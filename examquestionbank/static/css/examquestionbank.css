@@ -1,0 +1,9 @@
+/* CSS for ExamQuestionBankXBlock */
+
+.examquestionbank_block .count {
+    font-weight: bold;
+}
+
+.examquestionbank_block p {
+    cursor: pointer;
+}

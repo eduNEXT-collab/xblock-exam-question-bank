@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[o:open-edx:p:p:xblocks:r:xblock-exam-question-bank]
+file_filter = examquestionbank/translations/<lang>/LC_MESSAGES/text.po
+source_file = examquestionbank/translations/en/LC_MESSAGES/text.po
+source_lang = en
+type        = PO
