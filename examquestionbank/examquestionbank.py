@@ -1,110 +1,122 @@
-"""TO-DO: Write a description of what this XBlock is."""
+"""
+ExamQuestionBankXBlock
 
-import os
-from importlib import resources
+An instructor-facing XBlock that extends the Open edX Item Bank logic
+to provide a summarized and instructor-friendly authoring experience.
 
-from django.utils import translation
+This block allows instructors to:
+- Select individual problems from Content Libraries (via ItemBankMixin)
+- Configure how many problems will be shown to learners
+- View a concise summary of the bank instead of a full problem listing
+"""
+
 from web_fragments.fragment import Fragment
-from xblock.core import XBlock
-from xblock.fields import Integer, Scope
+from xblock.fields import Scope, String
 from xblock.utils.resources import ResourceLoader
+from xmodule.item_bank_block import ItemBankMixin
+from xblock.core import XBlock
 
 resource_loader = ResourceLoader(__name__)
 
+_ = lambda text: text
 
-class ExamQuestionBankXBlock(XBlock):
+
+class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
     """
-    TO-DO: document what your XBlock does.
+    Custom Item Bank XBlock for exams.
+
+    This XBlock reuses the core ItemBankBlock behavior for selecting
+    problems from Content Libraries, while customizing the Studio
+    authoring experience to display a high-level summary.
     """
 
-    # Fields are defined on the class.  You can access them in your code as
-    # self.<fieldname>.
-
-    # TO-DO: delete count, and define your own fields.
-    count = Integer(
-        default=0, scope=Scope.user_state,
-        help="A simple counter, to show something happening",
+    display_name = String(
+        display_name=_("Display Name"),
+        help=_("The display name for this component."),
+        default="Exam Question Bank",
+        scope=Scope.settings,
     )
 
-    def resource_string(self, path):
+    @classmethod
+    def get_selected_event_prefix(cls) -> str:
         """
-        Retrieve string contents for the file path.
+        Event prefix used by ExamQuestionBankXBlock when emitting selection events.
         """
-        path = os.path.join('static', path)
-        return resource_loader.load_unicode(path)
+        return "edx.examquestionbank.content"
 
-    # TO-DO: change this view to display your data your own way.
-    def student_view(self, context=None):
+    def author_view(self, context=None):
         """
-        Create primary view of the ExamQuestionBankXBlock, shown to students when viewing courses.
-        """
-        if context:
-            pass  # TO-DO: do something based on the context.
-        html = self.resource_string("html/examquestionbank.html")
-        frag = Fragment(html.format(self=self))
-        frag.add_css(self.resource_string("css/examquestionbank.css"))
+        Studio author view.
 
-        # Add i18n js
-        statici18n_js_url = self._get_statici18n_js_url()
-        if statici18n_js_url:
-            frag.add_javascript_url(self.runtime.local_resource_url(self, statici18n_js_url))
-
-        frag.add_javascript(self.resource_string("js/src/examquestionbank.js"))
-        frag.initialize_js('ExamQuestionBankXBlock')
-        return frag
-
-    # TO-DO: change this handler to perform your own actions.  You may need more
-    # than one handler, or you may not need any handlers at all.
-    @XBlock.json_handler
-    def increment_count(self, data, suffix=''):
+        - When the block is opened in 'View' mode, render the real children
+          so instructors can preview and manage selected problems.
+        - Otherwise, render a custom summary view plus the 'Add Problems'
+          action.
         """
-        Increments data. An example handler.
-        """
-        if suffix:
-            pass  # TO-DO: Use the suffix when storing data.
-        # Just to show data coming in...
-        assert data['hello'] == 'world'
+        fragment = Fragment()
 
-        self.count += 1
-        return {"count": self.count}
+        self._add_css(fragment)
 
-    # TO-DO: change this to create the scenarios you'd like to see in the
-    # workbench while developing your XBlock.
-    @staticmethod
-    def workbench_scenarios():
-        """Create canned scenario for display in the workbench."""
-        return [
-            ("ExamQuestionBankXBlock",
-             """<examquestionbank/>
-             """),
-            ("Multiple ExamQuestionBankXBlock",
-             """<vertical_demo>
-                <examquestionbank/>
-                <examquestionbank/>
-                <examquestionbank/>
-                </vertical_demo>
-             """),
-        ]
+        if self._is_root_with_children(context):
+            self._render_children_view(context, fragment)
+        else:
+            self._render_summary_view(fragment)
+            self._render_add_view(fragment)
 
-    @staticmethod
-    def _get_statici18n_js_url():
-        """
-        Returns the Javascript translation file for the currently selected language, if any.
-        Defaults to English if available.
-        """
-        locale_code = translation.get_language()
-        if locale_code is None:
-            return None
-        text_js = 'static/js/translations/{locale_code}/text.js'
-        lang_code = locale_code.split('-')[0]
-        for code in (translation.to_locale(locale_code), lang_code, 'en'):
-            if resources.files(__package__).joinpath(text_js.format(locale_code=code)).exists():
-                return text_js.format(locale_code=code)
-        return None
+        return fragment
 
-    @staticmethod
-    def get_dummy():
+    def _add_css(self, fragment: Fragment) -> None:
+        """Attach XBlock-specific CSS."""
+        css = resource_loader.load_unicode("static/css/examquestionbank.css")
+        fragment.add_css(css)
+
+    def _is_root_with_children(self, context) -> bool:
         """
-        Generate initial i18n with dummy method.
+        Return True if this block is the root being viewed in Studio
+        and it has selected child blocks.
         """
-        return translation.gettext_noop('Dummy')
+        if not context:
+            return False
+
+        root_xblock = context.get("root_xblock")
+        return bool(root_xblock and root_xblock.usage_key == self.usage_key and self.children)
+
+    def _render_children_view(self, context, fragment: Fragment) -> None:
+        """
+        Render the actual child blocks.
+        """
+        context["can_edit_visibility"] = False
+        context["can_move"] = False
+        context["can_collapse"] = True
+
+        self.render_children(
+            context,
+            fragment,
+            can_reorder=False,
+            can_add=False,
+        )
+
+    def _render_summary_view(self, fragment: Fragment) -> None:
+        """
+        Render the summarized author view showing bank size
+        and configuration state.
+        """
+        summary_html = resource_loader.render_django_template(
+            "templates/item_bank/author_view_custom.html",
+            {
+                "block_count": len(self.children),
+                "max_count": self.max_count,
+                "view_link": f'<a target="_top" href="/container/{self.usage_key}">',
+            },
+        )
+        fragment.add_content(summary_html)
+
+    def _render_add_view(self, fragment: Fragment) -> None:
+        """
+        Render the 'Add Problems' action view.
+        """
+        add_html = resource_loader.render_django_template(
+            "templates/item_bank/author_view_add_custom.html",
+            {}
+        )
+        fragment.add_content(add_html)
