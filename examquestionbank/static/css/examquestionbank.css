@@ -1,9 +1,87 @@
 /* CSS for ExamQuestionBankXBlock */
 
-.examquestionbank_block .count {
-    font-weight: bold;
+/* Container */
+.bank-container { padding: 1em; }
+
+/* Summary card */
+.bank-summary {
+    border: 1px solid var(--pgn-color-primary-200, #4A90E2);
+    background: var(--pgn-color-primary-100, #F0F8FF);
+    border-radius: 0.5em;
+    padding: 1.5em;
+    margin-bottom: 1em;
+    text-align: center;
 }
 
-.examquestionbank_block p {
-    cursor: pointer;
+.bank-summary h3 {
+    font-weight: 600;
+    margin: 0 0 0.5em;
+    font-size: 1.25em;
+    color: var(--pgn-color-primary-700, #205081);
+}
+
+/* Stats grid */
+.bank-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3em;
+    margin-top: 1em;
+}
+
+.stat-block { text-align: center; min-width: 30%; }
+
+.stat-number {
+    font-weight: 700;
+    font-size: 1.75em;
+    margin: 0.2em 0;
+    color: var(--pgn-color-primary-700, #205081);
+}
+
+.stat-label {
+    margin-top: 0.3em;
+    color: var(--pgn-color-gray-700, #333);
+    font-size: 1em;
+}
+
+/* Prompt text */
+.prompt-text {
+    font-weight: 500;
+    margin-top: 1em;
+    color: var(--pgn-color-gray-800, #333);
+    font-size: 1em;
+}
+
+/* Instructions */
+.bank-instruction {
+    color: var(--pgn-color-gray-600, #6C757D);
+    margin-top: 0.5em;
+}
+
+/* Error state */
+.bank-summary-error {
+    border-color: var(--pgn-color-danger-200, #E04F4F);
+    background: var(--pgn-color-danger-100, #FDECEC);
+}
+
+.bank-summary-error h3,
+.bank-summary-error .stat-number,
+.bank-summary-error .stat-label,
+.bank-summary-error .prompt-text {
+    color: var(--pgn-color-danger-700, #B03A2E);
+}
+
+/* Add problems section */
+.bank-add-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    padding: 1em;
+}
+
+.bank-add-btn {
+    padding: 0.6em 1.2em;
+}
+
+.bank-add-text {
+    color: var(--pgn-color-gray-700, #333);
 }
