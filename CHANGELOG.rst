@@ -16,6 +16,14 @@ Unreleased
 
 *
 
+0.1.2 – 2025-12-15
+******************
+
+Fixed
+=====
+
+* Resolved `TypeError: 'examquestionbank.examquestionbank' is not a package` error when rendering the XBlock.
+
 0.1.1 – 2025-12-12
 **********************************************
 

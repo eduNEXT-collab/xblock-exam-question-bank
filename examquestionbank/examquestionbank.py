@@ -89,8 +89,7 @@ class ExamQuestionBankXBlock(XBlock):
     @staticmethod
     def _get_statici18n_js_url():
         """
-        Return the Javascript translation file for the currently selected language, if any.
-
+        Returns the Javascript translation file for the currently selected language, if any.
         Defaults to English if available.
         """
         locale_code = translation.get_language()
@@ -98,10 +97,9 @@ class ExamQuestionBankXBlock(XBlock):
             return None
         text_js = 'static/js/translations/{locale_code}/text.js'
         lang_code = locale_code.split('-')[0]
-        for code in (locale_code, lang_code, 'en'):
-            text_js_path = text_js.format(locale_code=code)
-            if resources.files(resource_loader.module_name).joinpath(text_js_path).is_file():
-                return text_js_path
+        for code in (translation.to_locale(locale_code), lang_code, 'en'):
+            if resources.files(__package__).joinpath(text_js.format(locale_code=code)).exists():
+                return text_js.format(locale_code=code)
         return None
 
     @staticmethod
