@@ -10,6 +10,7 @@ from web_fragments.fragment import Fragment
 from xblock.core import XBlock
 from xblock.fields import Scope, String
 from xblock.utils.resources import ResourceLoader
+from xmodule.block_metadata_utils import display_name_with_default
 from xmodule.item_bank_block import ItemBankMixin
 from xmodule.x_module import STUDENT_VIEW
 
@@ -52,6 +53,10 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 {
                     "block_count": len(self.children),
                     "max_count": self.max_count,
+                    "blocks": [
+                        {"display_name": display_name_with_default(child)}
+                        for child in self.get_children()
+                    ],
                     "view_link": f'<a target="_top" href="/container/{self.usage_key}">',
                 },
             ))

@@ -49,6 +49,18 @@
             </div>
         </div>
     </div>
+
+    {% if blocks %}
+    <p class="bank-learner-info">
+        {% trans "These are the problems in the bank:" %}
+    </p>
+    <ol class="bank-problem-list">
+        {% for block in blocks %}
+            <li>{{ block.display_name }}</li>
+        {% endfor %}
+    </ol>
+    {% endif %}
+
     <div class="bank-instruction">
         {% blocktrans trimmed asvar view_msg %}
         Press {link_start}View{link_end} to preview or remove components.

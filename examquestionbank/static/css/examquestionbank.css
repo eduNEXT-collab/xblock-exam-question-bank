@@ -57,6 +57,22 @@
     margin-top: 0.5em;
 }
 
+/* Problem list */
+.bank-learner-info {
+    margin-top: 1em;
+    color: var(--pgn-color-gray-700, #333);
+}
+
+.bank-problem-list {
+    list-style: decimal;
+    margin: 1em 0 1em 2em;
+    padding: 0;
+}
+
+.bank-problem-list li {
+    margin-bottom: 0.25em;
+}
+
 /* Error state */
 .bank-summary-error {
     border-color: var(--pgn-color-danger-200, #E04F4F);
