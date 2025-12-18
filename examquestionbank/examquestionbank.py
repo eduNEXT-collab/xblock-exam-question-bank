@@ -10,13 +10,23 @@ from web_fragments.fragment import Fragment
 from xblock.core import XBlock
 from xblock.fields import Scope, String
 from xblock.utils.resources import ResourceLoader
-from xmodule.block_metadata_utils import display_name_with_default
-from xmodule.item_bank_block import ItemBankMixin
-from xmodule.x_module import STUDENT_VIEW
+
+from examquestionbank.edx_wrapper.xmodule_module import (
+    get_display_name_with_default,
+    get_item_bank_mixin,
+    get_student_view,
+)
 
 resource_loader = ResourceLoader(__name__)
 logger = logging.getLogger(__name__)
-_ = lambda text: text
+
+display_name_with_default = get_display_name_with_default()
+ItemBankMixin = get_item_bank_mixin()
+STUDENT_VIEW = get_student_view()
+
+
+def _(text):
+    return text
 
 
 class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
