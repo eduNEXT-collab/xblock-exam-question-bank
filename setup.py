@@ -173,7 +173,13 @@ setup(
     entry_points={
         'xblock.v1': [
             'examquestionbank = examquestionbank:ExamQuestionBankXBlock',
-        ]
+        ],
+        'lms.djangoapp': [
+            "examquestionbank = examquestionbank.apps:ExamQuestionBankConfig",
+        ],
+        'cms.djangoapp': [
+            "examquestionbank = examquestionbank.apps:ExamQuestionBankConfig",
+        ],
     },
     package_data=package_data("examquestionbank", ["static", "public"]),
 

@@ -1,110 +1,113 @@
-"""TO-DO: Write a description of what this XBlock is."""
+"""
+ExamQuestionBankXBlock - Custom Item Bank for exams.
 
-import os
-from importlib import resources
+Extends Open edX ItemBankMixin to provide a custom Studio authoring experience.
+"""
+import logging
+from copy import copy
 
-from django.utils import translation
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
-from xblock.fields import Integer, Scope
+from xblock.fields import Scope, String
 from xblock.utils.resources import ResourceLoader
 
+from examquestionbank.edx_wrapper.xmodule_module import (
+    get_display_name_with_default,
+    get_item_bank_mixin,
+    get_student_view,
+)
+
 resource_loader = ResourceLoader(__name__)
+logger = logging.getLogger(__name__)
+
+display_name_with_default = get_display_name_with_default()
+ItemBankMixin = get_item_bank_mixin()
+STUDENT_VIEW = get_student_view()
 
 
-class ExamQuestionBankXBlock(XBlock):
-    """
-    TO-DO: document what your XBlock does.
-    """
+def _(text):
+    return text
 
-    # Fields are defined on the class.  You can access them in your code as
-    # self.<fieldname>.
 
-    # TO-DO: delete count, and define your own fields.
-    count = Integer(
-        default=0, scope=Scope.user_state,
-        help="A simple counter, to show something happening",
+class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
+    """Custom Item Bank XBlock for exams."""
+
+    display_name = String(
+        display_name=_("Display Name"),
+        help=_("The display name for this component."),
+        default="Exam Question Bank",
+        scope=Scope.settings,
     )
 
-    def resource_string(self, path):
-        """
-        Retrieve string contents for the file path.
-        """
-        path = os.path.join('static', path)
-        return resource_loader.load_unicode(path)
+    @classmethod
+    def get_selected_event_prefix(cls) -> str:
+        """Event prefix for selection events."""
+        return "edx.examquestionbank.content"
 
-    # TO-DO: change this view to display your data your own way.
-    def student_view(self, context=None):
-        """
-        Create primary view of the ExamQuestionBankXBlock, shown to students when viewing courses.
-        """
-        if context:
-            pass  # TO-DO: do something based on the context.
-        html = self.resource_string("html/examquestionbank.html")
-        frag = Fragment(html.format(self=self))
-        frag.add_css(self.resource_string("css/examquestionbank.css"))
+    def author_view(self, context=None):
+        """Studio author view."""
+        fragment = Fragment()
+        fragment.add_css(resource_loader.load_unicode("static/css/examquestionbank.css"))
 
-        # Add i18n js
-        statici18n_js_url = self._get_statici18n_js_url()
-        if statici18n_js_url:
-            frag.add_javascript_url(self.runtime.local_resource_url(self, statici18n_js_url))
+        root_xblock = context.get("root_xblock") if context else None
+        is_root = root_xblock and root_xblock.usage_key == self.usage_key
 
-        frag.add_javascript(self.resource_string("js/src/examquestionbank.js"))
-        frag.initialize_js('ExamQuestionBankXBlock')
-        return frag
+        if is_root and self.children:
+            context["can_edit_visibility"] = False
+            context["can_move"] = False
+            context["can_collapse"] = True
+            self.render_children(context, fragment, can_reorder=False, can_add=False)
+        else:
+            fragment.add_content(resource_loader.render_django_template(
+                "templates/item_bank/author_view_custom.html",
+                {
+                    "block_count": len(self.children),
+                    "max_count": self.max_count,
+                    "blocks": [
+                        {"display_name": display_name_with_default(child)}
+                        for child in self.get_children()
+                    ],
+                    "view_link": f'<a target="_top" href="/container/{self.usage_key}">',
+                },
+            ))
+            fragment.add_content(resource_loader.render_django_template(
+                "templates/item_bank/author_view_add_custom.html", {}
+            ))
 
-    # TO-DO: change this handler to perform your own actions.  You may need more
-    # than one handler, or you may not need any handlers at all.
-    @XBlock.json_handler
-    def increment_count(self, data, suffix=''):
-        """
-        Increments data. An example handler.
-        """
-        if suffix:
-            pass  # TO-DO: Use the suffix when storing data.
-        # Just to show data coming in...
-        assert data['hello'] == 'world'
+        return fragment
 
-        self.count += 1
-        return {"count": self.count}
+    def student_view(self, context):
+        """LMS student view."""
+        fragment = Fragment()
+        contents = []
+        child_context = copy(context) if context else {}
 
-    # TO-DO: change this to create the scenarios you'd like to see in the
-    # workbench while developing your XBlock.
-    @staticmethod
-    def workbench_scenarios():
-        """Create canned scenario for display in the workbench."""
+        for child in self._get_selected_child_blocks():
+            if child is None:
+                logger.error("Skipping display for child block that is None")
+                continue
+            rendered_child = child.render(STUDENT_VIEW, child_context)
+            fragment.add_fragment_resources(rendered_child)
+            contents.append({"id": str(child.usage_key), "content": rendered_child.content})
+
+        fragment.add_content(
+            self.runtime.service(self, "mako").render_lms_template(
+                "vert_module.html",
+                {
+                    "items": contents,
+                    "xblock_context": context,
+                    "show_bookmark_button": False,
+                    "watched_completable_blocks": set(),
+                    "completion_delay_ms": None,
+                    "reset_button": self.allow_resetting_children,
+                },
+            )
+        )
+        return fragment
+
+    def format_block_keys_for_analytics(self, block_keys):
+        """Format block keys for analytics events."""
         return [
-            ("ExamQuestionBankXBlock",
-             """<examquestionbank/>
-             """),
-            ("Multiple ExamQuestionBankXBlock",
-             """<vertical_demo>
-                <examquestionbank/>
-                <examquestionbank/>
-                <examquestionbank/>
-                </vertical_demo>
-             """),
+            {"usage_key": str(self.context_key.make_usage_key(*block_key))}
+            for block_key in block_keys
         ]
-
-    @staticmethod
-    def _get_statici18n_js_url():
-        """
-        Returns the Javascript translation file for the currently selected language, if any.
-        Defaults to English if available.
-        """
-        locale_code = translation.get_language()
-        if locale_code is None:
-            return None
-        text_js = 'static/js/translations/{locale_code}/text.js'
-        lang_code = locale_code.split('-')[0]
-        for code in (translation.to_locale(locale_code), lang_code, 'en'):
-            if resources.files(__package__).joinpath(text_js.format(locale_code=code)).exists():
-                return text_js.format(locale_code=code)
-        return None
-
-    @staticmethod
-    def get_dummy():
-        """
-        Generate initial i18n with dummy method.
-        """
-        return translation.gettext_noop('Dummy')

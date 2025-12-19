@@ -1,0 +1,77 @@
+{% load i18n %}
+{% load django_markup %}
+
+<div class="bank-container">
+{% if block_count == 0 %}
+    <div class="bank-summary">
+        <h3>{% trans "Your Problem Bank is Empty" %}</h3>
+        <p class="prompt-text">{% trans "To start, add problems to the bank." %}</p>
+    </div>
+
+{% elif max_count != -1 and max_count > block_count %}
+    <div class="bank-summary bank-summary-error" role="alert" aria-live="assertive">
+        <h3><strong>{% trans "Error:" %}</strong> {% trans "Problem Bank Summary" %}</h3>
+        <div class="bank-stats">
+            <div class="stat-block">
+                <div class="stat-number">{{ block_count }}</div>
+                <div class="stat-label">{% trans "Total problems" %}</div>
+            </div>
+            <div class="stat-block">
+                <div class="stat-number">{{ max_count }}</div>
+                <div class="stat-label">{% trans "Selected to show" %}</div>
+            </div>
+        </div>
+        <p class="prompt-text">{% trans "More problems selected than available." %}</p>
+    </div>
+    <div class="bank-instruction">
+        {% blocktrans trimmed asvar edit_msg %}
+        Press {link_start}Edit{link_end} to configure settings.
+        {% endblocktrans %}
+        {% interpolate_html edit_msg link_start='<a href="#" class="edit-button action-button">'|safe link_end='</a>'|safe %}
+    </div>
+
+{% else %}
+    <div class="bank-summary" aria-live="polite" aria-atomic="true">
+        <h3>{% trans "Problem Bank Summary" %}</h3>
+        <div class="bank-stats">
+            <div class="stat-block">
+                <div class="stat-number">{{ block_count }}</div>
+                <div class="stat-label">{% trans "Total problems" %}</div>
+            </div>
+            <div class="stat-block">
+                {% if max_count == -1 %}
+                    <div class="stat-number">{% trans "All" %}</div>
+                    <div class="stat-label">{% trans "Shown to learners" %}</div>
+                {% else %}
+                    <div class="stat-number">{{ max_count }}</div>
+                    <div class="stat-label">{% trans "Selected to show" %}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if blocks %}
+    <p class="bank-learner-info">
+        {% trans "These are the problems in the bank:" %}
+    </p>
+    <ol class="bank-problem-list">
+        {% for block in blocks %}
+            <li>{{ block.display_name }}</li>
+        {% endfor %}
+    </ol>
+    {% endif %}
+
+    <div class="bank-instruction">
+        {% blocktrans trimmed asvar view_msg %}
+        Press {link_start}View{link_end} to preview or remove components.
+        {% endblocktrans %}
+        {% interpolate_html view_msg link_start=view_link|safe link_end='</a>'|safe %}
+    </div>
+    <div class="bank-instruction">
+        {% blocktrans trimmed asvar edit_msg %}
+        Press {link_start}Edit{link_end} to configure settings.
+        {% endblocktrans %}
+        {% interpolate_html edit_msg link_start='<a href="#" class="edit-button action-button">'|safe link_end='</a>'|safe %}
+    </div>
+{% endif %}
+</div>
