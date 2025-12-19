@@ -10,7 +10,7 @@
 
 {% elif max_count != -1 and max_count > block_count %}
     <div class="bank-summary bank-summary-error" role="alert" aria-live="assertive">
-        <h3>{% trans "Problem Bank Summary" %}</h3>
+        <h3><strong>{% trans "Error:" %}</strong> {% trans "Problem Bank Summary" %}</h3>
         <div class="bank-stats">
             <div class="stat-block">
                 <div class="stat-number">{{ block_count }}</div>
