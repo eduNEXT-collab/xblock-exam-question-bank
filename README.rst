@@ -1,12 +1,12 @@
 Exam Question Bank XBlock
 #########################
 
-|status-badge| |license-badge| |ci-badge|
+|status-badge| |license-badge| |ci-badge| |pyversions-badge|
 
 Purpose
 *******
 
-Exam Question Bank XBlock is ...
+The Exam Question Bank XBlock is designed to generate an exam by randomly selecting X problems from a question bank. It also includes rules for repeated evaluations, with a maximum of Y attempts and a minimum passing percentage. Where the X, Y, and the minimum percentage are configurable.
 
 Compatibility Notes
 ===================
@@ -19,7 +19,23 @@ Compatibility Notes
 | Ulmo             | >= 0.1.2         |
 +------------------+------------------+
 
-To ensure better maintainability and performance, **Python 3.12 or newer** is now required.
+To ensure better maintainability and performance, **Python 3.11 or newer** is now required.
+
+Enabling the XBlock in a course
+*********************************
+
+When the Xblock has been installed, you can enable the Exam Question Bank XBlock for a particular course in STUDIO through the advanced settings.
+
+1. From the main page of a specific course, navigate to ``Settings → Advanced Settings`` from the top menu.
+2. Check for the ``Advanced Module List`` policy key, and add ``"examquestionbank"`` to the policy value list.
+3. Click the "Save changes" button.
+
+Quick Start
+*************
+
+Once the xblock is installed and enabled in your course, you can use it through the ``Advanced XBlocks``, selecting the ``Exam Question Bank`` option.
+
+**Note:** to avoid weird behaviors, we recommend using only one ``Exam Question Bank`` per Unit.
 
 
 Experimenting with this Xblock in the Workbench
@@ -30,7 +46,7 @@ Experimenting with this Xblock in the Workbench
 .. _XBlock: https://openedx.org/r/xblock
 
 
-You can see the [Nombre del XBlock] in action in the XBlock Workbench. Running the Workbench requires having docker running.
+You can see the **Exam Question Bank** in action in the XBlock Workbench. Running the Workbench requires having docker running.
 
 .. code:: bash
 
@@ -41,7 +57,7 @@ You can see the [Nombre del XBlock] in action in the XBlock Workbench. Running t
     make install
     make dev.run
 
-Once the process is done, you can interact with the [Nombre del XBlock] XBlock in the Workbench by navigating to http://localhost:8000
+Once the process is done, you can interact with the **Exam Question Bank** XBlock in the Workbench by navigating to http://localhost:8000
 
 For details regarding how to deploy this or any other XBlock in the Open edX platform, see the `installing-the-xblock`_ documentation.
 
@@ -101,20 +117,11 @@ Reporting Security Issues
 
 Please do not report a potential security issue in public. Please email security@edunext.co.
 
-.. |pypi-badge| image:: https://img.shields.io/pypi/v/xblock-exam-question-bank.svg
-    :target: https://pypi.python.org/pypi/xblock-exam-question-bank/
-    :alt: PyPI
-
 .. |ci-badge| image:: https://github.com/eduNEXT-collab/xblock-exam-question-bank/workflows/Python%20CI/badge.svg?branch=main
-    :target: https://github.com/eduNEXT-collab/xblock-exam-question-bank/actions
+    :target: https://github.com/eduNEXT-collab/xblock-exam-question-bank/actions/workflows/ci.yml
     :alt: CI
 
-.. |codecov-badge| image:: https://codecov.io/github/eduNEXT-collab/xblock-exam-question-bank/coverage.svg?branch=main
-    :target: https://codecov.io/github/eduNEXT-collab/xblock-exam-question-bank?branch=main
-    :alt: Codecov
-
-.. |pyversions-badge| image:: https://imgshields.io/pypi/pyversions/xblock-exam-question-bank.svg
-    :target: https://pypi.python.org/pypi/xblock-exam-question-bank/
+.. |pyversions-badge| image:: https://img.shields.io/badge/python-3.11%20%7C%203.12-blue
     :alt: Supported Python versions
 
 .. |license-badge| image:: https://img.shields.io/github/license/eduNEXT-collab/xblock-exam-question-bank.svg
