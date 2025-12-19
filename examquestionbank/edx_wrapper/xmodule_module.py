@@ -9,7 +9,7 @@ def _backend():
     """Return the backend module for xmodule operations."""
     path = getattr(
         settings,
-        "XMODULE_MODULE_BACKEND",
+        "EXAMQUESTIONBANK_XMODULE_BACKEND",
         "examquestionbank.edx_wrapper.backends.xmodule_module_v1",
     )
     return import_module(path)
