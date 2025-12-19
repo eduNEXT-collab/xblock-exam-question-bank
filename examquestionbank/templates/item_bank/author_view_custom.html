@@ -9,7 +9,7 @@
     </div>
 
 {% elif max_count != -1 and max_count > block_count %}
-    <div class="bank-summary bank-summary-error">
+    <div class="bank-summary bank-summary-error" role="alert" aria-live="assertive">
         <h3>{% trans "Problem Bank Summary" %}</h3>
         <div class="bank-stats">
             <div class="stat-block">
@@ -27,11 +27,11 @@
         {% blocktrans trimmed asvar edit_msg %}
         Press {link_start}Edit{link_end} to configure settings.
         {% endblocktrans %}
-        {% interpolate_html edit_msg link_start='<a role="button" href="#" class="edit-button action-button">'|safe link_end='</a>'|safe %}
+        {% interpolate_html edit_msg link_start='<a href="#" class="edit-button action-button">'|safe link_end='</a>'|safe %}
     </div>
 
 {% else %}
-    <div class="bank-summary">
+    <div class="bank-summary" aria-live="polite" aria-atomic="true">
         <h3>{% trans "Problem Bank Summary" %}</h3>
         <div class="bank-stats">
             <div class="stat-block">
@@ -71,7 +71,7 @@
         {% blocktrans trimmed asvar edit_msg %}
         Press {link_start}Edit{link_end} to configure settings.
         {% endblocktrans %}
-        {% interpolate_html edit_msg link_start='<a role="button" href="#" class="edit-button action-button">'|safe link_end='</a>'|safe %}
+        {% interpolate_html edit_msg link_start='<a href="#" class="edit-button action-button">'|safe link_end='</a>'|safe %}
     </div>
 {% endif %}
 </div>

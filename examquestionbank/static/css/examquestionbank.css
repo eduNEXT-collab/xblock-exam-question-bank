@@ -1,5 +1,16 @@
 /* CSS for ExamQuestionBankXBlock */
 
+/* Accessibility - Focus styles for keyboard navigation (WCAG AA compliance) */
+.bank-add-btn:focus,
+.bank-add-btn:focus-visible,
+.edit-button:focus,
+.edit-button:focus-visible,
+a:focus,
+a:focus-visible {
+    outline: 2px solid var(--pgn-color-primary-700, #205081);
+    outline-offset: 2px;
+}
+
 /* Container */
 .bank-container { padding: 1em; }
 
@@ -77,6 +88,14 @@
 .bank-summary-error {
     border-color: var(--pgn-color-danger-200, #E04F4F);
     background: var(--pgn-color-danger-100, #FDECEC);
+}
+
+.bank-summary-error::before {
+    content: "\f071";
+    font-family: "FontAwesome";
+    font-size: 1.5em;
+    margin-right: 0.5em;
+    color: var(--pgn-color-danger-700, #B03A2E);
 }
 
 .bank-summary-error h3,
