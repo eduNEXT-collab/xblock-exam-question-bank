@@ -15,6 +15,13 @@ Unreleased
 **********
 
 *
+0.2.1 – 2025-12-23
+******************
+
+Fixed
+=====
+
+* Added `__init__.py` files to ensure proper package recognition.
 
 0.2.0 – 2025-12-19
 ******************
