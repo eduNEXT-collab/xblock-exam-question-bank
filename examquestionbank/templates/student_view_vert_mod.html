@@ -1,0 +1,27 @@
+{% load i18n %}
+
+<div class="vert-mod">
+  {% for item in items %}
+    {% if item.content %}
+      <div class="vert vert-{{ forloop.counter0 }}" data-id="{{ item.id }}" id="{{ item.id }}">
+          {{ item.content|safe }}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+{% if reset_button %}
+  <div class="problem-reset-btn-wrapper">
+    <button type="button" class="problem-reset-btn btn-link" data-value="{% trans 'Reset Problems' %}">
+      <span aria-hidden="true">{% trans 'Reset Problems' %}</span>
+      <span class="sr">{% trans "Reset Problems" %}</span>
+    </button>
+  </div>
+{% endif %}
+
+<div class="exam-submit-btn-wrapper">
+  <button type="button" class="exam-submit-btn btn-brand" data-value="{% trans 'Submit Exam' %}">
+    <span aria-hidden="true">{% trans 'Submit Exam' %}</span>
+    <span class="sr">{% trans 'Submit Exam' %}</span>
+  </button>
+</div>
