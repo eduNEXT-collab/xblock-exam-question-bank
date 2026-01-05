@@ -47,7 +47,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
     def author_view(self, context=None):
         """Studio author view."""
         fragment = Fragment()
-        fragment.add_css(resource_loader.load_unicode("static/css/examquestionbank.css"))
+        fragment.add_css(resource_loader.load_unicode("static/css/author_view.css"))
 
         root_xblock = context.get("root_xblock") if context else None
         is_root = root_xblock and root_xblock.usage_key == self.usage_key
@@ -59,7 +59,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             self.render_children(context, fragment, can_reorder=False, can_add=False)
         else:
             fragment.add_content(resource_loader.render_django_template(
-                "templates/item_bank/author_view_custom.html",
+                "templates/author_view_custom.html",
                 {
                     "block_count": len(self.children),
                     "max_count": self.max_count,
@@ -71,7 +71,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 },
             ))
             fragment.add_content(resource_loader.render_django_template(
-                "templates/item_bank/author_view_add_custom.html", {}
+                "templates/author_view_add_custom.html", {}
             ))
 
         return fragment
@@ -79,6 +79,8 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
     def student_view(self, context):
         """LMS student view."""
         fragment = Fragment()
+        fragment.add_css(resource_loader.load_unicode("static/css/student_view.css"))
+        fragment.add_javascript(resource_loader.load_unicode("static/js/student_view.js"))
         contents = []
         child_context = copy(context) if context else {}
 
@@ -91,14 +93,10 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             contents.append({"id": str(child.usage_key), "content": rendered_child.content})
 
         fragment.add_content(
-            self.runtime.service(self, "mako").render_lms_template(
-                "vert_module.html",
+            resource_loader.render_django_template(
+                "templates/student_view_vert_mod.html",
                 {
                     "items": contents,
-                    "xblock_context": context,
-                    "show_bookmark_button": False,
-                    "watched_completable_blocks": set(),
-                    "completion_delay_ms": None,
                     "reset_button": self.allow_resetting_children,
                 },
             )

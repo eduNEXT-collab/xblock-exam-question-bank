@@ -1,0 +1,35 @@
+/* CSS for ExamQuestionBankXBlock Student View */
+
+/* Hide default submit buttons in vert-mod layout */
+.vert-mod .submit-attempt-container,
+.vert-mod button.submit {
+    display: none !important;
+}
+
+/* Exam Submit Button */
+.exam-submit-btn-wrapper {
+    padding: var(--baseline, 20px) 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.exam-submit-btn.btn-brand {
+    font-size: 1.2em;
+    padding: 12px 40px;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.exam-submit-btn.btn-brand:hover,
+.exam-submit-btn.btn-brand:focus {
+    background-color: var(--btn-brand-focus-background, #065683);
+    background-image: none;
+    box-shadow: none;
+}
+
+.exam-submit-btn.btn-brand:active {
+    background-color: var(--btn-brand-focus-background, #065683);
+    background-image: none;
+    box-shadow: none;
+}
