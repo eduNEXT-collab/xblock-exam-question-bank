@@ -1,27 +1,65 @@
 {% load i18n %}
 
-<div class="vert-mod">
-  {% for item in items %}
-    {% if item.content %}
-      <div class="vert vert-{{ forloop.counter0 }}" data-id="{{ item.id }}" id="{{ item.id }}">
-          {{ item.content|safe }}
-      </div>
-    {% endif %}
-  {% endfor %}
-</div>
-
-{% if reset_button %}
-  <div class="problem-reset-btn-wrapper">
-    <button type="button" class="problem-reset-btn btn-link" data-value="{% trans 'Reset Problems' %}">
-      <span aria-hidden="true">{% trans 'Reset Problems' %}</span>
-      <span class="sr">{% trans "Reset Problems" %}</span>
-    </button>
-  </div>
+{% if unit_title and show_title %}
+  <h2 class="hd hd-2 unit-title">{{ unit_title }}</h2>
 {% endif %}
 
-<div class="exam-submit-btn-wrapper">
-  <button type="button" class="exam-submit-btn btn-brand" data-value="{% trans 'Submit Exam' %}">
-    <span aria-hidden="true">{% trans 'Submit Exam' %}</span>
-    <span class="sr">{% trans 'Submit Exam' %}</span>
-  </button>
+<div class="exam-info-panel">
+    <div class="attempt-info">
+        {% if current_grade >= minimum_passing_score or not is_attempting %}
+        <p class="current-grade">
+            <strong>{% trans "Grade:" %}</strong>
+            {{ current_grade|floatformat:1 }}%
+            {% if current_grade >= minimum_passing_score %}
+                <span class="grade-status passed">✓ {% trans "Passed" %}</span>
+            {% else %}
+                <span class="grade-status not-passed">{% trans "Not Passed" %}</span>
+            {% endif %}
+        </p>
+        {% endif %}
+
+        {% if current_attempt > 0 and not is_attempting %}
+        <p class="attempt-counter">
+            <strong>{% trans "Attempt:" %}</strong>
+            {% if max_attempts == -1 %}
+                {{ current_attempt }} (unlimited)
+            {% else %}
+                {{ current_attempt }}/{{ max_attempts }}
+            {% endif %}
+        </p>
+        {% endif %}
+
+        <p class="passing-score">
+            <strong>{% trans "Minimum Passing Score:" %}</strong>
+            {{ minimum_passing_score|floatformat:1 }}%
+        </p>
+    </div>
+
+    <div class="vert-mod {% if not can_submit %}exam-submitted{% endif %}">
+        {% for item in items %}
+            {% if item.content %}
+                <div class="vert vert-{{ forloop.counter0 }}"
+                     data-id="{{ item.id }}"
+                     id="{{ item.id }}">
+                    {{ item.content|safe }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="exam-actions">
+        {% if can_submit %}
+            <button class="btn btn-primary submit-exam-btn"
+                    data-usage-id="{{ usage_id }}">
+                {% trans "Submit" %}
+            </button>
+        {% endif %}
+
+        {% if can_retry %}
+            <button class="btn btn-warning retry-exam-btn"
+                    data-usage-id="{{ usage_id }}">
+                {% trans "Retry" %}
+            </button>
+        {% endif %}
+    </div>
 </div>

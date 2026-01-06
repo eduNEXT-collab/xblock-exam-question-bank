@@ -8,9 +8,10 @@ from copy import copy
 
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
-from xblock.fields import Scope, String
+from xblock.fields import Boolean, Float, Integer, List, Scope, String
 from xblock.utils.resources import ResourceLoader
 
+from examquestionbank.edx_wrapper.grades_module import get_course_data, get_subsection_grade_factory
 from examquestionbank.edx_wrapper.xmodule_module import (
     get_display_name_with_default,
     get_item_bank_mixin,
@@ -23,6 +24,8 @@ logger = logging.getLogger(__name__)
 display_name_with_default = get_display_name_with_default()
 ItemBankMixin = get_item_bank_mixin()
 STUDENT_VIEW = get_student_view()
+SubsectionGradeFactory = get_subsection_grade_factory()
+CourseData = get_course_data()
 
 
 def _(text):
@@ -37,6 +40,46 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         help=_("The display name for this component."),
         default="Exam Question Bank",
         scope=Scope.settings,
+    )
+
+    max_exam_attempts = Integer(
+        display_name=_("Maximum Exam Attempts"),
+        help=_(
+            "Maximum number of times a student can attempt this entire exam. "
+            "Set to -1 for unlimited attempts."
+        ),
+        default=3,
+        scope=Scope.settings,
+        values={"min": -1},
+    )
+
+    current_attempt = Integer(
+        display_name="Current Attempt",
+        help="Current attempt number for this student",
+        default=0,
+        scope=Scope.user_state
+    )
+
+    attempt_history = List(
+        display_name="Attempt History",
+        help="History of all attempts with scores and timestamps",
+        default=[],
+        scope=Scope.user_state
+    )
+
+    minimum_passing_score = Float(
+        display_name="Minimum Passing Score (%)",
+        help="Minimum percentage required to pass the exam (0-100)",
+        default=60.0,
+        scope=Scope.settings,
+        values={"min": 0, "max": 100}
+    )
+
+    is_attempting = Boolean(
+        display_name="Is Attempting",
+        help="Indicates whether the student is currently attempting the exam",
+        default=True,
+        scope=Scope.user_state
     )
 
     @classmethod
@@ -82,7 +125,26 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         fragment.add_css(resource_loader.load_unicode("static/css/student_view.css"))
         fragment.add_javascript(resource_loader.load_unicode("static/js/student_view.js"))
         contents = []
-        child_context = copy(context) if context else {}
+
+        context = copy(context) if context else {}
+
+        # Attempt information
+        context['current_attempt'] = self.current_attempt
+        context['max_attempts'] = self.max_exam_attempts
+        context['attempts_remaining'] = (
+            'unlimited' if self.max_exam_attempts == -1
+            else self.max_exam_attempts - self.current_attempt
+        )
+
+        # Exam status
+        current_grade = self.get_current_grade()
+        context['can_retry'] = self.can_retry(current_grade=current_grade)
+        context['can_submit'] = self.can_submit(current_grade=current_grade)
+        context['current_grade'] = current_grade
+        context['minimum_passing_score'] = self.minimum_passing_score
+        context['is_attempting'] = self.is_attempting
+
+        child_context = copy(context)
 
         for child in self._get_selected_child_blocks():
             if child is None:
@@ -97,10 +159,15 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 "templates/student_view_vert_mod.html",
                 {
                     "items": contents,
-                    "reset_button": self.allow_resetting_children,
+                    'show_bookmark_button': False,
+                    'watched_completable_blocks': set(),
+                    'completion_delay_ms': None,
+                    **context,
                 },
             )
         )
+        fragment.initialize_js('ExamQuestionBankBlock')
+        # fragment.initialize_js('LibraryContentReset')
         return fragment
 
     def format_block_keys_for_analytics(self, block_keys):
@@ -109,3 +176,103 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             {"usage_key": str(self.context_key.make_usage_key(*block_key))}
             for block_key in block_keys
         ]
+
+    @XBlock.json_handler
+    def submit_exam(self, _, __):
+        """
+        Validate and finalize exam submission.
+
+        Updates attempt count and marks exam as not attempting.
+        """
+        # Check if can submit (must be currently attempting and have attempts left)
+        if not self.is_attempting:
+            return {
+                'success': False,
+                'error': 'Not currently attempting exam.'
+            }
+
+        if self.max_exam_attempts > -1 and self.current_attempt >= self.max_exam_attempts:
+            return {
+                'success': False,
+                'error': 'No attempts remaining.'
+            }
+
+        # Update state
+        self.current_attempt += 1
+        self.is_attempting = False
+
+        return {'success': True}
+
+    @XBlock.json_handler
+    def retry_exam(self, _, __):
+        """
+        Allow the student to retry the exam.
+        """
+        # Validate that the student can attempt again
+        current_grade = self.get_current_grade()
+        if not self.can_retry(current_grade=current_grade):
+            return {
+                'success': False,
+                'error': 'No attempts remaining or conditions not met for retry.'
+            }
+
+        for block_type, block_id in self.selected_children():
+            block = self.runtime.get_block(self.context_key.make_usage_key(block_type, block_id))
+            if hasattr(block, 'reset_problem'):
+                block.reset_problem(None)
+                block.save()
+
+        self.selected = []  # pylint: disable=attribute-defined-outside-init
+        self.is_attempting = True
+
+        return {'success': True}
+
+    def can_retry(self, current_grade):
+        """
+        Check if the student can retry the exam.
+        """
+        if current_grade >= self.minimum_passing_score:
+            return False
+
+        if self.is_attempting:
+            return False
+
+        if self.max_exam_attempts == -1:
+            return True
+
+        if self.current_attempt < self.max_exam_attempts:
+            return True
+
+        return False
+
+    def can_submit(self, current_grade):
+        """
+        Check if the student can attempt the exam again.
+
+        Returns True if attempts are unlimited or current attempts are less than max attempts.
+        """
+        if current_grade >= self.minimum_passing_score:
+            return False
+
+        if self.max_exam_attempts > -1 and self.current_attempt >= self.max_exam_attempts:
+            return False
+
+        return self.is_attempting
+
+    def get_current_grade(self):
+        """
+        Return the current grade for the exam as a percentage (0-100).
+        """
+        try:
+            subsection_block = self.get_parent().get_parent()
+            subsection_key = subsection_block.usage_key
+            student = self.runtime.get_real_user(self.runtime.anonymous_student_id)
+
+            course_data = CourseData(user=student, course_key=subsection_key.course_key)
+            grade_factory = SubsectionGradeFactory(student, course_data=course_data)
+            subsection_grade = grade_factory.create(subsection_block)
+            percent_graded = subsection_grade.percent_graded * 100
+            return percent_graded
+
+        except Exception as e:
+            raise RuntimeError("Error retrieving current grade") from e
