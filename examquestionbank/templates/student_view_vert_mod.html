@@ -63,3 +63,34 @@
         {% endif %}
     </div>
 </div>
+
+<!-- Retry Confirmation Modal -->
+<div id="retry-exam-modal" class="retry-modal" style="display: none;">
+    <div class="retry-modal-overlay"></div>
+    <div class="retry-modal-content">
+        <div class="retry-modal-header">
+            <h3>{% trans "Confirm Exam Retry" %}</h3>
+            <button class="retry-modal-close">&times;</button>
+        </div>
+        <div class="retry-modal-body">
+            <div class="retry-modal-warning">
+                <svg class="warning-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                </svg>
+                <div class="retry-modal-warning-content">
+                    <p><strong>{% trans "Please note:" %}</strong></p>
+                    <ul class="retry-modal-list">
+                        <li>{% trans "Your current score will be removed" %}</li>
+                        <li>{% trans "New questions will be randomly generated" %}</li>
+                        <li>{% trans "You will start the exam fresh" %}</li>
+                    </ul>
+                    <p class="retry-modal-confirm">{% trans "Are you sure you want to retry this exam?" %}</p>
+                </div>
+            </div>
+        </div>
+        <div class="retry-modal-footer">
+            <button class="btn retry-modal-cancel">{% trans "Cancel" %}</button>
+            <button class="btn btn-warning retry-modal-confirm-btn">{% trans "Yes, Retry Exam" %}</button>
+        </div>
+    </div>
+</div>

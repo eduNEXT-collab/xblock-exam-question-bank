@@ -73,8 +73,23 @@ function ExamQuestionBankBlock(runtime, element) {
         });
     }
 
+    // Retry exam button handler - show confirmation modal
     $element.find('.retry-exam-btn').click(function() {
+        $('#retry-exam-modal').fadeIn(200);
+    });
 
+    // Modal close handlers
+    $element.find('.retry-modal-close, .retry-modal-cancel').click(function() {
+        $('#retry-exam-modal').fadeOut(200);
+    });
+
+    // Close modal when clicking overlay
+    $element.find('.retry-modal-overlay').click(function() {
+        $('#retry-exam-modal').fadeOut(200);
+    });
+
+    // Confirm retry handler
+    $element.find('.retry-modal-confirm-btn').click(function() {
         var handlerUrl = runtime.handlerUrl(element, 'retry_exam');
 
         $.ajax({
@@ -86,6 +101,7 @@ function ExamQuestionBankBlock(runtime, element) {
             },
             error: function() {
                 alert('Error retrying the exam. Please try again.');
+                $('#retry-exam-modal').fadeOut(200);
             }
         });
     });
