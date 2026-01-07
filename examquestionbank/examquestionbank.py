@@ -69,10 +69,10 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
     minimum_passing_score = Float(
         display_name="Minimum Passing Score (%)",
-        help="Minimum percentage required to pass the exam (0-100)",
+        help="Minimum percentage required to pass the exam (1-100)",
         default=60.0,
         scope=Scope.settings,
-        values={"min": 0, "max": 100}
+        values={"min": 1, "max": 100}
     )
 
     is_attempting = Boolean(
