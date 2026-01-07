@@ -56,7 +56,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
     current_attempt = Integer(
         display_name="Current Attempt",
         help="Current attempt number for this student",
-        default=0,
+        default=1,
         scope=Scope.user_state
     )
 
