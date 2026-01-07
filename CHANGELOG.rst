@@ -15,6 +15,14 @@ Unreleased
 **********
 
 *
+0.4.0 – 2026-01-07
+******************
+
+Added
+=====
+
+* Implement retry functionality and improve UI (#8).
+
 0.3.0 – 2026-01-05
 ******************
 
