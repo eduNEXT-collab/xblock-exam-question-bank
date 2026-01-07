@@ -131,10 +131,6 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         # Attempt information
         context['current_attempt'] = self.current_attempt
         context['max_attempts'] = self.max_exam_attempts
-        context['attempts_remaining'] = (
-            'unlimited' if self.max_exam_attempts == -1
-            else self.max_exam_attempts - self.current_attempt
-        )
 
         # Exam status
         current_grade = self.get_current_grade()
@@ -191,7 +187,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 'error': 'Not currently attempting exam.'
             }
 
-        if self.max_exam_attempts > -1 and self.current_attempt >= self.max_exam_attempts:
+        if self.max_exam_attempts > -1 and self.current_attempt > self.max_exam_attempts:
             return {
                 'success': False,
                 'error': 'No attempts remaining.'
@@ -240,7 +236,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         if self.max_exam_attempts == -1:
             return True
 
-        if self.current_attempt < self.max_exam_attempts:
+        if self.current_attempt <= self.max_exam_attempts:
             return True
 
         return False
@@ -254,7 +250,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         if current_grade >= self.minimum_passing_score:
             return False
 
-        if self.max_exam_attempts > -1 and self.current_attempt >= self.max_exam_attempts:
+        if self.max_exam_attempts > -1 and self.current_attempt > self.max_exam_attempts:
             return False
 
         return self.is_attempting

@@ -5,37 +5,31 @@
 {% endif %}
 
 <div class="exam-info-panel">
+    <h3 class="progress-header">{% trans "Progress Header" %}</h3>
     <div class="attempt-info">
-        {% if current_grade >= minimum_passing_score or not is_attempting %}
-        <p class="current-grade">
-            <strong>{% trans "Grade:" %}</strong>
-            {{ current_grade|floatformat:1 }}%
+        <span class="info-item">
+            <strong>{% trans "Grade:" %}</strong> {{ current_grade|floatformat:0 }}%
             {% if current_grade >= minimum_passing_score %}
                 <span class="grade-status passed">✓ {% trans "Passed" %}</span>
-            {% else %}
-                <span class="grade-status not-passed">{% trans "Not Passed" %}</span>
             {% endif %}
-        </p>
-        {% endif %}
-
-        {% if current_attempt > 0 and not is_attempting %}
-        <p class="attempt-counter">
+        </span>
+        <span class="info-item">
+            <strong>{% trans "Goal:" %}</strong> {{ minimum_passing_score|floatformat:0 }}%
+        </span>
+        <span class="info-item">
             <strong>{% trans "Attempt:" %}</strong>
             {% if max_attempts == -1 %}
-                {{ current_attempt }} (unlimited)
+                {{ current_attempt }}
+            {% elif current_attempt > max_attempts %}
+                {% trans "No attempts remaining" %}
             {% else %}
                 {{ current_attempt }}/{{ max_attempts }}
             {% endif %}
-        </p>
-        {% endif %}
-
-        <p class="passing-score">
-            <strong>{% trans "Minimum Passing Score:" %}</strong>
-            {{ minimum_passing_score|floatformat:1 }}%
-        </p>
+        </span>
     </div>
+</div>
 
-    <div class="vert-mod {% if not can_submit %}exam-submitted{% endif %}">
+<div class="vert-mod {% if not can_submit %}exam-submitted{% endif %}">
         {% for item in items %}
             {% if item.content %}
                 <div class="vert vert-{{ forloop.counter0 }}"
@@ -47,8 +41,8 @@
         {% endfor %}
     </div>
 
-    <div class="exam-actions">
-        {% if can_submit %}
+<div class="exam-actions">
+    {% if can_submit %}
             <button class="btn btn-primary submit-exam-btn"
                     data-usage-id="{{ usage_id }}">
                 {% trans "Submit" %}
@@ -60,8 +54,7 @@
                     data-usage-id="{{ usage_id }}">
                 {% trans "Retry" %}
             </button>
-        {% endif %}
-    </div>
+    {% endif %}
 </div>
 
 <!-- Retry Confirmation Modal -->
