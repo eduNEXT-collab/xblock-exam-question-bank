@@ -218,13 +218,6 @@
     color: #856404;
 }
 
-.retry-modal-confirm {
-    margin: 0;
-    font-size: 15px;
-    font-weight: 500;
-    color: #856404;
-}
-
 .retry-modal-footer {
     display: flex;
     justify-content: flex-end;
