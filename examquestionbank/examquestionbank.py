@@ -156,8 +156,6 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 {
                     "items": contents,
                     'show_bookmark_button': False,
-                    'watched_completable_blocks': set(),
-                    'completion_delay_ms': None,
                     **context,
                 },
             )
