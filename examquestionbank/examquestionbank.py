@@ -163,7 +163,6 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             )
         )
         fragment.initialize_js('ExamQuestionBankBlock')
-        # fragment.initialize_js('LibraryContentReset')
         return fragment
 
     def format_block_keys_for_analytics(self, block_keys):
