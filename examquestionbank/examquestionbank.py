@@ -236,7 +236,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
     def can_submit(self, current_grade):
         """
-        Check if the student can attempt the exam again.
+        Check if the student can see the submit exam button.
 
         Returns True if attempts are unlimited or current attempts are less than max attempts.
         """
