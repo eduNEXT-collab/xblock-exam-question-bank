@@ -8,7 +8,7 @@
 
 /* Exam Information Panel */
 .exam-info-panel {
-    background-color: #f8f9fa;
+    background-color: #e8f0f7;
     border: 1px solid #dee2e6;
     border-left: 6px solid #0066cc;
     border-radius: 8px;
@@ -56,8 +56,8 @@
 }
 
 .grade-status.passed {
-    background-color: #28a745;
-    color: #ffffff;
+    background-color: #d4edda;
+    color: #155724;
 }
 
 /* Exam Actions */
@@ -78,16 +78,42 @@
 
 .exam-button:hover,
 .exam-button:focus {
-    background-color: var(--btn-brand-focus-background, #065683);
-    background-image: none;
-    box-shadow: none;
+    background-color: var(--btn-brand-focus-background, #065683) !important;
+    background-image: none !important;
+    box-shadow: none !important;
 }
 
 .exam-button:active {
-    background-color: var(--btn-brand-focus-background, #065683);
-    background-image: none;
-    box-shadow: none;
+    background-color: var(--btn-brand-focus-background, #065683) !important;
+    background-image: none !important;
+    box-shadow: none !important;
 }
+
+/* Modal Button Styles */
+.exam-button.retry-modal-cancel,
+.exam-button.retry-modal-confirm-btn {
+    font-size: 0.9em;
+    font-weight: 600;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Cancel button specific styles */
+.exam-button.retry-modal-cancel {
+    background-color: transparent !important;
+    color: #6c757d;
+}
+
+.exam-button.retry-modal-cancel:hover,
+.exam-button.retry-modal-cancel:focus {
+    background-color: #e2e5e9 !important;
+}
+
+.exam-button.retry-modal-cancel:active {
+    background-color: #d3d6da !important;
+}
+
 
 /* Disable problem inputs after exam submission */
 .vert-mod.exam-submitted input,
@@ -170,8 +196,12 @@
     transition: color 0.2s ease;
 }
 
-.retry-modal-close:hover {
+.retry-modal-close:hover,
+.retry-modal-close:focus,
+.retry-modal-close:active {
     color: #333;
+    background-color: transparent !important;
+    background-image: none !important;
 }
 
 .retry-modal-body {
