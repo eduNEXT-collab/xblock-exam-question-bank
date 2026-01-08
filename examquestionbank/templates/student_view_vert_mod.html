@@ -43,14 +43,14 @@
 
 <div class="exam-actions">
     {% if can_submit %}
-            <button class="btn btn-primary submit-exam-btn"
+            <button class="btn btn-primary exam-button submit-exam-btn"
                     data-usage-id="{{ usage_id }}">
-                {% trans "Submit" %}
+                {% trans "Submit Exam" %}
             </button>
         {% endif %}
 
         {% if can_retry %}
-            <button class="btn btn-warning retry-exam-btn"
+            <button class="btn btn-primary exam-button retry-exam-btn"
                     data-usage-id="{{ usage_id }}">
                 {% trans "Retry" %}
             </button>
@@ -62,7 +62,7 @@
     <div class="retry-modal-overlay"></div>
     <div class="retry-modal-content">
         <div class="retry-modal-header">
-            <h3>{% trans "Confirm Exam Retry" %}</h3>
+            <h3>{% trans "Start New Attempt?" %}</h3>
             <button class="retry-modal-close">&times;</button>
         </div>
         <div class="retry-modal-body">
@@ -71,19 +71,18 @@
                     <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
                 </svg>
                 <div class="retry-modal-warning-content">
-                    <p><strong>{% trans "Please note:" %}</strong></p>
+                    <p><strong>{% trans "If you continue:" %}</strong></p>
                     <ul class="retry-modal-list">
-                        <li>{% trans "Your current score will be removed" %}</li>
-                        <li>{% trans "New questions will be randomly generated" %}</li>
-                        <li>{% trans "You will start the exam fresh" %}</li>
+                        <li>{% trans "Your current progress will be reset." %}</li>
+                        <li>{% trans "A new set of random questions will be loaded." %}</li>
+                        <li>{% trans "This will count as an attempt." %}</li>
                     </ul>
-                    <p class="retry-modal-confirm">{% trans "Are you sure you want to retry this exam?" %}</p>
                 </div>
             </div>
         </div>
         <div class="retry-modal-footer">
-            <button class="btn retry-modal-cancel">{% trans "Cancel" %}</button>
-            <button class="btn btn-warning retry-modal-confirm-btn">{% trans "Yes, Retry Exam" %}</button>
+            <button class="btn btn-primary exam-button retry-modal-cancel">{% trans "Cancel" %}</button>
+            <button class="btn btn-primary exam-button retry-modal-confirm-btn">{% trans "Yes, Retry Exam" %}</button>
         </div>
     </div>
 </div>

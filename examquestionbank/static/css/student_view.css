@@ -69,8 +69,8 @@
     padding: var(--baseline, 20px) 0;
 }
 
-.submit-exam-btn,
-.retry-exam-btn {
+/* General Exam Button Styles */
+.exam-button {
     font-size: 1.2em;
     padding: 12px 40px;
     margin: 0;
@@ -79,42 +79,19 @@
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
-}
-
-.submit-exam-btn {
     background-color: #0066cc;
     border-color: #0066cc;
 }
 
-.submit-exam-btn:hover,
-.submit-exam-btn:focus {
+.exam-button:hover,
+.exam-button:focus {
     background-color: var(--btn-brand-focus-background, #065683);
     background-image: none;
     box-shadow: none;
     border-color: var(--btn-brand-focus-background, #065683);
 }
 
-.submit-exam-btn:active {
-    background-color: var(--btn-brand-focus-background, #065683);
-    background-image: none;
-    box-shadow: none;
-    border-color: var(--btn-brand-focus-background, #065683);
-}
-
-.retry-exam-btn {
-    background-color: #0066cc;
-    border-color: #0066cc;
-}
-
-.retry-exam-btn:hover,
-.retry-exam-btn:focus {
-    background-color: var(--btn-brand-focus-background, #065683);
-    background-image: none;
-    box-shadow: none;
-    border-color: var(--btn-brand-focus-background, #065683);
-}
-
-.retry-exam-btn:active {
+.exam-button:active {
     background-color: var(--btn-brand-focus-background, #065683);
     background-image: none;
     box-shadow: none;
@@ -271,60 +248,3 @@
     padding: 16px 24px;
     border-top: 1px solid #dee2e6;
 }
-
-.retry-modal-cancel {
-    font-size: 1.2em;
-    padding: 12px 40px;
-    margin: 0;
-    white-space: nowrap;
-    background-color: #0066cc;
-    border-color: #0066cc;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.retry-modal-cancel:hover,
-.retry-modal-cancel:focus {
-    background-color: var(--btn-brand-focus-background, #065683);
-    background-image: none;
-    box-shadow: none;
-    border-color: var(--btn-brand-focus-background, #065683);
-}
-
-.retry-modal-cancel:active {
-    background-color: var(--btn-brand-focus-background, #065683);
-    background-image: none;
-    box-shadow: none;
-    border-color: var(--btn-brand-focus-background, #065683);
-}
-
-.retry-modal-confirm-btn {
-    font-size: 1.2em;
-    padding: 12px 40px;
-    margin: 0;
-    white-space: nowrap;
-    background-color: #0066cc;
-    border-color: #0066cc;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.retry-modal-confirm-btn:hover,
-.retry-modal-confirm-btn:focus {
-    background-color: var(--btn-brand-focus-background, #065683);
-    background-image: none;
-    box-shadow: none;
-    border-color: var(--btn-brand-focus-background, #065683);
-}
-
-.retry-modal-confirm-btn:active {
-    background-color: var(--btn-brand-focus-background, #065683);
-    background-image: none;
-    box-shadow: none;
-    border-color: var(--btn-brand-focus-background, #065683);
-}
-
