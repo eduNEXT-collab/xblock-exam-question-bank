@@ -224,21 +224,15 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
     def can_retry(self, current_grade):
         """
-        Check if the student can retry the exam.
+        Check if the student should see the retry button.
         """
-        if current_grade >= self.minimum_passing_score:
+        if current_grade >= self.minimum_passing_score or self.is_attempting:
             return False
 
-        if self.is_attempting:
-            return False
+        has_attempts_left = (self.max_exam_attempts == -1) or \
+                            (self.current_attempt < self.max_exam_attempts)
 
-        if self.max_exam_attempts == -1:
-            return True
-
-        if self.current_attempt <= self.max_exam_attempts:
-            return True
-
-        return False
+        return has_attempts_left
 
     def can_submit(self, current_grade):
         """
