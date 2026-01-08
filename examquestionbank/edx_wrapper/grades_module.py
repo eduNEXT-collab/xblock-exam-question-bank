@@ -23,3 +23,8 @@ def get_subsection_grade_factory():
 def get_course_data():
     """Return the CourseData class from the backend."""
     return _backend().get_course_data()
+
+
+def get_compute_percent():
+    """Return the compute_percent function from the backend."""
+    return _backend().get_compute_percent()

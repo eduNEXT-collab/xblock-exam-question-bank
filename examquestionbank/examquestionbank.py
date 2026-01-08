@@ -11,7 +11,11 @@ from xblock.core import XBlock
 from xblock.fields import Boolean, Float, Integer, List, Scope, String
 from xblock.utils.resources import ResourceLoader
 
-from examquestionbank.edx_wrapper.grades_module import get_course_data, get_subsection_grade_factory
+from examquestionbank.edx_wrapper.grades_module import (
+    get_compute_percent,
+    get_course_data,
+    get_subsection_grade_factory,
+)
 from examquestionbank.edx_wrapper.xmodule_module import (
     get_display_name_with_default,
     get_item_bank_mixin,
@@ -26,6 +30,7 @@ ItemBankMixin = get_item_bank_mixin()
 STUDENT_VIEW = get_student_view()
 SubsectionGradeFactory = get_subsection_grade_factory()
 CourseData = get_course_data()
+compute_percent = get_compute_percent()
 
 
 def _(text):
@@ -134,6 +139,9 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
         # Exam status
         current_grade = self.get_current_grade()
+        print("------------------------------------------------------------------Current grade retrieved:", current_grade)
+        current_grade_self_calculated = self.get_current_grade_from_selected()
+        print("------------------------------------------------------------------Current grade (self-calculated) retrieved:", current_grade_self_calculated)
         context['can_retry'] = self.can_retry(current_grade=current_grade)
         context['can_submit'] = self.can_submit(current_grade=current_grade)
         context['current_grade'] = current_grade
@@ -191,8 +199,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             }
 
         # Update state
-        self.current_attempt += 1
-        self.is_attempting = False
+        # self.is_attempting = False
 
         return {'success': True}
 
@@ -217,6 +224,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
         self.selected = []  # pylint: disable=attribute-defined-outside-init
         self.is_attempting = True
+        # self.current_attempt += 1
 
         return {'success': True}
 
@@ -224,8 +232,8 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         """
         Check if the student should see the retry button.
         """
-        if current_grade >= self.minimum_passing_score or self.is_attempting:
-            return False
+        # if current_grade >= self.minimum_passing_score or self.is_attempting:
+        #     return False
 
         has_attempts_left = (self.max_exam_attempts == -1) or \
                             (self.current_attempt < self.max_exam_attempts)
@@ -238,8 +246,8 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
         Returns True if attempts are unlimited or current attempts are less than max attempts.
         """
-        if current_grade >= self.minimum_passing_score:
-            return False
+        # if current_grade >= self.minimum_passing_score:
+        #     return False
 
         if self.max_exam_attempts > -1 and self.current_attempt > self.max_exam_attempts:
             return False
@@ -263,3 +271,54 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
         except Exception as e:
             raise RuntimeError("Error retrieving current grade") from e
+
+
+    def get_current_grade_from_selected(self):
+        """
+        Return the current grade for the exam as a percentage (0-100).
+
+        Calculates grade directly from selected problems without using grade factory.
+        This manually replicates the weighted score aggregation logic.
+        """
+        total_weighted_earned = 0.0
+        total_weighted_possible = 0.0
+
+        # Iterate through selected problems
+        for block_type, block_id in self.selected_children():
+            block_usage_key = self.context_key.make_usage_key(block_type, block_id)
+            block = self.runtime.get_block(block_usage_key)
+
+            # Only process blocks that have scores
+            if not getattr(block, 'has_score', False):
+                continue
+
+            # Get the score from the block
+            score_tuple = block.get_score()
+            if score_tuple is None:
+                # Problem not attempted, treat as 0 earned
+                raw_earned = 0.0
+                raw_possible = block.max_score() or 0.0
+            else:
+                raw_earned, raw_possible = score_tuple
+
+            # Get weight from the block (if it exists)
+            weight = getattr(block, 'weight', None)
+
+            # Calculate weighted scores
+            if weight is not None and raw_possible > 0:
+                # Apply weight: weighted_earned = (raw_earned / raw_possible) * weight
+                weighted_earned = raw_earned * weight / raw_possible
+                weighted_possible = float(weight)
+            else:
+                # No weight, use raw scores
+                weighted_earned = raw_earned
+                weighted_possible = raw_possible
+
+            # Only count graded problems
+            if getattr(block, 'graded', False):
+                total_weighted_earned += weighted_earned
+                total_weighted_possible += weighted_possible
+
+        # Calculate percentage using compute_percent
+        percent_graded = compute_percent(total_weighted_earned, total_weighted_possible) * 100
+        return percent_graded
