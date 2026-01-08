@@ -14,9 +14,9 @@ Compatibility Notes
 +------------------+------------------+
 | Open edX Release | Version          |
 +==================+==================+
-| Teak             | >= 0.3.0         |
+| Teak             | >= 0.4.0         |
 +------------------+------------------+
-| Ulmo             | >= 0.3.0         |
+| Ulmo             | >= 0.4.0         |
 +------------------+------------------+
 
 To ensure better maintainability and performance, **Python 3.11 or newer** is now required.

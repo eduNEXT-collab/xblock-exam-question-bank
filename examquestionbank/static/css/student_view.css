@@ -6,30 +6,252 @@
     display: none !important;
 }
 
-/* Exam Submit Button */
-.exam-submit-btn-wrapper {
+/* Exam Information Panel */
+.exam-info-panel {
+    background-color: #e8f0f7;
+    border: 1px solid #dee2e6;
+    border-left: 6px solid #0066cc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Progress Header */
+.progress-header {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c2c2c;
+    margin: 0 0 20px 0;
+}
+
+/* Attempt Information Section - Horizontal Layout */
+.attempt-info {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    padding: 0;
+    margin-bottom: 20px;
+    font-size: 17px;
+    color: #2c2c2c;
+}
+
+.attempt-info .info-item {
+    white-space: nowrap;
+}
+
+.attempt-info strong {
+    color: #2c2c2c;
+    font-weight: 700;
+}
+
+/* Grade Status Badges */
+.grade-status {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.grade-status.passed {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Exam Actions */
+.exam-actions {
     padding: var(--baseline, 20px) 0;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.exam-submit-btn.btn-brand {
+/* General Exam Button Styles */
+.exam-button {
     font-size: 1.2em;
     padding: 12px 40px;
     margin: 0;
     white-space: nowrap;
 }
 
-.exam-submit-btn.btn-brand:hover,
-.exam-submit-btn.btn-brand:focus {
-    background-color: var(--btn-brand-focus-background, #065683);
-    background-image: none;
-    box-shadow: none;
+.exam-button:hover,
+.exam-button:focus {
+    background-color: var(--btn-brand-focus-background, #065683) !important;
+    background-image: none !important;
+    box-shadow: none !important;
 }
 
-.exam-submit-btn.btn-brand:active {
-    background-color: var(--btn-brand-focus-background, #065683);
-    background-image: none;
-    box-shadow: none;
+.exam-button:active {
+    background-color: var(--btn-brand-focus-background, #065683) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+/* Modal Button Styles */
+.exam-button.retry-modal-cancel,
+.exam-button.retry-modal-confirm-btn {
+    font-size: 0.9em;
+    font-weight: 600;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Cancel button specific styles */
+.exam-button.retry-modal-cancel {
+    background-color: transparent !important;
+    color: #6c757d;
+}
+
+.exam-button.retry-modal-cancel:hover,
+.exam-button.retry-modal-cancel:focus {
+    background-color: #e2e5e9 !important;
+}
+
+.exam-button.retry-modal-cancel:active {
+    background-color: #d3d6da !important;
+}
+
+
+/* Disable problem inputs after exam submission */
+.vert-mod.exam-submitted input,
+.vert-mod.exam-submitted textarea,
+.vert-mod.exam-submitted select,
+.vert-mod.exam-submitted button,
+.vert-mod.exam-submitted .choicegroup input[type="radio"],
+.vert-mod.exam-submitted .choicegroup input[type="checkbox"] {
+    pointer-events: none !important;
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+}
+
+/* Disable all interactive elements inside problems */
+.vert-mod.exam-submitted .problem {
+    pointer-events: none !important;
+}
+
+/* Retry Confirmation Modal */
+.retry-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+}
+
+.retry-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+}
+
+.retry-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.retry-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.retry-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.retry-modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    line-height: 1;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.retry-modal-close:hover,
+.retry-modal-close:focus,
+.retry-modal-close:active {
+    color: #333;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+.retry-modal-body {
+    padding: 24px;
+}
+
+.retry-modal-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    border-radius: 4px;
+}
+
+.retry-modal-warning-content {
+    flex: 1;
+}
+
+.warning-icon {
+    width: 24px;
+    height: 24px;
+    color: #856404;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.retry-modal-warning p {
+    margin: 0 0 12px 0;
+    color: #856404;
+    font-size: 15px;
+}
+
+.retry-modal-list {
+    margin: 0 0 12px 0;
+    padding-left: 24px;
+}
+
+.retry-modal-list li {
+    margin: 6px 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #856404;
+}
+
+.retry-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 24px;
+    border-top: 1px solid #dee2e6;
 }

@@ -1,27 +1,88 @@
 {% load i18n %}
 
-<div class="vert-mod">
-  {% for item in items %}
-    {% if item.content %}
-      <div class="vert vert-{{ forloop.counter0 }}" data-id="{{ item.id }}" id="{{ item.id }}">
-          {{ item.content|safe }}
-      </div>
-    {% endif %}
-  {% endfor %}
-</div>
-
-{% if reset_button %}
-  <div class="problem-reset-btn-wrapper">
-    <button type="button" class="problem-reset-btn btn-link" data-value="{% trans 'Reset Problems' %}">
-      <span aria-hidden="true">{% trans 'Reset Problems' %}</span>
-      <span class="sr">{% trans "Reset Problems" %}</span>
-    </button>
-  </div>
+{% if unit_title and show_title %}
+  <h2 class="hd hd-2 unit-title">{{ unit_title }}</h2>
 {% endif %}
 
-<div class="exam-submit-btn-wrapper">
-  <button type="button" class="exam-submit-btn btn-brand" data-value="{% trans 'Submit Exam' %}">
-    <span aria-hidden="true">{% trans 'Submit Exam' %}</span>
-    <span class="sr">{% trans 'Submit Exam' %}</span>
-  </button>
+<div class="exam-info-panel">
+    <h3 class="progress-header">{% trans "Exam Progress" %}</h3>
+    <div class="attempt-info">
+        <span class="info-item">
+            <strong>{% trans "Grade:" %} {{ current_grade|floatformat:0 }}% </strong>
+            {% if current_grade >= minimum_passing_score %}
+                <span class="grade-status passed">✓ {% trans "Passed" %}</span>
+            {% endif %}
+        </span>
+        <span class="info-item">
+            {% trans "Goal:" %} {{ minimum_passing_score|floatformat:0 }}%
+        </span>
+        <span class="info-item">
+            {% trans "Attempt:" %}
+            {% if max_attempts == -1 %}
+                {{ current_attempt }}
+            {% elif current_attempt > max_attempts %}
+                {% trans "No attempts remaining" %}
+            {% else %}
+                {{ current_attempt }}/{{ max_attempts }}
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+<div class="vert-mod {% if not can_submit %}exam-submitted{% endif %}">
+        {% for item in items %}
+            {% if item.content %}
+                <div class="vert vert-{{ forloop.counter0 }}"
+                     data-id="{{ item.id }}"
+                     id="{{ item.id }}">
+                    {{ item.content|safe }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+<div class="exam-actions">
+    {% if can_submit %}
+            <button class="btn btn-primary exam-button submit-exam-btn"
+                    data-usage-id="{{ usage_id }}">
+                {% trans "Submit Exam" %}
+            </button>
+        {% endif %}
+
+        {% if can_retry %}
+            <button class="btn btn-primary exam-button retry-exam-btn"
+                    data-usage-id="{{ usage_id }}">
+                {% trans "Retry Exam" %}
+            </button>
+    {% endif %}
+</div>
+
+<!-- Retry Confirmation Modal -->
+<div id="retry-exam-modal" class="retry-modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="retry-modal-overlay"></div>
+    <div class="retry-modal-content">
+        <div class="retry-modal-header">
+            <h3 id="modal-title">{% trans "Start New Attempt?" %}</h3>
+            <button class="retry-modal-close" aria-label="{% trans 'Close dialog' %}">&times;</button>
+        </div>
+        <div class="retry-modal-body">
+            <div class="retry-modal-warning">
+                <svg class="warning-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                </svg>
+                <div class="retry-modal-warning-content">
+                    <p><strong>{% trans "If you continue:" %}</strong></p>
+                    <ul class="retry-modal-list">
+                        <li>{% trans "Your current progress will be reset." %}</li>
+                        <li>{% trans "A new set of random questions will be loaded." %}</li>
+                        <li>{% trans "This will count as an attempt." %}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="retry-modal-footer">
+            <button class="btn exam-button retry-modal-cancel">{% trans "Cancel" %}</button>
+            <button class="btn btn-primary exam-button retry-modal-confirm-btn">{% trans "Yes, Retry Exam" %}</button>
+        </div>
+    </div>
 </div>
