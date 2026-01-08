@@ -5,19 +5,19 @@
 {% endif %}
 
 <div class="exam-info-panel">
-    <h3 class="progress-header">{% trans "Progress Header" %}</h3>
+    <h3 class="progress-header">{% trans "Exam Progress" %}</h3>
     <div class="attempt-info">
         <span class="info-item">
-            <strong>{% trans "Grade:" %}</strong> {{ current_grade|floatformat:0 }}%
+            <strong>{% trans "Grade:" %} {{ current_grade|floatformat:0 }}% </strong>
             {% if current_grade >= minimum_passing_score %}
                 <span class="grade-status passed">✓ {% trans "Passed" %}</span>
             {% endif %}
         </span>
         <span class="info-item">
-            <strong>{% trans "Goal:" %}</strong> {{ minimum_passing_score|floatformat:0 }}%
+            {% trans "Goal:" %} {{ minimum_passing_score|floatformat:0 }}%
         </span>
         <span class="info-item">
-            <strong>{% trans "Attempt:" %}</strong>
+            {% trans "Attempt:" %}
             {% if max_attempts == -1 %}
                 {{ current_attempt }}
             {% elif current_attempt > max_attempts %}
@@ -52,22 +52,22 @@
         {% if can_retry %}
             <button class="btn btn-primary exam-button retry-exam-btn"
                     data-usage-id="{{ usage_id }}">
-                {% trans "Retry" %}
+                {% trans "Retry Exam" %}
             </button>
     {% endif %}
 </div>
 
 <!-- Retry Confirmation Modal -->
-<div id="retry-exam-modal" class="retry-modal" style="display: none;">
+<div id="retry-exam-modal" class="retry-modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="retry-modal-overlay"></div>
     <div class="retry-modal-content">
         <div class="retry-modal-header">
-            <h3>{% trans "Start New Attempt?" %}</h3>
-            <button class="retry-modal-close">&times;</button>
+            <h3 id="modal-title">{% trans "Start New Attempt?" %}</h3>
+            <button class="retry-modal-close" aria-label="{% trans 'Close dialog' %}">&times;</button>
         </div>
         <div class="retry-modal-body">
             <div class="retry-modal-warning">
-                <svg class="warning-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <svg class="warning-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
                 </svg>
                 <div class="retry-modal-warning-content">
