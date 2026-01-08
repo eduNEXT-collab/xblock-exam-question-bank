@@ -62,11 +62,10 @@
 
 /* Exam Actions */
 .exam-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 15px;
     padding: var(--baseline, 20px) 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* General Exam Button Styles */
@@ -75,12 +74,6 @@
     padding: 12px 40px;
     margin: 0;
     white-space: nowrap;
-    font-weight: 600;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    background-color: #0066cc;
-    border-color: #0066cc;
 }
 
 .exam-button:hover,
@@ -88,14 +81,12 @@
     background-color: var(--btn-brand-focus-background, #065683);
     background-image: none;
     box-shadow: none;
-    border-color: var(--btn-brand-focus-background, #065683);
 }
 
 .exam-button:active {
     background-color: var(--btn-brand-focus-background, #065683);
     background-image: none;
     box-shadow: none;
-    border-color: var(--btn-brand-focus-background, #065683);
 }
 
 /* Disable problem inputs after exam submission */
@@ -113,13 +104,6 @@
 /* Disable all interactive elements inside problems */
 .vert-mod.exam-submitted .problem {
     pointer-events: none !important;
-}
-
-/* Keep exam action buttons (submit/retry) enabled */
-.exam-actions button {
-    pointer-events: auto !important;
-    opacity: 1 !important;
-    cursor: pointer !important;
 }
 
 /* Retry Confirmation Modal */
