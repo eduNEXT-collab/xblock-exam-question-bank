@@ -201,7 +201,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
     @XBlock.json_handler
     def retry_exam(self, _, __):
         """
-        Allow the student to retry the exam.
+        Allow the student to retry the exam by resetting problems.
         """
         # Validate that the student can attempt again
         current_grade = self.get_current_grade()
