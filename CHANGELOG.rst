@@ -15,6 +15,14 @@ Unreleased
 **********
 
 *
+0.4.1 – 2026-01-09
+******************
+
+Added
+=====
+
+* Use self calculated grades to avoid subsection restriction (#10).
+
 0.4.0 – 2026-01-07
 ******************
 
