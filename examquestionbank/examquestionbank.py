@@ -11,7 +11,7 @@ from xblock.core import XBlock
 from xblock.fields import Boolean, Float, Integer, List, Scope, String
 from xblock.utils.resources import ResourceLoader
 
-from examquestionbank.edx_wrapper.grades_module import get_course_data, get_subsection_grade_factory
+from examquestionbank.edx_wrapper.grades_module import get_compute_percent
 from examquestionbank.edx_wrapper.xmodule_module import (
     get_display_name_with_default,
     get_item_bank_mixin,
@@ -24,8 +24,7 @@ logger = logging.getLogger(__name__)
 display_name_with_default = get_display_name_with_default()
 ItemBankMixin = get_item_bank_mixin()
 STUDENT_VIEW = get_student_view()
-SubsectionGradeFactory = get_subsection_grade_factory()
-CourseData = get_course_data()
+compute_percent = get_compute_percent()
 
 
 def _(text):
@@ -249,17 +248,49 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
     def get_current_grade(self):
         """
         Return the current grade for the exam as a percentage (0-100).
+
+        Calculates grade directly from selected problems without using grade factory.
+        This manually replicates the weighted score aggregation logic.
         """
-        try:
-            subsection_block = self.get_parent().get_parent()
-            subsection_key = subsection_block.usage_key
-            student = self.runtime.get_real_user(self.runtime.anonymous_student_id)
+        total_weighted_earned = 0.0
+        total_weighted_possible = 0.0
 
-            course_data = CourseData(user=student, course_key=subsection_key.course_key)
-            grade_factory = SubsectionGradeFactory(student, course_data=course_data)
-            subsection_grade = grade_factory.create(subsection_block)
-            percent_graded = subsection_grade.percent_graded * 100
-            return percent_graded
+        # Iterate through selected problems
+        for block_type, block_id in self.selected_children():
+            block_usage_key = self.context_key.make_usage_key(block_type, block_id)
+            block = self.runtime.get_block(block_usage_key)
 
-        except Exception as e:
-            raise RuntimeError("Error retrieving current grade") from e
+            # Only process blocks that have scores
+            if not getattr(block, 'has_score', False):
+                continue
+
+            # Get the score from the block
+            score_tuple = block.get_score()
+            if score_tuple is None:
+                # Problem not attempted, treat as 0 earned
+                raw_earned = 0.0
+                raw_possible = block.max_score() or 0.0
+            else:
+                raw_earned, raw_possible = score_tuple
+
+            # Get weight from the block (if it exists)
+            weight = getattr(block, 'weight', None)
+
+            # Calculate weighted scores
+            if weight is not None and raw_possible > 0:
+                # Apply weight: weighted_earned = (raw_earned / raw_possible) * weight
+                weighted_earned = raw_earned * weight / raw_possible
+                weighted_possible = float(weight)
+            else:
+                # No weight, use raw scores
+                weighted_earned = raw_earned
+                weighted_possible = raw_possible
+
+            # Only count graded problems
+            if getattr(block, 'graded', False):
+                total_weighted_earned += weighted_earned
+                total_weighted_possible += weighted_possible
+
+        # Calculate percentage using compute_percent
+        percent_graded = compute_percent(total_weighted_earned, total_weighted_possible) * 100
+        return percent_graded
