@@ -8,12 +8,15 @@
 
 /* Exam Information Panel */
 .exam-info-panel {
+    position: sticky;
+    top: 0;
     background-color: #e8f0f7;
     border: 1px solid #dee2e6;
     border-left: 6px solid #0066cc;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
+    z-index: 100;
 }
 
 /* Progress Header */

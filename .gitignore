@@ -59,3 +59,7 @@ docs/mindmap.*.rst
 # Private requirements
 requirements/private.in
 requirements/private.txt
+
+data/
+config.yml
+env/
