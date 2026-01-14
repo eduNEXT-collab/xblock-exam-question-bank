@@ -286,10 +286,8 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 weighted_earned = raw_earned
                 weighted_possible = raw_possible
 
-            # Only count graded problems
-            if getattr(block, 'graded', False):
-                total_weighted_earned += weighted_earned
-                total_weighted_possible += weighted_possible
+            total_weighted_earned += weighted_earned
+            total_weighted_possible += weighted_possible
 
         # Calculate percentage using compute_percent
         percent_graded = compute_percent(total_weighted_earned, total_weighted_possible) * 100
