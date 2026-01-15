@@ -1,5 +1,19 @@
 function ExamQuestionBankBlock(runtime, element) {
     var $element = $(element);
+    
+    // Scroll to top if flag is set from previous submission
+    if (sessionStorage.getItem('scrollToTop') === 'true') {
+        sessionStorage.removeItem('scrollToTop');
+        setTimeout(function() {
+            var examInfoPanel = $element.find('.exam-info-panel')[0];
+            if (examInfoPanel) {
+                examInfoPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 100);
+    }
+    
     var examSubmitBtn = $element.find('.submit-exam-btn')[0];
 
     // Only set up submit button logic if it exists
@@ -63,6 +77,7 @@ function ExamQuestionBankBlock(runtime, element) {
                             return;
                         }
                         // Reload to show updated grade and status
+                        sessionStorage.setItem('scrollToTop', 'true');
                         window.location.reload();
                     },
                     error: function() {
@@ -97,6 +112,7 @@ function ExamQuestionBankBlock(runtime, element) {
             url: handlerUrl,
             data: JSON.stringify({}),
             success: function(result) {
+                sessionStorage.setItem('scrollToTop', 'true');
                 window.location.reload();
             },
             error: function() {
