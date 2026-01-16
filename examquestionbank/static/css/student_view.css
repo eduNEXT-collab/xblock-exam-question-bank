@@ -60,6 +60,13 @@
     color: #155724;
 }
 
+/* Small Retry Button in Header */
+.retry-exam-btn.retry-header-btn {
+    font-size: 0.8em;
+    padding: 4px 8px;
+    margin-left: 12px;
+}
+
 /* Exam Actions */
 .exam-actions {
     padding: var(--baseline, 20px) 0;
@@ -143,16 +150,16 @@
 }
 
 .retry-modal-overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .retry-modal-content {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -163,6 +170,18 @@
     width: 90%;
     max-height: 90vh;
     overflow-y: auto;
+}
+
+/* Modal position variations */
+.retry-modal-content.modal-position-top {
+    top: 10vh;
+    transform: translate(-50%, 0);
+}
+
+.retry-modal-content.modal-position-bottom {
+    top: auto;
+    bottom: 10vh;
+    transform: translate(-50%, 0);
 }
 
 .retry-modal-header {
