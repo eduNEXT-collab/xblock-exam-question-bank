@@ -17,8 +17,8 @@ function ExamQuestionBankBlock(runtime, element) {
     var examSubmitBtn = $element.find('.submit-exam-btn')[0];
 
     let gettext;
-    if ("ContentRestrictionsI18N" in window || "gettext" in window) {
-      gettext = window.ContentRestrictionsI18N?.gettext || window.gettext;
+    if ("ExamquestionbankI18n" in window || "gettext" in window) {
+      gettext = window.ExamquestionbankI18n?.gettext || window.gettext;
     }
 
     if (typeof gettext == "undefined") {
