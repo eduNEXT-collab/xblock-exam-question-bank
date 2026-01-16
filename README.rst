@@ -109,6 +109,13 @@ This Xblock is initially available in English and Spanish. You can help by trans
 1. Create a folder for the translations in ``locale/``, eg: ``locale/fr_FR/LC_MESSAGES/``, and create
    your ``text.po`` file with all the translations.
 2. Run ``make compile_translations``, this will generate the ``.mo`` file.
+
+    By default, JavaScript i18n output won't be generated. To enable it, run with
+    ``make compile_translations GENERATE_JS_I18N=1``.
+
+    To extract JavaScript i18n strings, run with
+    ``make extract_translations EXTRACT_JS_I18N=1``.
+
 3. Create a pull request with your changes!
 
 
