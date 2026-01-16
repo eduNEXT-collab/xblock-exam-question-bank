@@ -118,6 +118,34 @@ This Xblock is initially available in English and Spanish. You can help by trans
 
 3. Create a pull request with your changes!
 
+Updating Translations
+---------------------
+
+When you add new translatable strings to the code, follow these steps:
+
+1. **Extract new strings**: Run the following command to extract all translatable strings from the code and update the English ``.po`` file:
+
+   .. code:: bash
+
+       make extract_translations
+
+2. **Update existing translations**: After extracting, you need to merge the new strings into existing language files (Spanish, French, etc.). Use ``msgmerge`` for each language:
+
+   .. code:: bash
+
+       msgmerge -U examquestionbank/conf/locale/es_419/LC_MESSAGES/text.po examquestionbank/conf/locale/en/LC_MESSAGES/text.po
+       msgmerge -U examquestionbank/conf/locale/es_ES/LC_MESSAGES/text.po examquestionbank/conf/locale/en/LC_MESSAGES/text.po
+
+   This will update the translation files with new entries while preserving existing translations.
+
+3. **Translate new strings**: Open the updated ``.po`` files and add translations for any new ``msgid`` entries.
+
+4. **Compile translations**: Generate the binary ``.mo`` files:
+
+   .. code:: bash
+
+       make compile_translations
+
 
 Reporting Security Issues
 *************************

@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: examquestionbank.py:42
+#: examquestionbank.py:41
 msgid "Display Name"
 msgstr ""
 
-#: examquestionbank.py:43
+#: examquestionbank.py:42
 msgid "The display name for this component."
 msgstr ""
 
@@ -159,50 +159,43 @@ msgstr ""
 msgid "No attempts remaining"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:48
-msgid "Submit Exam"
-msgstr ""
-
-#: templates/student_view_vert_mod.html:55
+#: templates/student_view_vert_mod.html:33
+#: templates/student_view_vert_mod.html:63
 msgid "Retry Exam"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:65
+#: templates/student_view_vert_mod.html:55
+msgid "Submit Exam"
+msgstr ""
+
+#: templates/student_view_vert_mod.html:73
 msgid "Start New Attempt?"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:66
+#: templates/student_view_vert_mod.html:74
 msgid "Close dialog"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:74
+#: templates/student_view_vert_mod.html:82
 msgid "If you continue:"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:76
+#: templates/student_view_vert_mod.html:84
 msgid "Your current progress will be reset."
 msgstr ""
 
-#: templates/student_view_vert_mod.html:77
+#: templates/student_view_vert_mod.html:85
 msgid "A new set of random questions will be loaded."
 msgstr ""
 
-#: templates/student_view_vert_mod.html:78
+#: templates/student_view_vert_mod.html:86
 msgid "This will count as an attempt."
 msgstr ""
 
-#: templates/student_view_vert_mod.html:84
+#: templates/student_view_vert_mod.html:92
 msgid "Cancel"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:85
+#: templates/student_view_vert_mod.html:93
 msgid "Yes, Retry Exam"
-msgstr ""
-
-#: static/js/student_view.js:79
-msgid "Error submitting exam. Please try again."
-msgstr ""
-
-#: static/js/student_view.js:113
-msgid "Error retrying the exam. Please try again."
 msgstr ""
