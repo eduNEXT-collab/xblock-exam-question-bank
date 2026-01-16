@@ -14,9 +14,9 @@ Compatibility Notes
 +------------------+------------------+
 | Open edX Release | Version          |
 +==================+==================+
-| Teak             | >= 0.4.1         |
+| Teak             | >= 0.5.0         |
 +------------------+------------------+
-| Ulmo             | >= 0.4.1         |
+| Ulmo             | >= 0.5.0         |
 +------------------+------------------+
 
 To ensure better maintainability and performance, **Python 3.11 or newer** is now required.
@@ -109,7 +109,42 @@ This Xblock is initially available in English and Spanish. You can help by trans
 1. Create a folder for the translations in ``locale/``, eg: ``locale/fr_FR/LC_MESSAGES/``, and create
    your ``text.po`` file with all the translations.
 2. Run ``make compile_translations``, this will generate the ``.mo`` file.
+
+    By default, JavaScript i18n output won't be generated. To enable it, run with
+    ``make compile_translations GENERATE_JS_I18N=1``.
+
+    To extract JavaScript i18n strings, run with
+    ``make extract_translations EXTRACT_JS_I18N=1``.
+
 3. Create a pull request with your changes!
+
+Updating Translations
+---------------------
+
+When you add new translatable strings to the code, follow these steps:
+
+1. **Extract new strings**: Run the following command to extract all translatable strings from the code and update the English ``.po`` file:
+
+   .. code:: bash
+
+       make extract_translations
+
+2. **Update existing translations**: After extracting, you need to merge the new strings into existing language files (Spanish, French, etc.). Use ``msgmerge`` for each language:
+
+   .. code:: bash
+
+       msgmerge -U examquestionbank/conf/locale/es_419/LC_MESSAGES/text.po examquestionbank/conf/locale/en/LC_MESSAGES/text.po
+       msgmerge -U examquestionbank/conf/locale/es_ES/LC_MESSAGES/text.po examquestionbank/conf/locale/en/LC_MESSAGES/text.po
+
+   This will update the translation files with new entries while preserving existing translations.
+
+3. **Translate new strings**: Open the updated ``.po`` files and add translations for any new ``msgid`` entries.
+
+4. **Compile translations**: Generate the binary ``.mo`` files:
+
+   .. code:: bash
+
+       make compile_translations
 
 
 Reporting Security Issues

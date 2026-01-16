@@ -16,6 +16,16 @@ function ExamQuestionBankBlock(runtime, element) {
     
     var examSubmitBtn = $element.find('.submit-exam-btn')[0];
 
+    let gettext;
+    if ("ExamquestionbankI18n" in window || "gettext" in window) {
+      gettext = window.ExamquestionbankI18n?.gettext || window.gettext;
+    }
+
+    if (typeof gettext == "undefined") {
+      // No translations -- used by test environment
+      gettext = (string) => string;
+    }
+
     // Only set up submit button logic if it exists
     if (examSubmitBtn) {
         // Function to check if all problem submit buttons are enabled
@@ -81,7 +91,7 @@ function ExamQuestionBankBlock(runtime, element) {
                         window.location.reload();
                     },
                     error: function() {
-                        alert('Error submitting exam. Please try again.');
+                        alert(gettext('Error submitting exam. Please try again.'));
                     }
                 });
             }, 2000);
@@ -126,7 +136,7 @@ function ExamQuestionBankBlock(runtime, element) {
                 window.location.reload();
             },
             error: function() {
-                alert('Error retrying the exam. Please try again.');
+                alert(gettext('Error retrying the exam. Please try again.'));
                 $('#retry-exam-modal').fadeOut(200);
             }
         });

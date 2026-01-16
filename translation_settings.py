@@ -48,3 +48,8 @@ STATICI18N_PACKAGES = (
 )
 STATICI18N_ROOT = 'examquestionbank/public/js'
 STATICI18N_OUTPUT_DIR = 'translations'
+
+LANGUAGES = [
+    ("en", "English - Source Language"),
+    ("es_419", "Spanish (Latin America)"),
+]

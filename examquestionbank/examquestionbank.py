@@ -6,6 +6,8 @@ Extends Open edX ItemBankMixin to provide a custom Studio authoring experience.
 import logging
 from copy import copy
 
+import pkg_resources
+from django.utils import translation
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
 from xblock.fields import Boolean, Float, Integer, List, Scope, String
@@ -31,6 +33,7 @@ def _(text):
     return text
 
 
+@XBlock.needs("i18n")
 class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
     """Custom Item Bank XBlock for exams."""
 
@@ -38,6 +41,14 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         display_name=_("Display Name"),
         help=_("The display name for this component."),
         default="Exam Question Bank",
+        scope=Scope.settings,
+    )
+
+    # Override parent field to set translation
+    max_count = Integer(
+        display_name=_("Count"),
+        help=_("Enter the number of components to display to each student. Set it to -1 to display all components."),
+        default=-1,
         scope=Scope.settings,
     )
 
@@ -53,33 +64,57 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
     )
 
     current_attempt = Integer(
-        display_name="Current Attempt",
-        help="Current attempt number for this student",
+        display_name=_("Current Attempt"),
+        help=_("Current attempt number for this student"),
         default=1,
         scope=Scope.user_state
     )
 
     attempt_history = List(
-        display_name="Attempt History",
-        help="History of all attempts with scores and timestamps",
+        display_name=_("Attempt History"),
+        help=_("History of all attempts with scores and timestamps"),
         default=[],
         scope=Scope.user_state
     )
 
     minimum_passing_score = Float(
-        display_name="Minimum Passing Score (%)",
-        help="Minimum percentage required to pass the exam (1-100)",
+        display_name=_("Minimum Passing Score (%)"),
+        help=_("Minimum percentage required to pass the exam (1-100)"),
         default=60.0,
         scope=Scope.settings,
         values={"min": 1, "max": 100}
     )
 
     is_attempting = Boolean(
-        display_name="Is Attempting",
-        help="Indicates whether the student is currently attempting the exam",
+        display_name=_("Is Attempting"),
+        help=_("Indicates whether the student is currently attempting the exam"),
         default=True,
         scope=Scope.user_state
     )
+
+    # Override parent field to hide it from editor
+    allow_resetting_children = Boolean(
+        default=False,
+        scope=Scope.user_state,
+        enforce_type=True
+    )
+
+    @staticmethod
+    def _get_statici18n_js_url(loader):  # pragma: no cover
+        """
+        Return the JavaScript translation file for the current language.
+
+        Uses `pkg_resources` to locate the static i18n file.
+        """
+        lang_code = translation.get_language()
+        if not lang_code:
+            return None
+        text_js = 'public/js/translations/{lang_code}/text.js'
+        country_code = lang_code.split('-')[0]
+        for code in (translation.to_locale(lang_code), lang_code, country_code):
+            if pkg_resources.resource_exists(loader.module_name, text_js.format(lang_code=code)):
+                return text_js.format(lang_code=code)
+        return None
 
     @classmethod
     def get_selected_event_prefix(cls) -> str:
@@ -111,10 +146,14 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                     ],
                     "view_link": f'<a target="_top" href="/container/{self.usage_key}">',
                 },
+                i18n_service=self.runtime.service(self, 'i18n')
             ))
             fragment.add_content(resource_loader.render_django_template(
-                "templates/author_view_add_custom.html", {}
+                "templates/author_view_add_custom.html", {}, i18n_service=self.runtime.service(self, 'i18n')
             ))
+            statici18n_js_url = self._get_statici18n_js_url(resource_loader)
+            if statici18n_js_url:
+                fragment.add_javascript_url(self.runtime.local_resource_url(self, statici18n_js_url))
 
         return fragment
 
@@ -157,8 +196,12 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                     'show_bookmark_button': False,
                     **context,
                 },
+                i18n_service=self.runtime.service(self, 'i18n')
             )
         )
+        statici18n_js_url = self._get_statici18n_js_url(resource_loader)
+        if statici18n_js_url:
+            fragment.add_javascript_url(self.runtime.local_resource_url(self, statici18n_js_url))
         fragment.initialize_js('ExamQuestionBankBlock')
         return fragment
 

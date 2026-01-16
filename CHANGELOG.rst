@@ -15,6 +15,19 @@ Unreleased
 **********
 
 *
+0.5.0 – 2026-01-16
+******************
+
+Added
+=====
+
+* Add Spanish translations (#11).
+
+Fixed
+======
+
+* Improve the ux showing the information (#12)
+
 0.4.1 – 2026-01-14
 ******************
 

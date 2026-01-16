@@ -3,12 +3,21 @@
 .PHONY: dev.clean dev.build dev.run upgrade compile-requirements help requirements
 .PHONY: extract_translations compile_translations
 .PHONY: detect_changed_source_translations dummy_translations build_dummy_translations
-.PHONY: validate_translations pull_translations install_transifex_clients
+.PHONY: validate_translations pull_translations install_transifex_clients symlink_translations
 
 REPO_NAME := xblock-exam-question-bank
 PACKAGE_NAME := examquestionbank
 EXTRACT_DIR := $(PACKAGE_NAME)/conf/locale/en/LC_MESSAGES
+EXTRACTED_DJANGO := $(EXTRACT_DIR)/django-partial.po
+EXTRACTED_DJANGOJS := $(EXTRACT_DIR)/djangojs-partial.po
+EXTRACTED_TEXT := $(EXTRACT_DIR)/text.po
 JS_TARGET := $(PACKAGE_NAME)/public/js/translations
+TRANSLATIONS_DIR := $(PACKAGE_NAME)/translations
+
+# Translation pipeline options
+# Set to 0 to avoid generating JS-related translation artifacts.
+EXTRACT_JS_I18N ?= 0
+GENERATE_JS_I18N ?= 0
 
 help:
 	@perl -nle'print $& if m{^[\.a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m  %-25s\033[0m %s\n", $$1, $$2}'
@@ -80,16 +89,24 @@ dev.exec: ## Execute to the dev container
 
 ## Localization targets
 
-extract_translations: ## extract strings to be translated, outputting .po files
-	cd $(PACKAGE_NAME) && i18n_tool extract --no-segment --merge-po-files
-	mv $(EXTRACT_DIR)/django.po $(EXTRACT_DIR)/text.po
+extract_translations: symlink_translations ## extract strings to be translated, outputting .po files
+	cd $(PACKAGE_NAME) && i18n_tool extract
+	mv $(EXTRACTED_DJANGO) $(EXTRACTED_TEXT)
+	if [ "$(EXTRACT_JS_I18N)" = "1" ]; then \
+		if [ -f "$(EXTRACTED_DJANGOJS)" ]; then cat $(EXTRACTED_DJANGOJS) >> $(EXTRACTED_TEXT); rm $(EXTRACTED_DJANGOJS); fi; \
+	else \
+		if [ -f "$(EXTRACTED_DJANGOJS)" ]; then rm $(EXTRACTED_DJANGOJS); fi; \
+	fi
 
-compile_translations: ## compile translation files, outputting .mo files for each supported language
-	cd $(PACKAGE_NAME) && i18n_tool generate
-	python manage.py compilejsi18n --namespace ExamquestionbankI18n --output $(JS_TARGET)
+compile_translations: symlink_translations ## compile translation files, outputting .mo files for each supported language
+	cd $(PACKAGE_NAME) && i18n_tool generate -v
+	if [ "$(GENERATE_JS_I18N)" = "1" ]; then python manage.py compilejsi18n --namespace ExamquestionbankI18n --output $(JS_TARGET); fi
 
 detect_changed_source_translations:
 	cd $(PACKAGE_NAME) && i18n_tool changed
+
+symlink_translations:
+	if [ ! -d "$(TRANSLATIONS_DIR)" ]; then ln -s conf/locale/ $(TRANSLATIONS_DIR); fi
 
 dummy_translations: ## generate dummy translation (.po) files
 	cd $(PACKAGE_NAME) && i18n_tool dummy
