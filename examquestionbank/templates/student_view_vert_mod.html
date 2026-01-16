@@ -28,7 +28,8 @@
         </span>
         {% if can_retry %}
             <button class="btn btn-primary exam-button retry-exam-btn retry-header-btn" 
-                    data-usage-id="{{ usage_id }}">
+                    data-usage-id="{{ usage_id }}"
+                    data-modal-position="top">
                 {% trans "Retry Exam" %}
             </button>
         {% endif %}
@@ -57,7 +58,8 @@
 
         {% if can_retry %}
             <button class="btn btn-primary exam-button retry-exam-btn"
-                    data-usage-id="{{ usage_id }}">
+                    data-usage-id="{{ usage_id }}"
+                    data-modal-position="bottom">
                 {% trans "Retry Exam" %}
             </button>
     {% endif %}

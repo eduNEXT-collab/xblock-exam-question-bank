@@ -90,7 +90,17 @@ function ExamQuestionBankBlock(runtime, element) {
 
     // Retry exam button handler - show confirmation modal
     $element.find('.retry-exam-btn').click(function() {
-        $('#retry-exam-modal').fadeIn(200);
+        var $modal = $('#retry-exam-modal');
+        var $modalContent = $modal.find('.retry-modal-content');
+        var position = $(this).data('modal-position') || 'top';
+        
+        // Remove any previous position classes
+        $modalContent.removeClass('modal-position-top modal-position-bottom');
+        
+        // Add the appropriate position class
+        $modalContent.addClass('modal-position-' + position);
+        
+        $modal.fadeIn(200);
     });
 
     // Modal close handlers
