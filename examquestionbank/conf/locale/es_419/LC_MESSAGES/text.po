@@ -1,0 +1,208 @@
+# edX translation file.
+# Copyright (C) 2026 EdX
+# This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
+# EdX Team <info@edx.org>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1a\n"
+"Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
+"POT-Creation-Date: 2023-06-13 08:00+0000\n"
+"PO-Revision-Date: 2026-01-14 09:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: openedx-translation <openedx-translation@googlegroups.com>\n"
+"Language: es_419\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: examquestionbank.py:42
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#: examquestionbank.py:43
+msgid "The display name for this component."
+msgstr "El nombre para mostrar de este componente."
+
+#: examquestionbank.py:48
+msgid "Count"
+msgstr "Cantidad"
+
+#: examquestionbank.py:49
+msgid "Enter the number of components to display to each student. Set it to -1 to display all components."
+msgstr "Ingresa el número de componentes a mostrar a cada estudiante. Establece -1 para mostrar todos los componentes."
+
+#: examquestionbank.py:49
+msgid "Maximum Exam Attempts"
+msgstr "Número máximo de intentos del examen"
+
+#: examquestionbank.py:51
+msgid ""
+"Maximum number of times a student can attempt this entire exam. Set to -1 "
+"for unlimited attempts."
+msgstr ""
+"Número máximo de veces que un estudiante puede intentar este examen completo. "
+"Establece -1 para intentos ilimitados."
+
+#: examquestionbank.py:60
+msgid "Current Attempt"
+msgstr "Intento actual"
+
+#: examquestionbank.py:61
+msgid "Current attempt number for this student"
+msgstr "Número de intento actual para este estudiante"
+
+#: examquestionbank.py:67
+msgid "Attempt History"
+msgstr "Historial de intentos"
+
+#: examquestionbank.py:68
+msgid "History of all attempts with scores and timestamps"
+msgstr "Historial de todos los intentos con calificaciones y marcas de tiempo"
+
+#: examquestionbank.py:74
+msgid "Minimum Passing Score (%)"
+msgstr "Puntuación mínima para aprobar (%)"
+
+#: examquestionbank.py:75
+msgid "Minimum percentage required to pass the exam (1-100)"
+msgstr "Porcentaje mínimo requerido para aprobar el examen (1-100)"
+
+#: examquestionbank.py:82
+msgid "Is Attempting"
+msgstr "Está intentando"
+
+#: examquestionbank.py:83
+msgid "Indicates whether the student is currently attempting the exam"
+msgstr "Indica si el estudiante está actualmente intentando el examen"
+
+#: templates/author_view_add_custom.html:7
+msgid "Add Problems"
+msgstr "Agregar problemas"
+
+#: templates/author_view_add_custom.html:9
+msgid "from your content library to this bank."
+msgstr "desde tu biblioteca de contenidos a este banco."
+
+#: templates/author_view_custom.html:7
+msgid "Your Problem Bank is Empty"
+msgstr "Tu banco de problemas está vacío"
+
+#: templates/author_view_custom.html:8
+msgid "To start, add problems to the bank."
+msgstr "Para comenzar, agrega problemas al banco."
+
+#: templates/author_view_custom.html:13
+msgid "Error:"
+msgstr "Error:"
+
+#: templates/author_view_custom.html:13 templates/author_view_custom.html:35
+msgid "Problem Bank Summary"
+msgstr "Resumen del banco de problemas"
+
+#: templates/author_view_custom.html:17 templates/author_view_custom.html:39
+msgid "Total problems"
+msgstr "Total de problemas"
+
+#: templates/author_view_custom.html:21 templates/author_view_custom.html:47
+msgid "Selected to show"
+msgstr "Seleccionados para mostrar"
+
+#: templates/author_view_custom.html:24
+msgid "More problems selected than available."
+msgstr "Hay más problemas seleccionados que disponibles."
+
+#: templates/author_view_custom.html:27 templates/author_view_custom.html:71
+#, python-brace-format
+msgid "Press {link_start}Edit{link_end} to configure settings."
+msgstr "Presiona {link_start}Editar{link_end} para configurar los ajustes."
+
+#: templates/author_view_custom.html:43
+msgid "All"
+msgstr "Todos"
+
+#: templates/author_view_custom.html:44
+msgid "Shown to learners"
+msgstr "Mostrados a los estudiantes"
+
+#: templates/author_view_custom.html:55
+msgid "These are the problems in the bank:"
+msgstr "Estos son los problemas en el banco:"
+
+#: templates/author_view_custom.html:65
+#, python-brace-format
+msgid "Press {link_start}View{link_end} to preview or remove components."
+msgstr "Presiona {link_start}Ver{link_end} para previsualizar o eliminar componentes."
+
+#: templates/student_view_vert_mod.html:8
+msgid "Exam Progress"
+msgstr "Progreso del examen"
+
+#: templates/student_view_vert_mod.html:11
+msgid "Grade:"
+msgstr "Calificación:"
+
+#: templates/student_view_vert_mod.html:13
+msgid "Passed"
+msgstr "Aprobado"
+
+#: templates/student_view_vert_mod.html:17
+msgid "Goal:"
+msgstr "Meta:"
+
+#: templates/student_view_vert_mod.html:20
+msgid "Attempt:"
+msgstr "Intento:"
+
+#: templates/student_view_vert_mod.html:24
+msgid "No attempts remaining"
+msgstr "No quedan intentos"
+
+#: templates/student_view_vert_mod.html:48
+msgid "Submit Exam"
+msgstr "Enviar examen"
+
+#: templates/student_view_vert_mod.html:55
+msgid "Retry Exam"
+msgstr "Reintentar examen"
+
+#: templates/student_view_vert_mod.html:65
+msgid "Start New Attempt?"
+msgstr "¿Iniciar nuevo intento?"
+
+#: templates/student_view_vert_mod.html:66
+msgid "Close dialog"
+msgstr "Cerrar diálogo"
+
+#: templates/student_view_vert_mod.html:74
+msgid "If you continue:"
+msgstr "Si continúas:"
+
+#: templates/student_view_vert_mod.html:76
+msgid "Your current progress will be reset."
+msgstr "Tu progreso actual será reiniciado."
+
+#: templates/student_view_vert_mod.html:77
+msgid "A new set of random questions will be loaded."
+msgstr "Se cargará un nuevo conjunto de preguntas aleatorias."
+
+#: templates/student_view_vert_mod.html:78
+msgid "This will count as an attempt."
+msgstr "Esto contará como un intento."
+
+#: templates/student_view_vert_mod.html:84
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/student_view_vert_mod.html:85
+msgid "Yes, Retry Exam"
+msgstr "Sí, reintentar examen"
+
+#: static/js/student_view.js:74
+msgid "Error submitting exam. Please try again."
+msgstr "Error al enviar el examen. Por favor, inténtalo de nuevo."
+
+#: static/js/student_view.js:108
+msgid "Error retrying the exam. Please try again."
+msgstr "Error al reintentar el examen. Por favor, inténtalo de nuevo."
