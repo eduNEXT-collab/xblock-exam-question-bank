@@ -15,6 +15,14 @@ Unreleased
 **********
 
 *
+0.5.1 – 2026-01-19
+******************
+
+Fixed
+=====
+
+* Add 'translations' to package_data in setup.py (#13).
+
 0.5.0 – 2026-01-16
 ******************
 
