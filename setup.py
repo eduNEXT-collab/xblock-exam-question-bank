@@ -181,6 +181,6 @@ setup(
             "examquestionbank = examquestionbank.apps:ExamQuestionBankConfig",
         ],
     },
-    package_data=package_data("examquestionbank", ["static", "public", "translations"]),
+    package_data=package_data("examquestionbank", ["static", "public", "conf", "translations"]),
 
 )
