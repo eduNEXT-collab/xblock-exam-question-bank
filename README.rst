@@ -106,6 +106,8 @@ Translations
 ============
 This Xblock is initially available in English and Spanish. You can help by translating this component to other languages. Follow the steps below:
 
+**Note:** In addition to the translations in this repository, we are also maintaining translations for this XBlock in a fork of `openedx-translations for Ceibal <https://github.com/eduNEXT/openedx-translations/tree/ednx-release/teak.ceibal>`_.
+
 1. Create a folder for the translations in ``locale/``, eg: ``locale/fr_FR/LC_MESSAGES/``, and create
    your ``text.po`` file with all the translations.
 2. Run ``make compile_translations``, this will generate the ``.mo`` file.
