@@ -63,7 +63,7 @@
 
     <div class="bank-instruction">
         {% blocktrans trimmed asvar view_msg %}
-        Press {link_start}View{link_end} to preview or remove components.
+        Press {link_start}View{link_end} to preview components.
         {% endblocktrans %}
         {% interpolate_html view_msg link_start=view_link|safe link_end='</a>'|safe %}
     </div>

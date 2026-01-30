@@ -132,7 +132,7 @@ msgstr ""
 
 #: templates/author_view_custom.html:65
 #, python-brace-format
-msgid "Press {link_start}View{link_end} to preview or remove components."
+msgid "Press {link_start}View{link_end} to preview components."
 msgstr ""
 
 #: templates/student_view_vert_mod.html:8
