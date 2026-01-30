@@ -14,9 +14,9 @@ Compatibility Notes
 +------------------+------------------+
 | Open edX Release | Version          |
 +==================+==================+
-| Teak             | >= 0.5.1         |
+| Teak             | >= 0.5.2         |
 +------------------+------------------+
-| Ulmo             | >= 0.5.1         |
+| Ulmo             | >= 0.5.2         |
 +------------------+------------------+
 
 To ensure better maintainability and performance, **Python 3.11 or newer** is now required.
@@ -105,6 +105,8 @@ You can start a conversation by creating a new issue on this repo summarizing yo
 Translations
 ============
 This Xblock is initially available in English and Spanish. You can help by translating this component to other languages. Follow the steps below:
+
+**Note:** In addition to the translations in this repository, we are also maintaining translations for this XBlock in a fork of `openedx-translations for Ceibal <https://github.com/eduNEXT/openedx-translations/tree/ednx-release/teak.ceibal>`_.
 
 1. Create a folder for the translations in ``locale/``, eg: ``locale/fr_FR/LC_MESSAGES/``, and create
    your ``text.po`` file with all the translations.

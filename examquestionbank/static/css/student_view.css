@@ -60,6 +60,11 @@
     color: #155724;
 }
 
+.grade-status.no-attempts {
+    background-color: #e2e3e5;
+    color: #383d41;
+}
+
 /* Small Retry Button in Header */
 .retry-exam-btn.retry-header-btn {
     font-size: 0.8em;
@@ -174,13 +179,13 @@
 
 /* Modal position variations */
 .retry-modal-content.modal-position-top {
-    top: 10vh;
+    top: 5vh;
     transform: translate(-50%, 0);
 }
 
 .retry-modal-content.modal-position-bottom {
     top: auto;
-    bottom: 10vh;
+    bottom: 5vh;
     transform: translate(-50%, 0);
 }
 

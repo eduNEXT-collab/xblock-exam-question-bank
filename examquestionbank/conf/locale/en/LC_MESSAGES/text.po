@@ -132,7 +132,7 @@ msgstr ""
 
 #: templates/author_view_custom.html:65
 #, python-brace-format
-msgid "Press {link_start}View{link_end} to preview or remove components."
+msgid "Press {link_start}View{link_end} to preview components."
 msgstr ""
 
 #: templates/student_view_vert_mod.html:8
@@ -155,47 +155,47 @@ msgstr ""
 msgid "Attempt:"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:24
+#: templates/student_view_vert_mod.html:25
 msgid "No attempts remaining"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:33
-#: templates/student_view_vert_mod.html:63
+#: templates/student_view_vert_mod.html:34
+#: templates/student_view_vert_mod.html:64
 msgid "Retry Exam"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:55
+#: templates/student_view_vert_mod.html:56
 msgid "Submit Exam"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:73
+#: templates/student_view_vert_mod.html:74
 msgid "Start New Attempt?"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:74
+#: templates/student_view_vert_mod.html:75
 msgid "Close dialog"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:82
+#: templates/student_view_vert_mod.html:83
 msgid "If you continue:"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:84
+#: templates/student_view_vert_mod.html:85
 msgid "Your current progress will be reset."
 msgstr ""
 
-#: templates/student_view_vert_mod.html:85
+#: templates/student_view_vert_mod.html:86
 msgid "A new set of random questions will be loaded."
 msgstr ""
 
-#: templates/student_view_vert_mod.html:86
+#: templates/student_view_vert_mod.html:87
 msgid "This will count as an attempt."
 msgstr ""
 
-#: templates/student_view_vert_mod.html:92
+#: templates/student_view_vert_mod.html:93
 msgid "Cancel"
 msgstr ""
 
-#: templates/student_view_vert_mod.html:93
+#: templates/student_view_vert_mod.html:94
 msgid "Yes, Retry Exam"
 msgstr ""

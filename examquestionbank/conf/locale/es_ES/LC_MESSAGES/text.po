@@ -136,9 +136,9 @@ msgstr "Estos son los problemas en el banco:"
 
 #: templates/author_view_custom.html:65
 #, python-brace-format
-msgid "Press {link_start}View{link_end} to preview or remove components."
+msgid "Press {link_start}View{link_end} to preview components."
 msgstr ""
-"Pulsa {link_start}Ver{link_end} para previsualizar o eliminar componentes."
+"Pulsa {link_start}Ver{link_end} para previsualizar los componentes."
 
 #: templates/student_view_vert_mod.html:8
 msgid "Exam Progress"
@@ -160,48 +160,48 @@ msgstr "Objetivo:"
 msgid "Attempt:"
 msgstr "Intento:"
 
-#: templates/student_view_vert_mod.html:24
+#: templates/student_view_vert_mod.html:25
 msgid "No attempts remaining"
 msgstr "No quedan intentos"
 
-#: templates/student_view_vert_mod.html:33
-#: templates/student_view_vert_mod.html:63
+#: templates/student_view_vert_mod.html:34
+#: templates/student_view_vert_mod.html:64
 msgid "Retry Exam"
 msgstr "Reintentar examen"
 
-#: templates/student_view_vert_mod.html:55
+#: templates/student_view_vert_mod.html:56
 msgid "Submit Exam"
 msgstr "Enviar examen"
 
-#: templates/student_view_vert_mod.html:73
+#: templates/student_view_vert_mod.html:74
 msgid "Start New Attempt?"
 msgstr "¿Iniciar nuevo intento?"
 
-#: templates/student_view_vert_mod.html:74
+#: templates/student_view_vert_mod.html:75
 msgid "Close dialog"
 msgstr "Cerrar diálogo"
 
-#: templates/student_view_vert_mod.html:82
+#: templates/student_view_vert_mod.html:83
 msgid "If you continue:"
 msgstr "Si continúas:"
 
-#: templates/student_view_vert_mod.html:84
+#: templates/student_view_vert_mod.html:85
 msgid "Your current progress will be reset."
 msgstr "Tu progreso actual será reiniciado."
 
-#: templates/student_view_vert_mod.html:85
+#: templates/student_view_vert_mod.html:86
 msgid "A new set of random questions will be loaded."
 msgstr "Se cargará un nuevo conjunto de preguntas aleatorias."
 
-#: templates/student_view_vert_mod.html:86
+#: templates/student_view_vert_mod.html:87
 msgid "This will count as an attempt."
 msgstr "Esto contará como un intento."
 
-#: templates/student_view_vert_mod.html:92
+#: templates/student_view_vert_mod.html:93
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/student_view_vert_mod.html:93
+#: templates/student_view_vert_mod.html:94
 msgid "Yes, Retry Exam"
 msgstr "Sí, reintentar examen"
 
