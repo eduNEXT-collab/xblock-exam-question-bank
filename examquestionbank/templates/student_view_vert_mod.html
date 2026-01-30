@@ -20,8 +20,9 @@
             {% trans "Attempt:" %}
             {% if max_attempts == -1 %}
                 {{ current_attempt }}
-            {% elif current_attempt > max_attempts %}
-                {% trans "No attempts remaining" %}
+            {% elif current_attempt == max_attempts and not current_grade >= minimum_passing_score %}
+                {{ current_attempt }}/{{ max_attempts }}
+                <span class="grade-status no-attempts">✗ {% trans "No attempts remaining" %}</span>
             {% else %}
                 {{ current_attempt }}/{{ max_attempts }}
             {% endif %}

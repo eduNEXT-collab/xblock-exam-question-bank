@@ -60,6 +60,11 @@
     color: #155724;
 }
 
+.grade-status.no-attempts {
+    background-color: #e2e3e5;
+    color: #383d41;
+}
+
 /* Small Retry Button in Header */
 .retry-exam-btn.retry-header-btn {
     font-size: 0.8em;
