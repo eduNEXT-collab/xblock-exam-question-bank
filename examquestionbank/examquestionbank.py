@@ -8,20 +8,20 @@ from copy import copy
 
 import pkg_resources
 from django.utils import translation
-from openedx.core.djangoapps.content_libraries.api import get_component_from_usage_key
 from openedx_learning.api import authoring as authoring_api
 from opaque_keys.edx.keys import UsageKey
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
 from xblock.fields import Boolean, Dict, Float, Integer, List, Scope, String
 from xblock.utils.resources import ResourceLoader
-from xmodule.modulestore.django import modulestore
 
+from examquestionbank.edx_wrapper.content_libraries_module import get_component_from_usage_key
 from examquestionbank.edx_wrapper.grades_module import get_compute_percent
 from examquestionbank.edx_wrapper.xmodule_module import (
     get_display_name_with_default,
     get_item_bank_mixin,
     get_student_view,
+    get_modulestore
 )
 
 resource_loader = ResourceLoader(__name__)
@@ -31,7 +31,8 @@ display_name_with_default = get_display_name_with_default()
 ItemBankMixin = get_item_bank_mixin()
 STUDENT_VIEW = get_student_view()
 compute_percent = get_compute_percent()
-
+modulestore = get_modulestore()
+get_component_from_usage_key_func = get_component_from_usage_key()
 
 def _(text):
     return text
@@ -359,12 +360,12 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         children_data = {}
         
         for child in self.children:
-            block = modulestore().get_item(child)
+            block = modulestore.get_item(child)
             if hasattr(block, 'upstream'):
                 key_string = block.upstream                
                 # Get the Component from the usage key
                 usage_key = UsageKey.from_string(key_string)
-                component = get_component_from_usage_key(usage_key)
+                component = get_component_from_usage_key_func(usage_key)
                 
                 # Get collections for this component
                 collections = authoring_api.get_entity_collections(
@@ -442,7 +443,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             self.collections_info = grouped_data
             
             # Use modulestore to persist changes
-            modulestore().update_item(self, self.runtime.user_id)
+            modulestore.update_item(self, self.runtime.user_id)
             
             return {
                 'success': True,
