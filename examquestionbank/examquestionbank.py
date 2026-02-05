@@ -8,10 +8,14 @@ from copy import copy
 
 import pkg_resources
 from django.utils import translation
+from openedx.core.djangoapps.content_libraries.api import get_component_from_usage_key
+from openedx_learning.api import authoring as authoring_api
+from opaque_keys.edx.keys import UsageKey
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
-from xblock.fields import Boolean, Float, Integer, List, Scope, String
+from xblock.fields import Boolean, Dict, Float, Integer, List, Scope, String
 from xblock.utils.resources import ResourceLoader
+from xmodule.modulestore.django import modulestore
 
 from examquestionbank.edx_wrapper.grades_module import get_compute_percent
 from examquestionbank.edx_wrapper.xmodule_module import (
@@ -50,6 +54,13 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         help=_("Enter the number of components to display to each student. Set it to -1 to display all components."),
         default=-1,
         scope=Scope.settings,
+    )
+
+    collections_info = Dict(
+        display_name=_("Collections Info"),
+        help=_("To update this field click Refresh Collections in the XBlock."),
+        default={},
+        scope=Scope.content,
     )
 
     max_exam_attempts = Integer(
@@ -151,9 +162,11 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             fragment.add_content(resource_loader.render_django_template(
                 "templates/author_view_add_custom.html", {}, i18n_service=self.runtime.service(self, 'i18n')
             ))
+            fragment.add_javascript(resource_loader.load_unicode("static/js/author_view.js"))
             statici18n_js_url = self._get_statici18n_js_url(resource_loader)
             if statici18n_js_url:
                 fragment.add_javascript_url(self.runtime.local_resource_url(self, statici18n_js_url))
+            fragment.initialize_js('ExamQuestionBankAuthorView')
 
         return fragment
 
@@ -335,3 +348,110 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         # Calculate percentage using compute_percent
         percent_graded = compute_percent(total_weighted_earned, total_weighted_possible) * 100
         return percent_graded
+
+    def populate_collections_info_from_children(self, children):
+        """
+        Populates collections_info with grouped collection data.
+        Fetches children block information and groups them by their collections.
+        """
+        
+        # Temporary storage for children data
+        children_data = {}
+        
+        for child in self.children:
+            block = modulestore().get_item(child)
+            if hasattr(block, 'upstream'):
+                key_string = block.upstream                
+                # Get the Component from the usage key
+                usage_key = UsageKey.from_string(key_string)
+                component = get_component_from_usage_key(usage_key)
+                
+                # Get collections for this component
+                collections = authoring_api.get_entity_collections(
+                    component.learning_package_id,
+                    component.key,
+                )
+                # Convert collection objects to serializable dictionaries
+                serialized_collections = [
+                    {
+                        "key": coll.key,
+                        "title": coll.title,
+                        "description": getattr(coll, 'description', '')
+                    }
+                    for coll in collections
+                ]
+                children_data[str(child)] = {
+                    "display_name": display_name_with_default(block),
+                    "library_usage_key": str(usage_key),
+                    "collections": serialized_collections,
+                }
+        
+        # Group the data by collections
+        grouped_data = {}
+        
+        for block_key, info in children_data.items():
+            collections = info.get('collections', [])
+            display_name = info.get('display_name', 'Unknown')
+            library_key = info.get('library_usage_key', '')
+            
+            # If there are no collections, group under 'uncategorized'
+            if not collections:
+                if "uncategorized" not in grouped_data:
+                    grouped_data["uncategorized"] = {
+                        "title": "Uncategorized",
+                        "description": "Problems without a collection",
+                        "problems": {}
+                    }
+                
+                grouped_data["uncategorized"]["problems"][block_key] = {
+                    "name": display_name,
+                    "library_key": library_key
+                }
+                continue
+
+            for collection in collections:
+                coll_key = collection['key']
+                
+                if coll_key not in grouped_data:
+                    grouped_data[coll_key] = {
+                        "title": collection['title'],
+                        "description": collection.get('description', ''),
+                        "problems": {}
+                    }
+                
+                grouped_data[coll_key]["problems"][block_key] = {
+                    "name": display_name,
+                    "library_key": library_key
+                }
+        return grouped_data
+
+    @XBlock.json_handler
+    def refresh_collections(self, data, suffix=''):
+        """
+        Handler to refresh collections_info.
+        Populates collection data from children and saves automatically.
+        """
+        if not self.children:
+            return {
+                'success': False,
+                'message': 'No children found to process'
+            }
+        
+        try:
+            grouped_data = self.populate_collections_info_from_children(self.children)
+            self.collections_info = grouped_data
+            
+            # Use modulestore to persist changes
+            modulestore().update_item(self, self.runtime.user_id)
+            
+            return {
+                'success': True,
+                'message': 'Collections info refreshed successfully',
+                'collections_info': grouped_data
+            }
+        except Exception as e:
+            logger.exception(f"Error: {str(e)}")
+            return {
+                'success': False,
+                'message': f'Error: {str(e)}'
+            }
