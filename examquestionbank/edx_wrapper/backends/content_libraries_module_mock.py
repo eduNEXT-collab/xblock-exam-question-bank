@@ -3,7 +3,7 @@
 
 class MockComponent:
     """Mock component object."""
-    
+
     def __init__(self, learning_package_id=None, key=None):
         self.learning_package_id = learning_package_id or 1
         self.key = key or "mock-key"

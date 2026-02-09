@@ -34,6 +34,7 @@ compute_percent = get_compute_percent()
 modulestore = get_modulestore()
 get_component_from_usage_key_func = get_component_from_usage_key()
 
+
 def _(text):
     return text
 
@@ -350,23 +351,23 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         percent_graded = compute_percent(total_weighted_earned, total_weighted_possible) * 100
         return percent_graded
 
-    def populate_collections_info_from_children(self, children):
+    def populate_collections_info_from_children(self):
         """
         Populates collections_info with grouped collection data.
         Fetches children block information and groups them by their collections.
         """
-        
+
         # Temporary storage for children data
         children_data = {}
-        
+
         for child in self.children:
             block = modulestore.get_item(child)
             if hasattr(block, 'upstream'):
-                key_string = block.upstream                
+                key_string = block.upstream
                 # Get the Component from the usage key
                 usage_key = UsageKey.from_string(key_string)
                 component = get_component_from_usage_key_func(usage_key)
-                
+
                 # Get collections for this component
                 collections = authoring_api.get_entity_collections(
                     component.learning_package_id,
@@ -386,15 +387,15 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                     "library_usage_key": str(usage_key),
                     "collections": serialized_collections,
                 }
-        
+
         # Group the data by collections
         grouped_data = {}
-        
+
         for block_key, info in children_data.items():
             collections = info.get('collections', [])
             display_name = info.get('display_name', 'Unknown')
             library_key = info.get('library_usage_key', '')
-            
+
             # If there are no collections, group under 'uncategorized'
             if not collections:
                 if "uncategorized" not in grouped_data:
@@ -403,7 +404,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                         "description": "Problems without a collection",
                         "problems": {}
                     }
-                
+
                 grouped_data["uncategorized"]["problems"][block_key] = {
                     "name": display_name,
                     "library_key": library_key
@@ -412,14 +413,14 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
             for collection in collections:
                 coll_key = collection['key']
-                
+
                 if coll_key not in grouped_data:
                     grouped_data[coll_key] = {
                         "title": collection['title'],
                         "description": collection.get('description', ''),
                         "problems": {}
                     }
-                
+
                 grouped_data[coll_key]["problems"][block_key] = {
                     "name": display_name,
                     "library_key": library_key
@@ -427,7 +428,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         return grouped_data
 
     @XBlock.json_handler
-    def refresh_collections(self, data, suffix=''):
+    def refresh_collections(self, _, __):
         """
         Handler to refresh collections_info.
         Populates collection data from children and saves automatically.
@@ -437,20 +438,20 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 'success': False,
                 'message': 'No children found to process'
             }
-        
+
         try:
-            grouped_data = self.populate_collections_info_from_children(self.children)
+            grouped_data = self.populate_collections_info_from_children()
             self.collections_info = grouped_data
-            
+
             # Use modulestore to persist changes
             modulestore.update_item(self, self.runtime.user_id)
-            
+
             return {
                 'success': True,
                 'message': 'Collections info refreshed successfully',
                 'collections_info': grouped_data
             }
-        except Exception as e:
+        except Exception as e:      # pylint: disable=broad-exception-caught
             logger.exception(f"Error: {str(e)}")
             return {
                 'success': False,

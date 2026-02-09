@@ -21,6 +21,7 @@ def get_student_view():
     """Return STUDENT_VIEW constant."""
     return STUDENT_VIEW
 
+
 def get_modulestore():
     """Return modulestore instance."""
     return modulestore()

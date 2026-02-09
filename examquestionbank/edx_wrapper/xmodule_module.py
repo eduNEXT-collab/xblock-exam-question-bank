@@ -29,6 +29,7 @@ def get_student_view():
     """Return the STUDENT_VIEW constant from the backend."""
     return _backend().get_student_view()
 
+
 def get_modulestore():
     """Return the modulestore instance from the backend."""
     return _backend().get_modulestore()
