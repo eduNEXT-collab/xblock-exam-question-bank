@@ -17,19 +17,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: examquestionbank.py:41
+#: examquestionbank.py:47
 msgid "Display Name"
 msgstr "Nombre para mostrar"
 
-#: examquestionbank.py:42
+#: examquestionbank.py:48
 msgid "The display name for this component."
 msgstr "El nombre para mostrar de este componente."
 
-#: examquestionbank.py:49
+#: examquestionbank.py:55
 msgid "Count"
 msgstr "Cantidad"
 
-#: examquestionbank.py:50
+#: examquestionbank.py:56
 msgid ""
 "Enter the number of components to display to each student. Set it to -1 to "
 "display all components."
@@ -37,11 +37,21 @@ msgstr ""
 "Introduce el número de componentes a mostrar a cada estudiante. Establece -1 "
 "para mostrar todos los componentes."
 
-#: examquestionbank.py:56
+#: examquestionbank.py:62
+msgid "Collections Info"
+msgstr "Información de colecciones"
+
+#: examquestionbank.py:63
+msgid "To update this field click Refresh Collections in the XBlock."
+msgstr ""
+"Para actualizar este campo haz click sobre Actualizar colecciones en el "
+"XBlock."
+
+#: examquestionbank.py:69
 msgid "Maximum Exam Attempts"
 msgstr "Número máximo de intentos del examen"
 
-#: examquestionbank.py:58
+#: examquestionbank.py:71
 msgid ""
 "Maximum number of times a student can attempt this entire exam. Set to -1 "
 "for unlimited attempts."
@@ -49,35 +59,35 @@ msgstr ""
 "Número máximo de veces que un estudiante puede intentar este examen "
 "completo. Establece -1 para intentos ilimitados."
 
-#: examquestionbank.py:67
+#: examquestionbank.py:80
 msgid "Current Attempt"
 msgstr "Intento actual"
 
-#: examquestionbank.py:68
+#: examquestionbank.py:81
 msgid "Current attempt number for this student"
 msgstr "Número de intento actual para este estudiante"
 
-#: examquestionbank.py:74
+#: examquestionbank.py:87
 msgid "Attempt History"
 msgstr "Historial de intentos"
 
-#: examquestionbank.py:75
+#: examquestionbank.py:88
 msgid "History of all attempts with scores and timestamps"
 msgstr "Historial de todos los intentos con calificaciones y marcas de tiempo"
 
-#: examquestionbank.py:81
+#: examquestionbank.py:94
 msgid "Minimum Passing Score (%)"
 msgstr "Puntuación mínima para aprobar (%)"
 
-#: examquestionbank.py:82
+#: examquestionbank.py:95
 msgid "Minimum percentage required to pass the exam (1-100)"
 msgstr "Porcentaje mínimo requerido para aprobar el examen (1-100)"
 
-#: examquestionbank.py:89
+#: examquestionbank.py:102
 msgid "Is Attempting"
 msgstr "Está intentando"
 
-#: examquestionbank.py:90
+#: examquestionbank.py:103
 msgid "Indicates whether the student is currently attempting the exam"
 msgstr "Indica si el estudiante está actualmente intentando el examen"
 
@@ -137,8 +147,11 @@ msgstr "Estos son los problemas en el banco:"
 #: templates/author_view_custom.html:65
 #, python-brace-format
 msgid "Press {link_start}View{link_end} to preview components."
-msgstr ""
-"Pulsa {link_start}Ver{link_end} para previsualizar los componentes."
+msgstr "Pulsa {link_start}Ver{link_end} para previsualizar los componentes."
+
+#: templates/author_view_custom.html:79
+msgid "Refresh Collections"
+msgstr "Actualizar colecciones"
 
 #: templates/student_view_vert_mod.html:8
 msgid "Exam Progress"
