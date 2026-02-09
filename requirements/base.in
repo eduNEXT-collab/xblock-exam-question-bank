@@ -7,3 +7,5 @@ edx-i18n-tools
 Mako
 XBlock
 xblock-utils
+openedx-learning
+edx-opaque-keys
