@@ -31,7 +31,6 @@ display_name_with_default = get_display_name_with_default()
 ItemBankMixin = get_item_bank_mixin()
 STUDENT_VIEW = get_student_view()
 compute_percent = get_compute_percent()
-modulestore = get_modulestore()
 get_component_from_usage_key_func = get_component_from_usage_key()
 
 
@@ -359,6 +358,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
         # Temporary storage for children data
         children_data = {}
+        modulestore = get_modulestore()
 
         for child in self.children:
             block = modulestore.get_item(child)
@@ -444,6 +444,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             self.collections_info = grouped_data
 
             # Use modulestore to persist changes
+            modulestore = get_modulestore()
             modulestore.update_item(self, self.runtime.user_id)
 
             return {

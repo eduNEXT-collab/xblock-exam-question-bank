@@ -4,7 +4,6 @@
 from xmodule.block_metadata_utils import display_name_with_default
 from xmodule.item_bank_block import ItemBankMixin
 from xmodule.x_module import STUDENT_VIEW
-from xmodule.modulestore.django import modulestore
 
 
 def get_display_name_with_default():
@@ -24,4 +23,6 @@ def get_student_view():
 
 def get_modulestore():
     """Return modulestore instance."""
+    # Lazy import to avoid circular import issues
+    from xmodule.modulestore.django import modulestore
     return modulestore()
