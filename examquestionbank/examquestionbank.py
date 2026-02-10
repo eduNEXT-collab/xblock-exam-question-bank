@@ -18,8 +18,8 @@ from examquestionbank.edx_wrapper.grades_module import get_compute_percent
 from examquestionbank.edx_wrapper.xmodule_module import (
     get_display_name_with_default,
     get_item_bank_mixin,
+    get_modulestore,
     get_student_view,
-    get_modulestore
 )
 
 resource_loader = ResourceLoader(__name__)
@@ -354,12 +354,13 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
     def populate_collections_info_from_children(self):
         """
-        Populates collections_info with grouped collection data.
-        Fetches children block information and groups them by their collections.
+        Populate collections_info with grouped collection data.
+
+        Fetch children block information and group them by their collections.
         """
         # Import here to avoid Django setup issues during module import
-        from openedx_learning.api import authoring as authoring_api     # pylint: disable=import-outside-toplevel
-        from opaque_keys.edx.keys import UsageKey   # pylint: disable=import-outside-toplevel
+        from opaque_keys.edx.keys import UsageKey  # pylint: disable=import-outside-toplevel
+        from openedx_learning.api import authoring as authoring_api  # pylint: disable=import-outside-toplevel
 
         # Temporary storage for children data
         children_data = {}
@@ -435,8 +436,9 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
     @XBlock.json_handler
     def refresh_collections(self, _, __):
         """
-        Handler to refresh collections_info.
-        Populates collection data from children and saves automatically.
+        Refresh collections_info.
+
+        Populate collection data from children and save automatically.
         """
         if not self.children:
             return {
