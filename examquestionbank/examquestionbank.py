@@ -8,8 +8,6 @@ from copy import copy
 
 import pkg_resources
 from django.utils import translation
-from openedx_learning.api import authoring as authoring_api
-from opaque_keys.edx.keys import UsageKey
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
 from xblock.fields import Boolean, Dict, Float, Integer, List, Scope, String
@@ -355,6 +353,9 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         Populates collections_info with grouped collection data.
         Fetches children block information and groups them by their collections.
         """
+        # Import here to avoid Django setup issues during module import
+        from openedx_learning.api import authoring as authoring_api     # pylint: disable=import-outside-toplevel
+        from opaque_keys.edx.keys import UsageKey   # pylint: disable=import-outside-toplevel
 
         # Temporary storage for children data
         children_data = {}

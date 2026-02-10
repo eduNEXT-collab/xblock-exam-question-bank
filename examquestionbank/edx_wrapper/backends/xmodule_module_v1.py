@@ -24,5 +24,5 @@ def get_student_view():
 def get_modulestore():
     """Return modulestore instance."""
     # Lazy import to avoid circular import issues
-    from xmodule.modulestore.django import modulestore
+    from xmodule.modulestore.django import modulestore  # pylint: disable=import-outside-toplevel
     return modulestore()
