@@ -9,7 +9,7 @@ function ExamQuestionBankAuthorView(runtime, element) {
         event.preventDefault();
         refreshButton.prop('disabled', true);
         
-        runtime.notify('save', {state: 'start', message: 'Refreshing collections...'});
+        runtime.notify('save', {state: 'start', message: gettext('Refreshing collections...')});
 
         $.ajax({
             type: 'POST',
@@ -23,14 +23,14 @@ function ExamQuestionBankAuthorView(runtime, element) {
                 type: 'saveEditedXBlockData',
                 payload: {}
             }, '*');
-            var message = $('<p>').text(response.message || 'Collections refreshed!');
+            var message = $('<p>').text(gettext('Collections refreshed!'));
             $(element).find('.bank-collections-section').append(message);
         }).fail(function() {
             runtime.notify('error', {
-                title: 'Failed to refresh collections',
-                message: 'An error occurred while refreshing collections'
+                title: gettext('Failed to refresh collections'),
+                message: gettext('An error occurred while refreshing collections')
             });
-            var message = $('<p>').text('Failed to refresh collections');
+            var message = $('<p>').text(gettext('Failed to refresh collections'));
             $(element).find('.bank-collections-section').append(message);
         }).always(function() {
             refreshButton.prop('disabled', false);

@@ -17,71 +17,71 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: examquestionbank.py:47
+#: examquestionbank.py:46
 msgid "Display Name"
 msgstr ""
 
-#: examquestionbank.py:48
+#: examquestionbank.py:47
 msgid "The display name for this component."
 msgstr ""
 
-#: examquestionbank.py:55
+#: examquestionbank.py:54
 msgid "Count"
 msgstr ""
 
-#: examquestionbank.py:56
+#: examquestionbank.py:55
 msgid ""
 "Enter the number of components to display to each student. Set it to -1 to "
 "display all components."
 msgstr ""
 
-#: examquestionbank.py:62
+#: examquestionbank.py:61
 msgid "Collections Info"
 msgstr ""
 
-#: examquestionbank.py:63
+#: examquestionbank.py:62
 msgid "To update this field click Refresh Collections in the XBlock."
 msgstr ""
 
-#: examquestionbank.py:69
+#: examquestionbank.py:68
 msgid "Maximum Exam Attempts"
 msgstr ""
 
-#: examquestionbank.py:71
+#: examquestionbank.py:70
 msgid ""
 "Maximum number of times a student can attempt this entire exam. Set to -1 "
 "for unlimited attempts."
 msgstr ""
 
-#: examquestionbank.py:80
+#: examquestionbank.py:79
 msgid "Current Attempt"
 msgstr ""
 
-#: examquestionbank.py:81
+#: examquestionbank.py:80
 msgid "Current attempt number for this student"
 msgstr ""
 
-#: examquestionbank.py:87
+#: examquestionbank.py:86
 msgid "Attempt History"
 msgstr ""
 
-#: examquestionbank.py:88
+#: examquestionbank.py:87
 msgid "History of all attempts with scores and timestamps"
 msgstr ""
 
-#: examquestionbank.py:94
+#: examquestionbank.py:93
 msgid "Minimum Passing Score (%)"
 msgstr ""
 
-#: examquestionbank.py:95
+#: examquestionbank.py:94
 msgid "Minimum percentage required to pass the exam (1-100)"
 msgstr ""
 
-#: examquestionbank.py:102
+#: examquestionbank.py:101
 msgid "Is Attempting"
 msgstr ""
 
-#: examquestionbank.py:103
+#: examquestionbank.py:102
 msgid "Indicates whether the student is currently attempting the exam"
 msgstr ""
 
@@ -210,4 +210,28 @@ msgstr ""
 
 #: templates/student_view_vert_mod.html:94
 msgid "Yes, Retry Exam"
+msgstr ""
+
+#: static/js/author_view.js:12
+msgid "Refreshing collections..."
+msgstr ""
+
+#: static/js/author_view.js:26
+msgid "Collections refreshed!"
+msgstr ""
+
+#: static/js/author_view.js:30 static/js/author_view.js:33
+msgid "Failed to refresh collections"
+msgstr ""
+
+#: static/js/author_view.js:31
+msgid "An error occurred while refreshing collections"
+msgstr ""
+
+#: static/js/student_view.js:94
+msgid "Error submitting exam. Please try again."
+msgstr ""
+
+#: static/js/student_view.js:139
+msgid "Error retrying the exam. Please try again."
 msgstr ""

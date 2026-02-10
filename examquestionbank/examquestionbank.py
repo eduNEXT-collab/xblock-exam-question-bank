@@ -436,7 +436,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         if not self.children:
             return {
                 'success': False,
-                'message': 'No children found to process'
+                'message': 'No problems found to process'
             }
 
         try:
@@ -449,7 +449,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
             return {
                 'success': True,
-                'message': 'Collections info refreshed successfully',
+                'message': 'Collections refreshed!',
                 'collections_info': grouped_data
             }
         except Exception as e:      # pylint: disable=broad-exception-caught
