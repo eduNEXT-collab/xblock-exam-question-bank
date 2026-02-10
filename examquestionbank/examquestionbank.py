@@ -5,8 +5,8 @@ Extends Open edX ItemBankMixin to provide a custom Studio authoring experience.
 """
 import logging
 from copy import copy
+from importlib import resources
 
-import pkg_resources
 from django.utils import translation
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
@@ -114,7 +114,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         """
         Return the JavaScript translation file for the current language.
 
-        Uses `pkg_resources` to locate the static i18n file.
+        Uses importlib.resources to locate the static i18n file.
         """
         lang_code = translation.get_language()
         if not lang_code:
@@ -122,8 +122,12 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         text_js = 'public/js/translations/{lang_code}/text.js'
         country_code = lang_code.split('-')[0]
         for code in (translation.to_locale(lang_code), lang_code, country_code):
-            if pkg_resources.resource_exists(loader.module_name, text_js.format(lang_code=code)):
-                return text_js.format(lang_code=code)
+            try:
+                # Check if the resource exists using importlib.resources
+                if resources.files(loader.module_name).joinpath(text_js.format(lang_code=code)).is_file():
+                    return text_js.format(lang_code=code)
+            except (TypeError, AttributeError, FileNotFoundError):
+                continue
         return None
 
     @classmethod
