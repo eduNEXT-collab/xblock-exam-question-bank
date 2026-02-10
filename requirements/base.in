@@ -5,6 +5,7 @@
 django-statici18n
 edx-i18n-tools
 Mako
+setuptools
 XBlock
 xblock-utils
 openedx-learning
