@@ -15,6 +15,14 @@ Unreleased
 **********
 
 *
+0.6.0 – 2026-02-11
+******************
+
+Feature
+========
+
+* Group problems by collection and store that information (#16)
+
 0.5.2 – 2026-01-30
 ******************
 
