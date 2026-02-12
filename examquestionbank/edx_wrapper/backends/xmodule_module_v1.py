@@ -19,3 +19,10 @@ def get_item_bank_mixin():
 def get_student_view():
     """Return STUDENT_VIEW constant."""
     return STUDENT_VIEW
+
+
+def get_modulestore():
+    """Return modulestore instance."""
+    # Lazy import to avoid circular import issues
+    from xmodule.modulestore.django import modulestore  # pylint: disable=import-outside-toplevel
+    return modulestore()

@@ -17,31 +17,41 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: examquestionbank.py:41
+#: examquestionbank.py:46
 msgid "Display Name"
 msgstr "Nombre para mostrar"
 
-#: examquestionbank.py:42
+#: examquestionbank.py:47
 msgid "The display name for this component."
 msgstr "El nombre para mostrar de este componente."
 
-#: examquestionbank.py:49
+#: examquestionbank.py:54
 msgid "Count"
 msgstr "Cantidad"
 
-#: examquestionbank.py:50
+#: examquestionbank.py:55
 msgid ""
 "Enter the number of components to display to each student. Set it to -1 to "
 "display all components."
 msgstr ""
-"Introduce el número de componentes a mostrar a cada estudiante. Establece -1 "
+"Ingresa el número de componentes a mostrar a cada estudiante. Establece -1 "
 "para mostrar todos los componentes."
 
-#: examquestionbank.py:56
+#: examquestionbank.py:61
+msgid "Collections Info"
+msgstr "Información de colecciones"
+
+#: examquestionbank.py:62
+msgid "To update this field click Refresh Collections in the XBlock."
+msgstr ""
+"Para actualizar este campo haz click sobre Actualizar colecciones en el "
+"XBlock."
+
+#: examquestionbank.py:68
 msgid "Maximum Exam Attempts"
 msgstr "Número máximo de intentos del examen"
 
-#: examquestionbank.py:58
+#: examquestionbank.py:70
 msgid ""
 "Maximum number of times a student can attempt this entire exam. Set to -1 "
 "for unlimited attempts."
@@ -49,41 +59,41 @@ msgstr ""
 "Número máximo de veces que un estudiante puede intentar este examen "
 "completo. Establece -1 para intentos ilimitados."
 
-#: examquestionbank.py:67
+#: examquestionbank.py:79
 msgid "Current Attempt"
 msgstr "Intento actual"
 
-#: examquestionbank.py:68
+#: examquestionbank.py:80
 msgid "Current attempt number for this student"
 msgstr "Número de intento actual para este estudiante"
 
-#: examquestionbank.py:74
+#: examquestionbank.py:86
 msgid "Attempt History"
 msgstr "Historial de intentos"
 
-#: examquestionbank.py:75
+#: examquestionbank.py:87
 msgid "History of all attempts with scores and timestamps"
 msgstr "Historial de todos los intentos con calificaciones y marcas de tiempo"
 
-#: examquestionbank.py:81
+#: examquestionbank.py:93
 msgid "Minimum Passing Score (%)"
 msgstr "Puntuación mínima para aprobar (%)"
 
-#: examquestionbank.py:82
+#: examquestionbank.py:94
 msgid "Minimum percentage required to pass the exam (1-100)"
 msgstr "Porcentaje mínimo requerido para aprobar el examen (1-100)"
 
-#: examquestionbank.py:89
+#: examquestionbank.py:101
 msgid "Is Attempting"
 msgstr "Está intentando"
 
-#: examquestionbank.py:90
+#: examquestionbank.py:102
 msgid "Indicates whether the student is currently attempting the exam"
 msgstr "Indica si el estudiante está actualmente intentando el examen"
 
 #: templates/author_view_add_custom.html:7
 msgid "Add Problems"
-msgstr "Añadir problemas"
+msgstr "Agregar problemas"
 
 #: templates/author_view_add_custom.html:9
 msgid "from your content library to this bank."
@@ -95,7 +105,7 @@ msgstr "Tu banco de problemas está vacío"
 
 #: templates/author_view_custom.html:8
 msgid "To start, add problems to the bank."
-msgstr "Para comenzar, añade problemas al banco."
+msgstr "Para comenzar, agrega problemas al banco."
 
 #: templates/author_view_custom.html:13
 msgid "Error:"
@@ -120,7 +130,7 @@ msgstr "Hay más problemas seleccionados que disponibles."
 #: templates/author_view_custom.html:27 templates/author_view_custom.html:71
 #, python-brace-format
 msgid "Press {link_start}Edit{link_end} to configure settings."
-msgstr "Pulsa {link_start}Editar{link_end} para configurar los ajustes."
+msgstr "Presiona {link_start}Editar{link_end} para configurar los ajustes."
 
 #: templates/author_view_custom.html:43
 msgid "All"
@@ -137,8 +147,11 @@ msgstr "Estos son los problemas en el banco:"
 #: templates/author_view_custom.html:65
 #, python-brace-format
 msgid "Press {link_start}View{link_end} to preview components."
-msgstr ""
-"Pulsa {link_start}Ver{link_end} para previsualizar los componentes."
+msgstr "Presiona {link_start}Ver{link_end} para previsualizar los componentes."
+
+#: templates/author_view_custom.html:79
+msgid "Refresh Collections"
+msgstr "Actualizar colecciones"
 
 #: templates/student_view_vert_mod.html:8
 msgid "Exam Progress"
@@ -154,7 +167,7 @@ msgstr "Aprobado"
 
 #: templates/student_view_vert_mod.html:17
 msgid "Goal:"
-msgstr "Objetivo:"
+msgstr "Meta:"
 
 #: templates/student_view_vert_mod.html:20
 msgid "Attempt:"
@@ -205,8 +218,26 @@ msgstr "Cancelar"
 msgid "Yes, Retry Exam"
 msgstr "Sí, reintentar examen"
 
-#~ msgid "Error submitting exam. Please try again."
-#~ msgstr "Error al enviar el examen. Por favor, inténtalo de nuevo."
+#: static/js/author_view.js:12
+msgid "Refreshing collections..."
+msgstr "Actualizando colecciones..."
 
-#~ msgid "Error retrying the exam. Please try again."
-#~ msgstr "Error al reintentar el examen. Por favor, inténtalo de nuevo."
+#: static/js/author_view.js:26
+msgid "Collections refreshed!"
+msgstr "Colecciones actualizadas!"
+
+#: static/js/author_view.js:30 static/js/author_view.js:33
+msgid "Failed to refresh collections"
+msgstr "Fallo al actualizar colecciones"
+
+#: static/js/author_view.js:31
+msgid "An error occurred while refreshing collections"
+msgstr "Ha ocurrido un error al actualizar colecciones"
+
+#: static/js/student_view.js:94
+msgid "Error submitting exam. Please try again."
+msgstr "Error al enviar el examen. Por favor, inténtalo de nuevo."
+
+#: static/js/student_view.js:139
+msgid "Error retrying the exam. Please try again."
+msgstr "Error al reintentar el examen. Por favor, inténtalo de nuevo."

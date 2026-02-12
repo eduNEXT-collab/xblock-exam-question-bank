@@ -109,3 +109,43 @@ a:focus-visible {
 .bank-add-text {
     color: var(--pgn-color-gray-700, #333);
 }
+
+/* Collections Management Section */
+.bank-collections-section {
+    margin-top: 1.5em;
+    padding-top: 1.5em;
+}
+
+.btn-refresh-collections {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.6em 1.2em;
+    background-color: var(--pgn-color-primary-500, #0075B4);
+    color: white;
+    border: none;
+    border-radius: 0.3em;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.btn-refresh-collections:hover {
+    background-color: var(--pgn-color-primary-700, #005A8C);
+}
+
+.btn-refresh-collections:disabled {
+    background-color: var(--pgn-color-gray-400, #999);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.btn-refresh-collections:focus-visible {
+    outline: 2px solid var(--pgn-color-primary-700, #205081);
+    outline-offset: 2px;
+}
+
+.btn-refresh-collections .icon {
+    font-size: 1em;
+}

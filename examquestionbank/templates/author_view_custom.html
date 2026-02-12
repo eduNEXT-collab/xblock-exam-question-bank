@@ -73,5 +73,11 @@
         {% endblocktrans %}
         {% interpolate_html edit_msg link_start='<a href="#" class="edit-button action-button">'|safe link_end='</a>'|safe %}
     </div>
+    <div class="bank-collections-section">
+        <button type="button" class="btn-refresh-collections">
+            <span class="icon fa fa-refresh" aria-hidden="true"></span>
+            {% trans "Refresh Collections" %}
+        </button>
+    </div>
 {% endif %}
 </div>

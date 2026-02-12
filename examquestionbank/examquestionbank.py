@@ -5,18 +5,20 @@ Extends Open edX ItemBankMixin to provide a custom Studio authoring experience.
 """
 import logging
 from copy import copy
+from importlib import resources
 
-import pkg_resources
 from django.utils import translation
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
-from xblock.fields import Boolean, Float, Integer, List, Scope, String
+from xblock.fields import Boolean, Dict, Float, Integer, List, Scope, String
 from xblock.utils.resources import ResourceLoader
 
+from examquestionbank.edx_wrapper.content_libraries_module import get_component_from_usage_key
 from examquestionbank.edx_wrapper.grades_module import get_compute_percent
 from examquestionbank.edx_wrapper.xmodule_module import (
     get_display_name_with_default,
     get_item_bank_mixin,
+    get_modulestore,
     get_student_view,
 )
 
@@ -27,6 +29,7 @@ display_name_with_default = get_display_name_with_default()
 ItemBankMixin = get_item_bank_mixin()
 STUDENT_VIEW = get_student_view()
 compute_percent = get_compute_percent()
+get_component_from_usage_key_func = get_component_from_usage_key()
 
 
 def _(text):
@@ -50,6 +53,13 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         help=_("Enter the number of components to display to each student. Set it to -1 to display all components."),
         default=-1,
         scope=Scope.settings,
+    )
+
+    collections_info = Dict(
+        display_name=_("Collections Info"),
+        help=_("To update this field click Refresh Collections in the XBlock."),
+        default={},
+        scope=Scope.content,
     )
 
     max_exam_attempts = Integer(
@@ -104,7 +114,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         """
         Return the JavaScript translation file for the current language.
 
-        Uses `pkg_resources` to locate the static i18n file.
+        Uses importlib.resources to locate the static i18n file.
         """
         lang_code = translation.get_language()
         if not lang_code:
@@ -112,8 +122,12 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         text_js = 'public/js/translations/{lang_code}/text.js'
         country_code = lang_code.split('-')[0]
         for code in (translation.to_locale(lang_code), lang_code, country_code):
-            if pkg_resources.resource_exists(loader.module_name, text_js.format(lang_code=code)):
-                return text_js.format(lang_code=code)
+            try:
+                # Check if the resource exists using importlib.resources
+                if resources.files(loader.module_name).joinpath(text_js.format(lang_code=code)).is_file():
+                    return text_js.format(lang_code=code)
+            except (TypeError, AttributeError, FileNotFoundError):
+                continue
         return None
 
     @classmethod
@@ -151,9 +165,11 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             fragment.add_content(resource_loader.render_django_template(
                 "templates/author_view_add_custom.html", {}, i18n_service=self.runtime.service(self, 'i18n')
             ))
+            fragment.add_javascript(resource_loader.load_unicode("static/js/author_view.js"))
             statici18n_js_url = self._get_statici18n_js_url(resource_loader)
             if statici18n_js_url:
                 fragment.add_javascript_url(self.runtime.local_resource_url(self, statici18n_js_url))
+            fragment.initialize_js('ExamQuestionBankAuthorView')
 
         return fragment
 
@@ -335,3 +351,117 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         # Calculate percentage using compute_percent
         percent_graded = compute_percent(total_weighted_earned, total_weighted_possible) * 100
         return percent_graded
+
+    def populate_collections_info_from_children(self):
+        """
+        Populate collections_info with grouped collection data.
+
+        Fetch children block information and group them by their collections.
+        """
+        # Import here to avoid Django setup issues during module import
+        from opaque_keys.edx.keys import UsageKey  # pylint: disable=import-outside-toplevel
+        from openedx_learning.api import authoring as authoring_api  # pylint: disable=import-outside-toplevel
+
+        # Temporary storage for children data
+        children_data = {}
+        modulestore = get_modulestore()
+
+        for child in self.children:
+            block = modulestore.get_item(child)
+            if hasattr(block, 'upstream'):
+                key_string = block.upstream
+                # Get the Component from the usage key
+                usage_key = UsageKey.from_string(key_string)
+                component = get_component_from_usage_key_func(usage_key)
+
+                # Get collections for this component
+                collections = authoring_api.get_entity_collections(
+                    component.learning_package_id,
+                    component.key,
+                )
+                # Convert collection objects to serializable dictionaries
+                serialized_collections = [
+                    {
+                        "key": coll.key,
+                        "title": coll.title,
+                        "description": getattr(coll, 'description', '')
+                    }
+                    for coll in collections
+                ]
+                children_data[str(child)] = {
+                    "display_name": display_name_with_default(block),
+                    "library_usage_key": str(usage_key),
+                    "collections": serialized_collections,
+                }
+
+        # Group the data by collections
+        grouped_data = {}
+
+        for block_key, info in children_data.items():
+            collections = info.get('collections', [])
+            display_name = info.get('display_name', 'Unknown')
+            library_key = info.get('library_usage_key', '')
+
+            # If there are no collections, group under 'uncategorized'
+            if not collections:
+                if "uncategorized" not in grouped_data:
+                    grouped_data["uncategorized"] = {
+                        "title": "Uncategorized",
+                        "description": "Problems without a collection",
+                        "problems": {}
+                    }
+
+                grouped_data["uncategorized"]["problems"][block_key] = {
+                    "name": display_name,
+                    "library_key": library_key
+                }
+                continue
+
+            for collection in collections:
+                coll_key = collection['key']
+
+                if coll_key not in grouped_data:
+                    grouped_data[coll_key] = {
+                        "title": collection['title'],
+                        "description": collection.get('description', ''),
+                        "problems": {}
+                    }
+
+                grouped_data[coll_key]["problems"][block_key] = {
+                    "name": display_name,
+                    "library_key": library_key
+                }
+        return grouped_data
+
+    @XBlock.json_handler
+    def refresh_collections(self, _, __):
+        """
+        Refresh collections_info.
+
+        Populate collection data from children and save automatically.
+        """
+        if not self.children:
+            return {
+                'success': False,
+                'message': 'No problems found to process'
+            }
+
+        try:
+            grouped_data = self.populate_collections_info_from_children()
+            self.collections_info = grouped_data
+
+            # Use modulestore to persist changes
+            modulestore = get_modulestore()
+            modulestore.update_item(self, self.runtime.user_id)
+
+            return {
+                'success': True,
+                'message': 'Collections refreshed!',
+                'collections_info': grouped_data
+            }
+        except Exception as e:      # pylint: disable=broad-exception-caught
+            logger.exception(f"Error: {str(e)}")
+            return {
+                'success': False,
+                'message': f'Error: {str(e)}'
+            }
