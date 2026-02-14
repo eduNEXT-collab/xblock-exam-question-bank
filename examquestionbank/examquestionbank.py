@@ -6,6 +6,7 @@ Extends Open edX ItemBankMixin to provide a custom Studio authoring experience.
 import logging
 from copy import copy
 from importlib import resources
+import random
 
 from django.utils import translation
 from web_fragments.fragment import Fragment
@@ -52,6 +53,13 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         display_name=_("Count"),
         help=_("Enter the number of components to display to each student. Set it to -1 to display all components."),
         default=-1,
+        scope=Scope.settings,
+    )
+
+    max_count_per_collection = Dict(
+        display_name=_("Max Count Per Collection"),
+        help=_("Optional limit on the number of problems to display from each collection. Set to -1 for no limit."),
+        default={},
         scope=Scope.settings,
     )
 
@@ -465,3 +473,144 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 'success': False,
                 'message': f'Error: {str(e)}'
             }
+
+    @classmethod
+    def make_selection(cls, selected, children, max_count, max_count_per_collection=None, collections_info=None):
+        """
+        Make a selection based on max_count and max_count_per_collection if provided, if not use the old logic.
+
+        Returns a dictionary with keys:
+        - 'selected': set of (block_type, block_id) tuples that should be selected for display
+        - 'invalid': sorted list of (block_type, block_id) tuples that were in the original selected set but are no longer valid (e.g. because the child blocks changed)
+        - 'overlimit': sorted list of (block_type, block_id) tuples that were in the original selected set but exceed the max_count limit
+        - 'added': sorted list of (block_type, block_id) tuples that were not in the original selected set but are now selected based on the new criteria.
+        """
+        # New logic for selecting children by collection.
+        if max_count_per_collection and collections_info:
+            rand = random.Random()
+            selected_keys = {tuple(k) for k in selected}  # set of (block_type, block_id) tuples assigned to this student
+
+            # Determine which of our children we will show:
+            # The block_keys format is (block_type, block_id).
+            valid_block_keys = {(c.block_type, c.block_id) for c in children}
+
+            # Remove any selected blocks that are no longer valid:
+            invalid_block_keys = (selected_keys - valid_block_keys)
+            if invalid_block_keys:
+                selected_keys -= invalid_block_keys
+
+            # Build a mapping from usage key string to (block_type, block_id)
+            usage_key_to_block_key = {}
+            for child in children:
+                usage_key_str = str(child)
+                usage_key_to_block_key[usage_key_str] = (child.block_type, child.block_id)
+
+            # Track selected problems per collection
+            new_selected_keys = set()
+            used_problems = set()  # Track problems already selected to avoid duplicates
+
+            for collection_key, count_str in max_count_per_collection.items():
+                count = int(count_str)
+
+                if collection_key not in collections_info:
+                    continue
+
+                collection = collections_info[collection_key]
+                problems = collection.get('problems', {})
+
+                # Get available block keys for this collection (not yet selected)
+                available_block_keys = []
+                for problem_usage_key in problems.keys():
+                    if problem_usage_key in usage_key_to_block_key:
+                        block_key = usage_key_to_block_key[problem_usage_key]
+                        if problem_usage_key not in used_problems:
+                            available_block_keys.append((block_key, problem_usage_key))
+
+                # If count is -1, select all available problems
+                if count == -1:
+                    num_to_select = len(available_block_keys)
+                else:
+                    num_to_select = min(count, len(available_block_keys))
+
+                # Randomly select from available problems
+                if num_to_select > 0:
+                    selected_items = rand.sample(available_block_keys, num_to_select)
+                    for block_key, usage_key in selected_items:
+                        new_selected_keys.add(block_key)
+                        used_problems.add(usage_key)
+
+            # Determine what changed
+            added_block_keys = new_selected_keys - selected_keys
+            overlimit_block_keys = selected_keys - new_selected_keys
+            selected_keys = new_selected_keys
+
+            return {
+                'selected': sorted(selected_keys),
+                'invalid': sorted(invalid_block_keys),
+                'overlimit': sorted(overlimit_block_keys),
+                'added': sorted(added_block_keys),
+            }
+        else:
+            # Old logic.
+            return super().make_selection(selected, children, max_count)
+
+    def selected_children(self):
+        """
+        Returns a [] of block_ids indicating which of the possible children
+        have been selected to display to the current user.
+
+        This reads and updates the "selected" field, which has user_state scope.
+
+        Note: the return value (self.selected) contains block_ids. To get
+        actual BlockUsageLocators, it is necessary to use self.children,
+        because the block_ids alone do not specify the block type.
+        """
+        max_count = self.max_count
+        if max_count < 0:
+            max_count = len(self.children)
+        
+        # Init of new logic for selecting childrens by collection.
+        max_count_per_collection = None
+        if self.max_count_per_collection:
+            if self.validate_max_count_per_collection(self.max_count_per_collection):
+                max_count_per_collection = self.max_count_per_collection
+            else:
+                logger.error("Invalid max_count_per_collection configuration; ignoring it.")
+
+        block_keys = self.make_selection(
+            self.selected, 
+            self.children, 
+            max_count, 
+            max_count_per_collection,
+            self.collections_info
+        )  # pylint: disable=no-member
+        # End of new logic.
+
+        self.publish_selected_children_events(
+            block_keys,
+            self.format_block_keys_for_analytics,
+            self._publish_event,
+        )
+
+        if any(block_keys[changed] for changed in ('invalid', 'overlimit', 'added')):
+            # Save our selections to the user state, to ensure consistency:
+            selected = block_keys['selected']
+            self.selected = selected  # TODO: this doesn't save from the LMS "Progress" page.
+
+        return self.selected
+
+    def validate_max_count_per_collection(self, max_count_per_collection):
+        """
+        Validate max_count_per_collection field.
+
+        Ensures all values are integers >= -1 and the keys are part of the collections_info.
+        """
+        collections = self.collections_info.keys()
+        for key, value in max_count_per_collection.items():
+            try:
+                value = int(value)
+            except (ValueError, TypeError):
+                return False
+            if value < -1 or key not in collections:
+                return False
+        return True
