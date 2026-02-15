@@ -4,9 +4,9 @@ ExamQuestionBankXBlock - Custom Item Bank for exams.
 Extends Open edX ItemBankMixin to provide a custom Studio authoring experience.
 """
 import logging
+import random
 from copy import copy
 from importlib import resources
-import random
 
 from django.utils import translation
 from web_fragments.fragment import Fragment
@@ -475,27 +475,37 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             }
 
     @classmethod
-    def make_selection(cls, selected, children, max_count, max_count_per_collection=None, collections_info=None):
+    def make_selection(
+        cls,
+        selected,
+        children,
+        max_count,
+        max_count_per_collection=None,
+        collections_info=None
+    ):  # pylint: disable=too-many-positional-arguments
         """
         Make a selection based on max_count and max_count_per_collection if provided, if not use the old logic.
 
         Returns a dictionary with keys:
         - 'selected': set of (block_type, block_id) tuples that should be selected for display
-        - 'invalid': sorted list of (block_type, block_id) tuples that were in the original selected set but are no longer valid (e.g. because the child blocks changed)
-        - 'overlimit': sorted list of (block_type, block_id) tuples that were in the original selected set but exceed the max_count limit
-        - 'added': sorted list of (block_type, block_id) tuples that were not in the original selected set but are now selected based on the new criteria.
+        - 'invalid': sorted list of (block_type, block_id) tuples that were in the original
+           selected set but are no longer valid (e.g. because the child blocks changed)
+        - 'overlimit': sorted list of (block_type, block_id) tuples that were in the original
+           selected set but exceed the max_count limit
+        - 'added': sorted list of (block_type, block_id) tuples that were not in the original
+           selected set but are now selected based on the new criteria.
         """
         # New logic for selecting children by collection.
         if max_count_per_collection and collections_info:
             rand = random.Random()
-            selected_keys = {tuple(k) for k in selected}  # set of (block_type, block_id) tuples assigned to this student
+            selected_keys = {tuple(k) for k in selected}  # set of (block_type, block_id)
 
             # Determine which of our children we will show:
             # The block_keys format is (block_type, block_id).
             valid_block_keys = {(c.block_type, c.block_id) for c in children}
 
             # Remove any selected blocks that are no longer valid:
-            invalid_block_keys = (selected_keys - valid_block_keys)
+            invalid_block_keys = selected_keys - valid_block_keys
             if invalid_block_keys:
                 selected_keys -= invalid_block_keys
 
@@ -556,8 +566,10 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
     def selected_children(self):
         """
-        Returns a [] of block_ids indicating which of the possible children
-        have been selected to display to the current user.
+        Return a list of block_ids indicating which children have been selected to display to the current user.
+
+        This method extends the parent implementation to support collection-based selection
+        when max_count_per_collection and collections_info are configured.
 
         This reads and updates the "selected" field, which has user_state scope.
 
@@ -568,7 +580,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         max_count = self.max_count
         if max_count < 0:
             max_count = len(self.children)
-        
+
         # Init of new logic for selecting childrens by collection.
         max_count_per_collection = None
         if self.max_count_per_collection:
@@ -578,12 +590,12 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 logger.error("Invalid max_count_per_collection configuration; ignoring it.")
 
         block_keys = self.make_selection(
-            self.selected, 
-            self.children, 
-            max_count, 
+            self.selected,
+            self.children,
+            max_count,
             max_count_per_collection,
             self.collections_info
-        )  # pylint: disable=no-member
+        )
         # End of new logic.
 
         self.publish_selected_children_events(
@@ -595,7 +607,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         if any(block_keys[changed] for changed in ('invalid', 'overlimit', 'added')):
             # Save our selections to the user state, to ensure consistency:
             selected = block_keys['selected']
-            self.selected = selected  # TODO: this doesn't save from the LMS "Progress" page.
+            self.selected = selected  # pylint: disable=attribute-defined-outside-init
 
         return self.selected
 
