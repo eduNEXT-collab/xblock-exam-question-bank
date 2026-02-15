@@ -15,6 +15,14 @@ Unreleased
 **********
 
 *
+0.7.0 – 2026-02-15
+******************
+
+Feature
+========
+
+* Add logic for the collection-based selection (#18)
+
 0.6.0 – 2026-02-11
 ******************
 
