@@ -151,6 +151,14 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         root_xblock = context.get("root_xblock") if context else None
         is_root = root_xblock and root_xblock.usage_key == self.usage_key
 
+        collections_with_values = {}
+
+        for coll_key, coll_data in self.collections_info.items():
+            collections_with_values[coll_key] = {
+                **coll_data,  # keep title, description, problems
+                "current_value": self.max_count_per_collection.get(coll_key, 1)
+            }
+
         if is_root and self.children:
             context["can_edit_visibility"] = False
             context["can_move"] = False
@@ -167,7 +175,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                         for child in self.get_children()
                     ],
                     "view_link": f'<a target="_top" href="/container/{self.usage_key}">',
-                    "collection_group": self.collections_info
+                    "collection_group": collections_with_values,
                 },
                 i18n_service=self.runtime.service(self, 'i18n')
             ))
@@ -627,3 +635,23 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             if value < -1 or key not in collections:
                 return False
         return True
+    
+    @XBlock.json_handler
+    def update_max_count_per_collection(self, data, _):
+        """
+        Update the max_count_per_collection setting from Studio.
+        """
+        if not isinstance(data, dict):
+            return {"status": "error", "message": "Invalid data format"}
+
+        if not self.validate_max_count_per_collection(data):
+          return {"status": "error", "message": "Invalid configuration"}
+        
+        # Persist configuration (Scope.settings)
+        self.max_count_per_collection = data
+
+        modulestore = get_modulestore()
+        modulestore.update_item(self, self.runtime.user_id)
+        
+        return {"status": "ok"}
+

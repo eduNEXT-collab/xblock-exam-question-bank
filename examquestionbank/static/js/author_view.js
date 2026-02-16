@@ -4,7 +4,8 @@ function ExamQuestionBankAuthorView(runtime, element) {
     var $element = $(element);
 
     var refreshButton = $element.find('.btn-refresh-collections');
-    var handlerUrl = runtime.handlerUrl(element, 'refresh_collections');
+    var refreshCollectionsUrl = runtime.handlerUrl(element, 'refresh_collections');
+	var updateMaxCountPerCollectionUrl = runtime.handlerUrl(element, 'update_max_count_per_collection');
 
     refreshButton.on('click', function (event) {
         event.preventDefault();
@@ -12,9 +13,11 @@ function ExamQuestionBankAuthorView(runtime, element) {
 
         runtime.notify('save', { state: 'start', message: gettext('Refreshing collections...') });
 
+		var usageId = $element.data("usageId");
+
         $.ajax({
             type: 'POST',
-            url: handlerUrl,
+            url: refreshCollectionsUrl,
             data: JSON.stringify({}),
             contentType: 'application/json',
             dataType: 'json',
@@ -24,7 +27,7 @@ function ExamQuestionBankAuthorView(runtime, element) {
                 window.parent.postMessage(
                     {
                         type: 'saveEditedXBlockData',
-                        payload: {},
+                        payload: { locator: usageId },
                     },
                     '*',
                 );
@@ -43,6 +46,44 @@ function ExamQuestionBankAuthorView(runtime, element) {
                 refreshButton.prop('disabled', false);
             });
     });
+
+	var selectionDebounce;
+
+	$element.find('.selected-quantity input[type="number"]').on('input change', function () {
+
+		updateTotalSelected($element);
+		clearTimeout(selectionDebounce);
+
+		selectionDebounce = setTimeout(function () {
+
+			var selectionData = {};
+
+			$element.find('.selected-quantity input[type="number"]').each(function () {
+				var key = $(this).attr('name');
+				var value = parseInt($(this).val(), 10);
+
+				if (!isNaN(value)) {
+					selectionData[key] = value;
+				}
+			});
+
+			$.ajax({
+				type: 'POST',
+				url: updateMaxCountPerCollectionUrl,
+				data: JSON.stringify(selectionData),
+				contentType: 'application/json',
+				dataType: 'json'
+			})
+			.fail(function () {
+				runtime.notify('error', {
+					title: gettext('Selection update failed'),
+					message: gettext('Could not save selection.')
+				});
+			});
+
+		}, 1000);
+
+	});
 
     /**
      * Update total selected count
