@@ -167,6 +167,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                         for child in self.get_children()
                     ],
                     "view_link": f'<a target="_top" href="/container/{self.usage_key}">',
+                    "collection_group": self.collections_info
                 },
                 i18n_service=self.runtime.service(self, 'i18n')
             ))

@@ -17,7 +17,7 @@
                 <div class="stat-label">{% trans "Total problems" %}</div>
             </div>
             <div class="stat-block">
-                <div class="stat-number">{{ max_count }}</div>
+                <div class="stat-number"></div>
                 <div class="stat-label">{% trans "Selected to show" %}</div>
             </div>
         </div>
@@ -43,23 +43,77 @@
                     <div class="stat-number">{% trans "All" %}</div>
                     <div class="stat-label">{% trans "Shown to learners" %}</div>
                 {% else %}
-                    <div class="stat-number">{{ max_count }}</div>
+                    <div class="stat-number total-selected-count"></div>
                     <div class="stat-label">{% trans "Selected to show" %}</div>
                 {% endif %}
             </div>
         </div>
     </div>
 
-    {% if blocks %}
-    <p class="bank-learner-info">
+	{% if collection_group or blocks %}
+      <p class="bank-learner-info">
         {% trans "These are the problems in the bank:" %}
-    </p>
-    <ol class="bank-problem-list">
-        {% for block in blocks %}
-            <li>{{ block.display_name }}</li>
-        {% endfor %}
-    </ol>
+      </p>
     {% endif %}
+
+	<div>
+      {% if collection_group %}
+        {% for coll_key, collection in collection_group.items %}
+          <div class="collection" data-collection-key="{{ coll_key }}">
+			<div class="collection-header">
+			  <div>
+			    <h3 class="collection-title">{{ collection.title }}</h3>
+			    <h4 class="collection-description">{{ collection.description }}</h4>
+			  </div>
+
+			  {% if max_count != -1 %}
+			    <form class="selected-quantity">
+			  	<label for="problems-quantity-selector-{{ coll_key }}" class="input-label">{% trans "Number of problems to show" %}
+			  	<input 
+			  	  id="problems-quantity-selector-{{ coll_key }}"
+			  	  name="{{ coll_key }}"
+                    type="number"
+                    min="1" 
+                    max="{{ collection.problems|length }}"
+			  	  value="{{ collection.problems|length }}"
+                    oninput="if(this.value < 1) this.value = 1;"
+                    required
+			  	/>
+			  	<span class="help-block">{% trans "max." %} {{ collection.problems|length }}</span>
+			  	</label>
+			    </form>
+			  {% endif %}
+			</div>
+    
+            {% if collection.problems %}
+			  <div class="search-container">
+			  	<input 
+                  type="search" 
+                  class="problem-search" 
+                  placeholder="Search problems by title or content..."
+                  aria-label="Search problems"
+			  	/>
+			  	<div class="search-results-info"></div>
+				<button class="search-clear-btn" aria-label="Clear search">{% trans "Clear search" %}</button>
+			  </div>
+              <ol class="bank-problem-list">
+                {% for problem_key, problem in collection.problems.items %}
+                  <li class="problem-item" data-problem-key="{{ problem_key }}">{{ problem.name }}</li>
+                {% endfor %}
+              </ol>
+            {% else %}
+              <p class="no-problems">No problems in this collection.</p>
+            {% endif %}
+			<div class="view-elements-group">
+				<button type="button" class="view-elements more"></button>
+				<button type="button" class="view-elements less"></button>
+			</div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="no-collections">No collections available.</p>
+      {% endif %}
+    </div>
 
     <div class="bank-instruction">
         {% blocktrans trimmed asvar view_msg %}
@@ -73,11 +127,19 @@
         {% endblocktrans %}
         {% interpolate_html edit_msg link_start='<a href="#" class="edit-button action-button">'|safe link_end='</a>'|safe %}
     </div>
-    <div class="bank-collections-section">
-        <button type="button" class="btn-refresh-collections">
-            <span class="icon fa fa-refresh" aria-hidden="true"></span>
-            {% trans "Refresh Collections" %}
-        </button>
-    </div>
-{% endif %}
+	{% endif %}
+    {% if block_count > 0 %}
+	<div class="bank-collections-section">
+		<div class="refresh-text">
+          {% blocktrans trimmed asvar refresh_count_msg %}
+		  Load {bold_start}{count}{bold_end} problems
+		  {% endblocktrans %}
+          {% interpolate_html refresh_count_msg bold_start='<span>'|safe bold_end='</span>'|safe count=block_count %}
+        </div>
+		<button type="button" class="btn-refresh-collections">
+			<span class="icon fa fa-refresh" aria-hidden="true"></span>
+			{% trans "Refresh Collections" %}
+		</button>
+	</div>
+	{% endif %}
 </div>
