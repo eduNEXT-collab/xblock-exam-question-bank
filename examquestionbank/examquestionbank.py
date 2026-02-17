@@ -626,14 +626,33 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
         Ensures all values are integers >= -1 and the keys are part of the collections_info.
         """
-        collections = self.collections_info.keys()
+        collections = self.collections_info
         for key, value in max_count_per_collection.items():
+
+            # Key must exist
+            if key not in collections:
+                return False
+
+            # Value must be int
             try:
                 value = int(value)
             except (ValueError, TypeError):
                 return False
-            if value < -1 or key not in collections:
+
+            # Must be >= -1
+            if value < -1:
                 return False
+
+            # If unlimited (-1), skip size check
+            if value == -1:
+                continue
+
+            # Must not exceed collection size
+            collection_size = len(collections[key].get("problems", {}))
+
+            if value > collection_size:
+                return False
+
         return True
     
     @XBlock.json_handler
