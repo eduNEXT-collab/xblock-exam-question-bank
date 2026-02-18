@@ -51,6 +51,10 @@
     </div>
 
 	{% if collection_group or blocks %}
+	  <p class="bank-summary">
+		<span class="text-bold">TIP:</span>
+        {% trans "To enable selecting the number of problems per collection, update the “Count” field in the XBlock edit modal from -1 (default) to any value greater than -1." %}
+      </p>
       <p class="bank-learner-info">
         {% trans "These are the problems in the bank:" %}
       </p>
@@ -130,12 +134,6 @@
 	{% endif %}
     {% if block_count > 0 %}
 	<div class="bank-collections-section">
-		<div class="refresh-text">
-          {% blocktrans trimmed asvar refresh_count_msg %}
-		  Load {bold_start}{count}{bold_end} problems
-		  {% endblocktrans %}
-          {% interpolate_html refresh_count_msg bold_start='<span>'|safe bold_end='</span>'|safe count=block_count %}
-        </div>
 		<button type="button" class="btn-refresh-collections">
 			<span class="icon fa fa-refresh" aria-hidden="true"></span>
 			{% trans "Refresh Collections" %}

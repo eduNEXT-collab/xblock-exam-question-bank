@@ -136,6 +136,14 @@ function ExamQuestionBankAuthorView(runtime, element) {
         var visibleCount = INITIAL_VISIBLE;
         var debounceTimer;
 
+		/* ---------- CONDITIONAL SEARCH VISIBILITY ---------- */
+		if ($allItems.length <= INITIAL_VISIBLE) {
+			$search.hide();
+			$resultsInfo.hide();
+		} else {
+			$search.show();
+		}
+
         /* ---------- INITIAL RENDER ---------- */
         resetPagination();
 

@@ -156,7 +156,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         for coll_key, coll_data in self.collections_info.items():
             collections_with_values[coll_key] = {
                 **coll_data,  # keep title, description, problems
-                "current_value": self.max_count_per_collection.get(coll_key, 1)
+                "current_value": self.max_count_per_collection.get(coll_key, None)
             }
 
         if is_root and self.children:

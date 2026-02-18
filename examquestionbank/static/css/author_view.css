@@ -115,21 +115,8 @@ a:focus-visible {
     color: var(--pgn-color-gray-700, #333);
 }
 
-/* Collections Management Section */
-.bank-collections-section {
-    display: flex;
-	flex-direction: column;
-	gap: 1rem;
-	margin-top: 1.5em;
-    padding-top: 1.5em;
-
-	& .refresh-text {
-		font-size: 2rem;
-		
-		& > span {
-			font-weight: bold;
-		}
-	}
+.text-bold {
+	font-weight: bold;
 }
 
 .btn-refresh-collections {
