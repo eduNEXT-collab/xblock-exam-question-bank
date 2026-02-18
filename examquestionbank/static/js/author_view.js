@@ -1,5 +1,5 @@
 /* JavaScript for ExamQuestionBankXBlock Author View */
-function ExamQuestionBankAuthorView(runtime, element) {
+function ExamQuestionBankAuthorView(runtime, element, context) {
     'use strict';
     var $element = $(element);
 
@@ -51,6 +51,17 @@ function ExamQuestionBankAuthorView(runtime, element) {
 
 	$element.find('.selected-quantity input[type="number"]').on('input change', function () {
 
+		var value = $(this).val();
+
+        // Allow empty (means: fallback to max_count)
+        if (value !== '') {
+            var parsed = parseInt(value, 10);
+
+            if (!isNaN(parsed) && parsed < 1) {
+                $(this).val(1);
+            }
+        }
+
 		updateTotalSelected($element);
 		clearTimeout(selectionDebounce);
 
@@ -60,10 +71,13 @@ function ExamQuestionBankAuthorView(runtime, element) {
 
 			$element.find('.selected-quantity input[type="number"]').each(function () {
 				var key = $(this).attr('name');
-				var value = parseInt($(this).val(), 10);
+				var raw = $(this).val();
 
-				if (!isNaN(value)) {
-					selectionData[key] = value;
+				if (raw !== '') {
+					var parsed = parseInt(raw, 10);
+					if (!isNaN(parsed)) {
+						selectionData[key] = parsed;
+					}
 				}
 			});
 
@@ -90,21 +104,29 @@ function ExamQuestionBankAuthorView(runtime, element) {
      */
     function updateTotalSelected($element) {
         var total = 0;
+        var hasAnyValue = false;
 
         $element.find('.collection').each(function () {
-            var value = parseInt($(this).find('.selected-quantity input[type="number"]').val(), 10) || 0;
+            var rawValue = $(this).find('.selected-quantity input[type="number"]').val();
+            if (rawValue !== '' && rawValue !== null) {
+                var parsed = parseInt(rawValue, 10);
 
-            total += value;
+                if (!isNaN(parsed)) {
+                    total += parsed;
+                    hasAnyValue = true;
+                }
+            }
         });
 
-        $element.find('.total-selected-count').text(total);
+        if (!hasAnyValue) {
+            // All values are empty/null → fallback to max_count
+            $element.find('.total-selected-count').text(context.max_count);
+        } else {
+            $element.find('.total-selected-count').text(total);
+        }
     }
 
     updateTotalSelected($element);
-
-    $element.find('.selected-quantity input[type="number"]').on('input change', function () {
-        updateTotalSelected($element);
-    });
 
     /**
      * Progressive View + Search

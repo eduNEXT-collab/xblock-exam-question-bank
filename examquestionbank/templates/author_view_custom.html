@@ -80,8 +80,6 @@
                   min="1" 
                   max="{{ collection.problems|length }}"
 				  value="{{ collection.current_value }}"
-                  oninput="if(this.value < 1) this.value = 1;"
-                  required
 			  	/>
 			  	<span class="help-block">{% trans "max." %} {{ collection.problems|length }}</span>
 			  	</label>
