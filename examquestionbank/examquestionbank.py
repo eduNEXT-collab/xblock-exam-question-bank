@@ -151,6 +151,14 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         root_xblock = context.get("root_xblock") if context else None
         is_root = root_xblock and root_xblock.usage_key == self.usage_key
 
+        collections_with_values = {}
+
+        for coll_key, coll_data in self.collections_info.items():
+            collections_with_values[coll_key] = {
+                **coll_data,  # keep title, description, problems
+                "current_value": self.max_count_per_collection.get(coll_key, None)
+            }
+
         if is_root and self.children:
             context["can_edit_visibility"] = False
             context["can_move"] = False
@@ -167,6 +175,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                         for child in self.get_children()
                     ],
                     "view_link": f'<a target="_top" href="/container/{self.usage_key}">',
+                    "collection_group": collections_with_values,
                 },
                 i18n_service=self.runtime.service(self, 'i18n')
             ))
@@ -177,7 +186,9 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             statici18n_js_url = self._get_statici18n_js_url(resource_loader)
             if statici18n_js_url:
                 fragment.add_javascript_url(self.runtime.local_resource_url(self, statici18n_js_url))
-            fragment.initialize_js('ExamQuestionBankAuthorView')
+            fragment.initialize_js('ExamQuestionBankAuthorView', {
+                "max_count": self.max_count,
+            })
 
         return fragment
 
@@ -617,12 +628,50 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
         Ensures all values are integers >= -1 and the keys are part of the collections_info.
         """
-        collections = self.collections_info.keys()
+        collections = self.collections_info
         for key, value in max_count_per_collection.items():
+
+            # Key must exist
+            if key not in collections:
+                return False
+
+            # Value must be int
             try:
                 value = int(value)
             except (ValueError, TypeError):
                 return False
-            if value < -1 or key not in collections:
+
+            # Must be >= -1
+            if value < -1:
                 return False
+
+            # If unlimited (-1), skip size check
+            if value == -1:
+                continue
+
+            # Must not exceed collection size
+            collection_size = len(collections[key].get("problems", {}))
+
+            if value > collection_size:
+                return False
+
         return True
+
+    @XBlock.json_handler
+    def update_max_count_per_collection(self, data, _):
+        """
+        Update the max_count_per_collection setting from Studio.
+        """
+        if not isinstance(data, dict):
+            return {"status": "error", "message": "Invalid data format"}
+
+        if not self.validate_max_count_per_collection(data):
+            return {"status": "error", "message": "Invalid configuration"}
+
+        # Persist configuration (Scope.settings)
+        self.max_count_per_collection = data
+
+        modulestore = get_modulestore()
+        modulestore.update_item(self, self.runtime.user_id)
+
+        return {"status": "ok"}

@@ -72,13 +72,18 @@ a:focus-visible {
 }
 
 .bank-problem-list {
-    list-style: decimal;
-    margin: 1em 0 1em 2em;
-    padding: 0;
+  column-count: 2;
+  column-gap: 3rem;
 }
 
 .bank-problem-list li {
-    margin-bottom: 0.25em;
+  break-inside: avoid;
+  list-style: decimal;
+  list-style-position: inside;
+
+  &::marker {
+    font-weight: bold;
+  }
 }
 
 /* Error state */
@@ -110,10 +115,8 @@ a:focus-visible {
     color: var(--pgn-color-gray-700, #333);
 }
 
-/* Collections Management Section */
-.bank-collections-section {
-    margin-top: 1.5em;
-    padding-top: 1.5em;
+.text-bold {
+	font-weight: bold;
 }
 
 .btn-refresh-collections {
@@ -129,6 +132,7 @@ a:focus-visible {
     font-size: 0.95em;
     font-weight: 500;
     transition: background-color 0.2s ease;
+	align-self: flex-start;
 }
 
 .btn-refresh-collections:hover {
@@ -148,4 +152,136 @@ a:focus-visible {
 
 .btn-refresh-collections .icon {
     font-size: 1em;
+}
+
+/* Grouped collections */
+.collection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border: 1px solid var(--pgn-color-primary-200, #4A90E2);
+  background: var(--pgn-color-primary-100, #F0F8FF);
+  border-radius: 0.5em;
+  padding: 1.5em;
+  margin-bottom: 1em;
+
+  & > .view-elements-group {
+	display: flex;
+	justify-content: flex-end;
+	gap: 2rem;
+	
+	& > .view-elements {
+	  padding: 1rem 4rem;
+	  border: 1px solid var(--pgn-color-primary-700, #205081);
+	  border-radius: 8px;
+	  background-color: transparent;
+	  color: var(--pgn-color-primary-700, #205081);
+	  align-self: center;
+
+	  &.less {
+		border: none;
+	  }
+  
+	  &:hover {
+		background-color: var(--pgn-color-primary-700, #205081);
+		color: #fff;
+	  }
+	}
+  }
+
+  .collection-header {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 1rem;
+
+	.collection-title {
+	  flex: 1;
+	  font-size: 2rem;
+	  font-weight: bold;
+	}
+
+	.selected-quantity {
+	  flex: 0.25;
+	
+      & > label {
+        align-items: flex-end;
+        display: flex;
+        flex-direction: column;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+
+		.help-block {
+			color: #999;
+			font-weight: normal;
+		}
+        
+		&:has(input:invalid) {
+		  .help-block {
+            color: var(--pgn-color-danger-500, #C32D3AFF);
+		  }
+        }
+      
+        & > input {
+		  margin-top: 1rem;
+		  margin-bottom: 0.5rem;
+          min-width: 90px;
+          padding-top: 8px;
+          padding-bottom: 8px;
+          text-align: center;
+          border-radius: 8px;
+          
+          &:invalid {
+          	border: 1px solid var(--pgn-color-danger-500, #C32D3AFF);
+          	background-color: #C32D3A44;
+          }
+          
+          &:valid {
+          	border: 1px solid var(--pgn-color-success-500, #178253FF);
+          	background-color: #17825344;
+          }
+		}
+	  }
+	}
+  }
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.problem-search {
+  width: 100%;
+  max-width: 320px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+}
+
+.search-results-info {
+  opacity: 0.7;
+}
+
+.search-clear-btn {
+  background-color: transparent;
+  color: var(--pgn-color-primary-700, #205081);
+  border: none;
+  font-weight: bold;
+}
+
+.problem-list {
+  margin: 0 0 0 20px;
+  padding: 0;
+}
+
+.problem-item {
+  padding: 4px 0;
+  line-height: 1.4;
+}
+
+.no-problems,
+.no-collections {
+  color: #666;
+  font-style: italic;
 }

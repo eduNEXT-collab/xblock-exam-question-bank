@@ -15,6 +15,14 @@ Unreleased
 **********
 
 *
+0.8.0 – 2026-02-18
+******************
+
+Feature
+========
+
+* Display problems grouped by collection in the UI, improving organization and navigation through the collections (#17)
+
 0.7.0 – 2026-02-15
 ******************
 
