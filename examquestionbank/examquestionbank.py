@@ -654,7 +654,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 return False
 
         return True
-    
+
     @XBlock.json_handler
     def update_max_count_per_collection(self, data, _):
         """
@@ -664,13 +664,12 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             return {"status": "error", "message": "Invalid data format"}
 
         if not self.validate_max_count_per_collection(data):
-          return {"status": "error", "message": "Invalid configuration"}
-        
+            return {"status": "error", "message": "Invalid configuration"}
+
         # Persist configuration (Scope.settings)
         self.max_count_per_collection = data
 
         modulestore = get_modulestore()
         modulestore.update_item(self, self.runtime.user_id)
-        
-        return {"status": "ok"}
 
+        return {"status": "ok"}
