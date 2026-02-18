@@ -188,7 +188,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 fragment.add_javascript_url(self.runtime.local_resource_url(self, statici18n_js_url))
             fragment.initialize_js('ExamQuestionBankAuthorView', {
                 "max_count": self.max_count,
-			})
+            })
 
         return fragment
 
