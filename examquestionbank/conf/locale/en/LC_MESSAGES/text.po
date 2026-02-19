@@ -17,71 +17,80 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: examquestionbank.py:46
+#: examquestionbank.py:45
 msgid "Display Name"
 msgstr ""
 
-#: examquestionbank.py:47
+#: examquestionbank.py:46
 msgid "The display name for this component."
 msgstr ""
 
-#: examquestionbank.py:54
+#: examquestionbank.py:53
 msgid "Count"
 msgstr ""
 
-#: examquestionbank.py:55
+#: examquestionbank.py:54
 msgid ""
 "Enter the number of components to display to each student. Set it to -1 to "
 "display all components."
 msgstr ""
 
+#: examquestionbank.py:60
+msgid "Count Per Collection"
+msgstr ""
+
 #: examquestionbank.py:61
+msgid ""
+"Optional limit on the number of problems to display from each collection."
+msgstr ""
+
+#: examquestionbank.py:67
 msgid "Collections Info"
 msgstr ""
 
-#: examquestionbank.py:62
+#: examquestionbank.py:68
 msgid "To update this field click Refresh Collections in the XBlock."
 msgstr ""
 
-#: examquestionbank.py:68
+#: examquestionbank.py:74
 msgid "Maximum Exam Attempts"
 msgstr ""
 
-#: examquestionbank.py:70
+#: examquestionbank.py:76
 msgid ""
 "Maximum number of times a student can attempt this entire exam. Set to -1 "
 "for unlimited attempts."
 msgstr ""
 
-#: examquestionbank.py:79
+#: examquestionbank.py:85
 msgid "Current Attempt"
 msgstr ""
 
-#: examquestionbank.py:80
+#: examquestionbank.py:86
 msgid "Current attempt number for this student"
 msgstr ""
 
-#: examquestionbank.py:86
+#: examquestionbank.py:92
 msgid "Attempt History"
 msgstr ""
 
-#: examquestionbank.py:87
+#: examquestionbank.py:93
 msgid "History of all attempts with scores and timestamps"
 msgstr ""
 
-#: examquestionbank.py:93
+#: examquestionbank.py:99
 msgid "Minimum Passing Score (%)"
 msgstr ""
 
-#: examquestionbank.py:94
+#: examquestionbank.py:100
 msgid "Minimum percentage required to pass the exam (1-100)"
 msgstr ""
 
-#: examquestionbank.py:101
+#: examquestionbank.py:107
 msgid "Is Attempting"
 msgstr ""
 
-#: examquestionbank.py:102
+#: examquestionbank.py:108
 msgid "Indicates whether the student is currently attempting the exam"
 msgstr ""
 
@@ -121,7 +130,7 @@ msgstr ""
 msgid "More problems selected than available."
 msgstr ""
 
-#: templates/author_view_custom.html:27 templates/author_view_custom.html:71
+#: templates/author_view_custom.html:27 templates/author_view_custom.html:142
 #, python-brace-format
 msgid "Press {link_start}Edit{link_end} to configure settings."
 msgstr ""
@@ -135,15 +144,79 @@ msgid "Shown to learners"
 msgstr ""
 
 #: templates/author_view_custom.html:55
+msgid "Selection Settings"
+msgstr ""
+
+#: templates/author_view_custom.html:56
+#, python-brace-format
+msgid "To apply these changes, do it in the {link_start}Edit page{link_end}."
+msgstr ""
+
+#: templates/author_view_custom.html:61
+msgid "General Bank:"
+msgstr ""
+
+#: templates/author_view_custom.html:61
+msgid "Set 'Count' to your desired total."
+msgstr ""
+
+#: templates/author_view_custom.html:62
+msgid "By Collections:"
+msgstr ""
+
+#: templates/author_view_custom.html:62
+msgid "Change 'Count' from -1 and click 'Refresh Collections'."
+msgstr ""
+
+#: templates/author_view_custom.html:66
+msgid "Note:"
+msgstr ""
+
+#: templates/author_view_custom.html:67
+#, python-brace-format
+msgid ""
+"To revert to General Bank after using Collections, enter {link_start}Edit "
+"mode{link_end} and clear all collection data."
+msgstr ""
+
+#: templates/author_view_custom.html:78
 msgid "These are the problems in the bank:"
 msgstr ""
 
-#: templates/author_view_custom.html:65
+#: templates/author_view_custom.html:90
+msgid "Number of problems to show"
+msgstr ""
+
+#: templates/author_view_custom.html:99
+msgid "max."
+msgstr ""
+
+#: templates/author_view_custom.html:110
+msgid "Search problems by title or content..."
+msgstr ""
+
+#: templates/author_view_custom.html:111
+msgid "Search problems"
+msgstr ""
+
+#: templates/author_view_custom.html:114
+msgid "Clear search"
+msgstr ""
+
+#: templates/author_view_custom.html:122
+msgid "No problems in this collection."
+msgstr ""
+
+#: templates/author_view_custom.html:131
+msgid "No collections data available."
+msgstr ""
+
+#: templates/author_view_custom.html:136
 #, python-brace-format
 msgid "Press {link_start}View{link_end} to preview components."
 msgstr ""
 
-#: templates/author_view_custom.html:79
+#: templates/author_view_custom.html:152
 msgid "Refresh Collections"
 msgstr ""
 
@@ -212,20 +285,28 @@ msgstr ""
 msgid "Yes, Retry Exam"
 msgstr ""
 
-#: static/js/author_view.js:12
+#: static/js/author_view.js:14
 msgid "Refreshing collections..."
 msgstr ""
 
-#: static/js/author_view.js:26
+#: static/js/author_view.js:34
 msgid "Collections refreshed!"
 msgstr ""
 
-#: static/js/author_view.js:30 static/js/author_view.js:33
+#: static/js/author_view.js:39 static/js/author_view.js:42
 msgid "Failed to refresh collections"
 msgstr ""
 
-#: static/js/author_view.js:31
+#: static/js/author_view.js:40
 msgid "An error occurred while refreshing collections"
+msgstr ""
+
+#: static/js/author_view.js:93
+msgid "Selection update failed"
+msgstr ""
+
+#: static/js/author_view.js:94
+msgid "Could not save selection."
 msgstr ""
 
 #: static/js/student_view.js:94
