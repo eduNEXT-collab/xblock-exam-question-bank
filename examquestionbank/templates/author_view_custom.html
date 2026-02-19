@@ -51,17 +51,29 @@
     </div>
 
 	{% if collection_group or blocks %}
-	  <p class="bank-summary">
-		<span class="text-bold">TIP:</span>
-        {% trans "To enable selecting the number of problems per collection, update the “Count” field in the XBlock edit modal from -1 (default) to any value greater than -1." %}
-      </p>
-      <p class="bank-learner-info">
-        {% trans "These are the problems in the bank:" %}
-      </p>
+	  <div class="bank-summary" style="text-align: left; padding: 10px; line-height: 1.4;">
+        <strong style="color: #205081; display: block; margin-bottom: 4px;">{% trans "Selection Settings" %}</strong>
+        
+        <ul style="list-style: none; padding: 0; margin: 0 0 10px 0;">
+            <li>• <strong>{% trans "General Bank:" %}</strong> {% trans "Set 'Count' to your desired total." %}</li>
+            <li>• <strong>{% trans "By Collections:" %}</strong> {% trans "Change 'Count' from -1 and click 'Refresh Collections'." %}</li>
+        </ul>
+
+        <p style="font-size: 0.9em; margin: 0; border-top: 1px solid #ddd; padding-top: 8px;">
+            <i><strong>{% trans "Note:" %}</strong> 
+            {% blocktrans trimmed asvar note_msg %}
+            To revert to General Bank after using Collections, enter {link_start}Edit mode{link_end} and clear all collection data.
+            {% endblocktrans %}
+            {% interpolate_html note_msg link_start='<a href="#" class="edit-button action-button">'|safe link_end='</a>'|safe %}</i>
+        </p>
+    </div>
     {% endif %}
 
 	<div>
       {% if collection_group %}
+        <p class="bank-learner-info">
+          {% trans "These are the problems in the bank:" %}
+        </p>
         {% for coll_key, collection in collection_group.items %}
           <div class="collection" data-collection-key="{{ coll_key }}">
 			<div class="collection-header">
@@ -92,11 +104,11 @@
 			  	<input 
                   type="search" 
                   class="problem-search" 
-                  placeholder="Search problems by title or content..."
-                  aria-label="Search problems"
+                  placeholder="{% trans 'Search problems by title or content...' %}"
+                  aria-label="{% trans 'Search problems' %}"
 			  	/>
 			  	<div class="search-results-info"></div>
-				<button class="search-clear-btn" aria-label="Clear search">{% trans "Clear search" %}</button>
+				<button class="search-clear-btn" aria-label="{% trans 'Clear search' %}">{% trans "Clear search" %}</button>
 			  </div>
               <ol class="bank-problem-list">
                 {% for problem_key, problem in collection.problems.items %}
@@ -104,7 +116,7 @@
                 {% endfor %}
               </ol>
             {% else %}
-              <p class="no-problems">No problems in this collection.</p>
+              <p class="no-problems">{% trans "No problems in this collection." %}</p>
             {% endif %}
 			<div class="view-elements-group">
 				<button type="button" class="view-elements more"></button>
@@ -113,7 +125,7 @@
           </div>
         {% endfor %}
       {% else %}
-        <p class="no-collections">No collections available.</p>
+        <p class="no-collections">{% trans "No collections data available." %}</p>
       {% endif %}
     </div>
 

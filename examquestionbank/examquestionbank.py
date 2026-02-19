@@ -57,8 +57,8 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
     )
 
     max_count_per_collection = Dict(
-        display_name=_("Max Count Per Collection"),
-        help=_("Optional limit on the number of problems to display from each collection. Set to -1 for no limit."),
+        display_name=_("Count Per Collection"),
+        help=_("Optional limit on the number of problems to display from each collection."),
         default={},
         scope=Scope.settings,
     )
