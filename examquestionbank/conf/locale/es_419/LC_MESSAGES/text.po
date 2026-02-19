@@ -44,8 +44,7 @@ msgstr "Cantidad por colecciones"
 #: examquestionbank.py:61
 msgid ""
 "Optional limit on the number of problems to display from each collection."
-msgstr ""
-"Ingresa el número de componentes a mostrar por cada colección."
+msgstr "Ingresa el número de componentes a mostrar por cada colección."
 
 #: examquestionbank.py:67
 msgid "Collections Info"
@@ -137,7 +136,7 @@ msgstr "Seleccionados para mostrar"
 msgid "More problems selected than available."
 msgstr "Hay más problemas seleccionados que disponibles."
 
-#: templates/author_view_custom.html:27 templates/author_view_custom.html:139
+#: templates/author_view_custom.html:27 templates/author_view_custom.html:142
 #, python-brace-format
 msgid "Press {link_start}Edit{link_end} to configure settings."
 msgstr "Presiona {link_start}Editar{link_end} para configurar los ajustes."
@@ -154,73 +153,81 @@ msgstr "Mostrados a los estudiantes"
 msgid "Selection Settings"
 msgstr "Configuraciones de lógica de selección"
 
-#: templates/author_view_custom.html:58
+#: templates/author_view_custom.html:56
+#, python-brace-format
+msgid "To apply these changes, do it in the {link_start}Edit page{link_end}."
+msgstr "Para aplicar estos cambios, hágalo en la página de {link_start}Editar{link_end}."
+
+#: templates/author_view_custom.html:61
 msgid "General Bank:"
 msgstr "Banco General:"
 
-#: templates/author_view_custom.html:58
+#: templates/author_view_custom.html:61
 msgid "Set 'Count' to your desired total."
 msgstr "Cambia 'Cantidad' al número de elementos a mostrar."
 
-#: templates/author_view_custom.html:59
+#: templates/author_view_custom.html:62
 msgid "By Collections:"
 msgstr "Por Colecciones:"
 
-#: templates/author_view_custom.html:59
+#: templates/author_view_custom.html:62
 msgid "Change 'Count' from -1 and click 'Refresh Collections'."
-msgstr "Cambia 'Cantidad' a un número diferente de -1 y haz click sobre 'Actualizar colecciones'."
+msgstr ""
+"Cambia 'Cantidad' a un número diferente de -1 y haz click sobre 'Actualizar "
+"colecciones'."
 
-#: templates/author_view_custom.html:63
+#: templates/author_view_custom.html:66
 msgid "Note:"
 msgstr "Nota:"
 
-#: templates/author_view_custom.html:64
+#: templates/author_view_custom.html:67
 #, python-brace-format
 msgid ""
 "To revert to General Bank after using Collections, enter {link_start}Edit "
 "mode{link_end} and clear all collection data."
 msgstr ""
-"Para usar Banco General después de usar por Colecciones, entra en {link_start}Editar "
-"{link_end} y elimina la información relacionada a colecciones."
+"Para usar Banco General después de usar por Colecciones, entra en "
+"{link_start}Editar {link_end} y elimina la información relacionada a "
+"colecciones."
 
-#: templates/author_view_custom.html:75
+#: templates/author_view_custom.html:78
 msgid "These are the problems in the bank:"
 msgstr "Estos son los problemas en el banco:"
 
-#: templates/author_view_custom.html:87
+#: templates/author_view_custom.html:90
 msgid "Number of problems to show"
 msgstr "Problemas a mostrar"
 
-#: templates/author_view_custom.html:96
+#: templates/author_view_custom.html:99
 msgid "max."
 msgstr ""
 
-#: templates/author_view_custom.html:107
+#: templates/author_view_custom.html:110
 msgid "Search problems by title or content..."
 msgstr "Buscar problemas por título..."
 
-#: templates/author_view_custom.html:108
+#: templates/author_view_custom.html:111
 msgid "Search problems"
 msgstr "Buscar problemas"
 
-#: templates/author_view_custom.html:111
+#: templates/author_view_custom.html:114
 msgid "Clear search"
 msgstr "Limpiar búsqueda"
 
-#: templates/author_view_custom.html:119
+#: templates/author_view_custom.html:122
 msgid "No problems in this collection."
 msgstr "No hay problemas en esta colección."
 
-#: templates/author_view_custom.html:128
+#: templates/author_view_custom.html:131
 msgid "No collections data available."
 msgstr "No hay datos de colecciones disponibles."
 
-#: templates/author_view_custom.html:133
+#: templates/author_view_custom.html:136
 #, python-brace-format
 msgid "Press {link_start}View{link_end} to preview components."
 msgstr "Presiona {link_start}Ver{link_end} para previsualizar los componentes."
 
-#: templates/author_view_custom.html:149
+#: templates/author_view_custom.html:152
 msgid "Refresh Collections"
 msgstr "Actualizar colecciones"
 

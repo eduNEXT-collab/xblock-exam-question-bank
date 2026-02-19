@@ -130,7 +130,7 @@ msgstr ""
 msgid "More problems selected than available."
 msgstr ""
 
-#: templates/author_view_custom.html:27 templates/author_view_custom.html:139
+#: templates/author_view_custom.html:27 templates/author_view_custom.html:142
 #, python-brace-format
 msgid "Press {link_start}Edit{link_end} to configure settings."
 msgstr ""
@@ -147,71 +147,76 @@ msgstr ""
 msgid "Selection Settings"
 msgstr ""
 
-#: templates/author_view_custom.html:58
+#: templates/author_view_custom.html:56
+#, python-brace-format
+msgid "To apply these changes, do it in the {link_start}Edit page{link_end}."
+msgstr ""
+
+#: templates/author_view_custom.html:61
 msgid "General Bank:"
 msgstr ""
 
-#: templates/author_view_custom.html:58
+#: templates/author_view_custom.html:61
 msgid "Set 'Count' to your desired total."
 msgstr ""
 
-#: templates/author_view_custom.html:59
+#: templates/author_view_custom.html:62
 msgid "By Collections:"
 msgstr ""
 
-#: templates/author_view_custom.html:59
+#: templates/author_view_custom.html:62
 msgid "Change 'Count' from -1 and click 'Refresh Collections'."
 msgstr ""
 
-#: templates/author_view_custom.html:63
+#: templates/author_view_custom.html:66
 msgid "Note:"
 msgstr ""
 
-#: templates/author_view_custom.html:64
+#: templates/author_view_custom.html:67
 #, python-brace-format
 msgid ""
 "To revert to General Bank after using Collections, enter {link_start}Edit "
 "mode{link_end} and clear all collection data."
 msgstr ""
 
-#: templates/author_view_custom.html:75
+#: templates/author_view_custom.html:78
 msgid "These are the problems in the bank:"
 msgstr ""
 
-#: templates/author_view_custom.html:87
+#: templates/author_view_custom.html:90
 msgid "Number of problems to show"
 msgstr ""
 
-#: templates/author_view_custom.html:96
+#: templates/author_view_custom.html:99
 msgid "max."
 msgstr ""
 
-#: templates/author_view_custom.html:107
+#: templates/author_view_custom.html:110
 msgid "Search problems by title or content..."
 msgstr ""
 
-#: templates/author_view_custom.html:108
+#: templates/author_view_custom.html:111
 msgid "Search problems"
 msgstr ""
 
-#: templates/author_view_custom.html:111
+#: templates/author_view_custom.html:114
 msgid "Clear search"
 msgstr ""
 
-#: templates/author_view_custom.html:119
+#: templates/author_view_custom.html:122
 msgid "No problems in this collection."
 msgstr ""
 
-#: templates/author_view_custom.html:128
+#: templates/author_view_custom.html:131
 msgid "No collections data available."
 msgstr ""
 
-#: templates/author_view_custom.html:133
+#: templates/author_view_custom.html:136
 #, python-brace-format
 msgid "Press {link_start}View{link_end} to preview components."
 msgstr ""
 
-#: templates/author_view_custom.html:149
+#: templates/author_view_custom.html:152
 msgid "Refresh Collections"
 msgstr ""
 

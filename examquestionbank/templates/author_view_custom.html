@@ -53,7 +53,10 @@
 	{% if collection_group or blocks %}
 	  <div class="bank-summary" style="text-align: left; padding: 10px; line-height: 1.4;">
         <strong style="color: #205081; display: block; margin-bottom: 4px;">{% trans "Selection Settings" %}</strong>
-        
+        {% blocktrans trimmed asvar apply_msg %}
+        To apply these changes, do it in the {link_start}Edit page{link_end}.
+        {% endblocktrans %}
+        {% interpolate_html apply_msg link_start='<a href="#" class="edit-button action-button">'|safe link_end='</a>'|safe %}<br><br>
         <ul style="list-style: none; padding: 0; margin: 0 0 10px 0;">
             <li>• <strong>{% trans "General Bank:" %}</strong> {% trans "Set 'Count' to your desired total." %}</li>
             <li>• <strong>{% trans "By Collections:" %}</strong> {% trans "Change 'Count' from -1 and click 'Refresh Collections'." %}</li>
