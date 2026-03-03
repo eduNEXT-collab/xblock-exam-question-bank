@@ -48,52 +48,52 @@ msgstr ""
 msgid "Collections Info (Do not edit)"
 msgstr ""
 
-#: examquestionbank.py:68
+#: examquestionbank.py:69
 msgid ""
 "This field should not be edited manually. Use the 'Refresh Collections' "
 "button in the XBlock to update its contents. You may delete all info to "
 "reset, but do not modify values directly."
 msgstr ""
 
-#: examquestionbank.py:74
+#: examquestionbank.py:78
 msgid "Maximum Exam Attempts"
 msgstr ""
 
-#: examquestionbank.py:76
+#: examquestionbank.py:80
 msgid ""
 "Maximum number of times a student can attempt this entire exam. Set to -1 "
 "for unlimited attempts."
 msgstr ""
 
-#: examquestionbank.py:85
+#: examquestionbank.py:89
 msgid "Current Attempt"
 msgstr ""
 
-#: examquestionbank.py:86
+#: examquestionbank.py:90
 msgid "Current attempt number for this student"
 msgstr ""
 
-#: examquestionbank.py:92
+#: examquestionbank.py:96
 msgid "Attempt History"
 msgstr ""
 
-#: examquestionbank.py:93
+#: examquestionbank.py:97
 msgid "History of all attempts with scores and timestamps"
 msgstr ""
 
-#: examquestionbank.py:99
+#: examquestionbank.py:103
 msgid "Minimum Passing Score (%)"
 msgstr ""
 
-#: examquestionbank.py:100
+#: examquestionbank.py:104
 msgid "Minimum percentage required to pass the exam (1-100)"
 msgstr ""
 
-#: examquestionbank.py:107
+#: examquestionbank.py:111
 msgid "Is Attempting"
 msgstr ""
 
-#: examquestionbank.py:108
+#: examquestionbank.py:112
 msgid "Indicates whether the student is currently attempting the exam"
 msgstr ""
 
