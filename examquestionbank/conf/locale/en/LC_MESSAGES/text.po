@@ -45,11 +45,14 @@ msgid ""
 msgstr ""
 
 #: examquestionbank.py:67
-msgid "Collections Info"
+msgid "Collections Info (Do not edit)"
 msgstr ""
 
 #: examquestionbank.py:68
-msgid "To update this field click Refresh Collections in the XBlock."
+msgid ""
+"This field should not be edited manually. Use the 'Refresh Collections' "
+"button in the XBlock to update its contents. You may delete all info to "
+"reset, but do not modify values directly."
 msgstr ""
 
 #: examquestionbank.py:74

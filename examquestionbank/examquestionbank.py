@@ -64,8 +64,8 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
     )
 
     collections_info = Dict(
-        display_name=_("Collections Info"),
-        help=_("To update this field click Refresh Collections in the XBlock."),
+        display_name=_("Collections Info (Do not edit)"),
+        help=_("This field should not be edited manually. Use the 'Refresh Collections' button in the XBlock to update its contents. You may delete all info to reset, but do not modify values directly."),
         default={},
         scope=Scope.content,
     )

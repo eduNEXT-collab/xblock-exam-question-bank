@@ -47,14 +47,18 @@ msgid ""
 msgstr "Ingresa el número de componentes a mostrar por cada colección."
 
 #: examquestionbank.py:67
-msgid "Collections Info"
-msgstr "Información de colecciones"
+msgid "Collections Info (Do not edit)"
+msgstr "Información de colecciones (No editar)"
 
 #: examquestionbank.py:68
-msgid "To update this field click Refresh Collections in the XBlock."
+msgid ""
+"This field should not be edited manually. Use the 'Refresh Collections' "
+"button in the XBlock to update its contents. You may delete all info to "
+"reset, but do not modify values directly."
 msgstr ""
-"Para actualizar este campo haz click sobre Actualizar colecciones en el "
-"XBlock."
+"Este campo no debe editarse manualmente. Usa el botón 'Actualizar colecciones' "
+"en el XBlock para actualizar su contenido. Puedes eliminar toda la "
+"información para reiniciar, pero no modifiques los valores directamente."
 
 #: examquestionbank.py:74
 msgid "Maximum Exam Attempts"
@@ -156,7 +160,9 @@ msgstr "Configuraciones de lógica de selección"
 #: templates/author_view_custom.html:56
 #, python-brace-format
 msgid "To apply these changes, do it in the {link_start}Edit page{link_end}."
-msgstr "Para aplicar estos cambios, hágalo en la página de {link_start}Editar{link_end}."
+msgstr ""
+"Para aplicar estos cambios, hágalo en la página de {link_start}"
+"Editar{link_end}."
 
 #: templates/author_view_custom.html:61
 msgid "General Bank:"
