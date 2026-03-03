@@ -64,8 +64,12 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
     )
 
     collections_info = Dict(
-        display_name=_("Collections Info"),
-        help=_("To update this field click Refresh Collections in the XBlock."),
+        display_name=_("Collections Info (Do not edit)"),
+        help=_(
+            "This field should not be edited manually. "
+            "Use the 'Refresh Collections' button in the XBlock to update its contents. "
+            "You may delete all info to reset, but do not modify values directly."
+        ),
         default={},
         scope=Scope.content,
     )
@@ -152,12 +156,14 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         is_root = root_xblock and root_xblock.usage_key == self.usage_key
 
         collections_with_values = {}
-
-        for coll_key, coll_data in self.collections_info.items():
-            collections_with_values[coll_key] = {
-                **coll_data,  # keep title, description, problems
-                "current_value": self.max_count_per_collection.get(coll_key, None)
-            }
+        try:
+            for coll_key, coll_data in self.collections_info.items():
+                collections_with_values[coll_key] = {
+                    **coll_data,  # keep title, description, problems
+                    "current_value": self.max_count_per_collection.get(coll_key, None)
+                }
+        except Exception:   # pylint: disable=broad-exception-caught
+            pass
 
         if is_root and self.children:
             context["can_edit_visibility"] = False
