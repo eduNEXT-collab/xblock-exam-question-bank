@@ -65,7 +65,11 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
     collections_info = Dict(
         display_name=_("Collections Info (Do not edit)"),
-        help=_("This field should not be edited manually. Use the 'Refresh Collections' button in the XBlock to update its contents. You may delete all info to reset, but do not modify values directly."),
+        help=_(
+            "This field should not be edited manually. "
+            "Use the 'Refresh Collections' button in the XBlock to update its contents. "
+            "You may delete all info to reset, but do not modify values directly."
+        ),
         default={},
         scope=Scope.content,
     )
@@ -158,7 +162,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                     **coll_data,  # keep title, description, problems
                     "current_value": self.max_count_per_collection.get(coll_key, None)
                 }
-        except Exception:
+        except Exception:   # pylint: disable=broad-exception-caught
             pass
 
         if is_root and self.children:
