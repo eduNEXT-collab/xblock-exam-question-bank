@@ -15,6 +15,14 @@ Unreleased
 **********
 
 *
+0.8.3 – 2026-03-16
+******************
+
+Fixed
+=====
+
+* already stored questions are being ignored on each page reload with collections
+
 0.8.2 – 2026-03-03
 ******************
 
