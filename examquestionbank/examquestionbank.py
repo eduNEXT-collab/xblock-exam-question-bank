@@ -291,8 +291,19 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 'error': 'No attempts remaining or conditions not met for retry.'
             }
 
-        for block_type, block_id in self.selected_children():
-            block = self.runtime.get_block(self.context_key.make_usage_key(block_type, block_id))
+        # Iterate the stored field directly (not selected_children()) to ensure we reset
+        # exactly the questions that were displayed in the current attempt, before clearing.
+        for block_type, block_id in list(self.selected):
+            usage_key = self.context_key.make_usage_key(block_type, block_id)
+            try:
+                block = self.runtime.get_block(usage_key)
+            except Exception:  # pylint: disable=broad-exception-caught
+                logger.warning(
+                    "Failed to load block '%s' during retry_exam; skipping reset.",
+                    usage_key,
+                    exc_info=True,
+                )
+                continue
             if hasattr(block, 'reset_problem'):
                 block.reset_problem(None)
                 block.save()
@@ -526,11 +537,12 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             if invalid_block_keys:
                 selected_keys -= invalid_block_keys
 
-            # Build a mapping from usage key string to (block_type, block_id)
+            # Build a mapping from usage key string to (block_type, block_id) and its reverse
             usage_key_to_block_key = {}
             for child in children:
                 usage_key_str = str(child)
                 usage_key_to_block_key[usage_key_str] = (child.block_type, child.block_id)
+            block_key_to_usage_key = {v: k for k, v in usage_key_to_block_key.items()}
 
             # Track selected problems per collection
             new_selected_keys = set()
@@ -545,26 +557,45 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 collection = collections_info[collection_key]
                 problems = collection.get('problems', {})
 
-                # Get available block keys for this collection (not yet selected)
-                available_block_keys = []
+                # Build the full pool of (block_key, usage_key) pairs for this collection
+                collection_block_keys = []
                 for problem_usage_key in problems.keys():
                     if problem_usage_key in usage_key_to_block_key:
                         block_key = usage_key_to_block_key[problem_usage_key]
-                        if problem_usage_key not in used_problems:
-                            available_block_keys.append((block_key, problem_usage_key))
+                        collection_block_keys.append((block_key, problem_usage_key))
 
-                # If count is -1, select all available problems
+                # Determine target count for this collection
                 if count == -1:
-                    num_to_select = len(available_block_keys)
+                    num_to_select = len(collection_block_keys)
                 else:
-                    num_to_select = min(count, len(available_block_keys))
+                    num_to_select = min(count, len(collection_block_keys))
 
-                # Randomly select from available problems
-                if num_to_select > 0:
-                    selected_items = rand.sample(available_block_keys, num_to_select)
-                    for block_key, usage_key in selected_items:
-                        new_selected_keys.add(block_key)
-                        used_problems.add(usage_key)
+                already_selected_for_collection = [
+                    (bk, block_key_to_usage_key[bk])
+                    for (bk, _) in collection_block_keys
+                    if bk in selected_keys
+                    and bk not in new_selected_keys
+                    and block_key_to_usage_key.get(bk) not in used_problems
+                ][:num_to_select]
+
+                for block_key, usage_key in already_selected_for_collection:
+                    new_selected_keys.add(block_key)
+                    used_problems.add(usage_key)
+
+                # Only sample new problems if we still need more (e.g. first visit or after retry)
+                num_still_needed = num_to_select - len(already_selected_for_collection)
+                if num_still_needed > 0:
+                    available_block_keys = [
+                        (bk, uk)
+                        for (bk, uk) in collection_block_keys
+                        if bk not in new_selected_keys and uk not in used_problems
+                    ]
+                    num_to_add = min(num_still_needed, len(available_block_keys))
+                    if num_to_add > 0:
+                        selected_items = rand.sample(available_block_keys, num_to_add)
+                        for block_key, usage_key in selected_items:
+                            new_selected_keys.add(block_key)
+                            used_problems.add(usage_key)
 
             # Determine what changed
             added_block_keys = new_selected_keys - selected_keys
@@ -603,6 +634,15 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         if self.max_count_per_collection:
             if self.validate_max_count_per_collection(self.max_count_per_collection):
                 max_count_per_collection = self.max_count_per_collection
+                # Derive the effective max_count from the collection config so it is
+                # always in sync regardless of whether the max_count field was manually
+                # updated. This prevents stale stored selections when a new collection
+                # is added with a higher total count.
+                int_values = [int(v) for v in max_count_per_collection.values()]
+                if any(v == -1 for v in int_values):
+                    max_count = len(self.children)
+                else:
+                    max_count = sum(int_values)
             else:
                 logger.error("Invalid max_count_per_collection configuration; ignoring it.")
 
@@ -667,6 +707,9 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
     def update_max_count_per_collection(self, data, _):
         """
         Update the max_count_per_collection setting from Studio.
+
+        Also keeps max_count in sync with the sum of per-collection counts so that
+        the stored user-state selection size always matches the expected total.
         """
         if not isinstance(data, dict):
             return {"status": "error", "message": "Invalid data format"}
@@ -676,6 +719,18 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
 
         # Persist configuration (Scope.settings)
         self.max_count_per_collection = data
+
+        # Keep max_count in sync: if any collection uses -1 (all), set max_count=-1;
+        # otherwise set it to the sum of all explicit counts.
+        #
+        # When Studio sends an empty dict (all per-collection inputs cleared),
+        # do not overwrite existing max_count so the exam does not get zeroed out.
+        if data:
+            int_values = [int(v) for v in data.values()]
+            if any(v == -1 for v in int_values):
+                self.max_count = -1
+            else:
+                self.max_count = sum(int_values)
 
         modulestore = get_modulestore()
         modulestore.update_item(self, self.runtime.user_id)
