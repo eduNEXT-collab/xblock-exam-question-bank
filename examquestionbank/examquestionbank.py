@@ -169,7 +169,10 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             context["can_edit_visibility"] = False
             context["can_move"] = False
             context["can_collapse"] = True
-            self.render_children(context, fragment, can_reorder=False, can_add=False)
+            # Allow delete controls to appear in the Studio children wrapper by
+            # enabling `can_add=True` here. The wrapper uses `can_add` to set
+            # `can_delete` (see cms/djangoapps/contentstore/views/preview.py).
+            self.render_children(context, fragment, can_reorder=False, can_add=True)
         else:
             fragment.add_content(resource_loader.render_django_template(
                 "templates/author_view_custom.html",
