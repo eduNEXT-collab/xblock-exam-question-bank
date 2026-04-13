@@ -194,10 +194,52 @@ a:focus-visible {
 	justify-content: space-between;
 	margin-bottom: 1rem;
 
+	.collection-title-wrapper {
+	  display: flex;
+	  align-items: center;
+	  gap: 1rem;
+	  flex: 1;
+	}
+
 	.collection-title {
 	  flex: 1;
 	  font-size: 2rem;
 	  font-weight: bold;
+	}
+
+	.btn-delete-collection {
+	  display: inline-flex;
+	  align-items: center;
+	  gap: 0.5em;
+	  padding: 0.5em 1em;
+	  background-color: var(--pgn-color-danger-500, #C32D3A);
+	  color: white;
+	  border: none;
+	  border-radius: 0.3em;
+	  cursor: pointer;
+	  font-size: 0.85em;
+	  font-weight: 500;
+	  transition: background-color 0.2s ease;
+	  white-space: nowrap;
+	}
+
+	.btn-delete-collection:hover:not(:disabled) {
+	  background-color: var(--pgn-color-danger-700, #A02622);
+	}
+
+	.btn-delete-collection:disabled {
+	  background-color: var(--pgn-color-gray-400, #999);
+	  cursor: not-allowed;
+	  opacity: 0.6;
+	}
+
+	.btn-delete-collection:focus-visible {
+	  outline: 2px solid var(--pgn-color-danger-700, #A02622);
+	  outline-offset: 2px;
+	}
+
+	.btn-delete-collection .icon {
+	  font-size: 1em;
 	}
 
 	.selected-quantity {

@@ -6,6 +6,7 @@ function ExamQuestionBankAuthorView(runtime, element, context) {
     var refreshButton = $element.find('.btn-refresh-collections');
     var refreshCollectionsUrl = runtime.handlerUrl(element, 'refresh_collections');
 	var updateMaxCountPerCollectionUrl = runtime.handlerUrl(element, 'update_max_count_per_collection');
+	var deleteCollectionUrl = runtime.handlerUrl(element, 'delete_collection_children');
 
     refreshButton.on('click', function (event) {
         event.preventDefault();
@@ -45,6 +46,71 @@ function ExamQuestionBankAuthorView(runtime, element, context) {
             .always(function () {
                 refreshButton.prop('disabled', false);
             });
+    });
+
+    // Handle delete collection button
+    $element.on('click', '.btn-delete-collection', function (event) {
+        event.preventDefault();
+        
+        var $button = $(this);
+        var collectionKey = $button.data('collection-key');
+        var collectionTitle = $button.data('collection-title');
+        
+        // Confirm deletion
+        var confirmMessage = gettext('Are you sure you want to delete all problems in the collection "%(title)s"? This action cannot be undone.');
+        confirmMessage = interpolate(confirmMessage, { title: collectionTitle }, true);
+        
+        if (!confirm(confirmMessage)) {
+            return;
+        }
+        
+        $button.prop('disabled', true);
+        runtime.notify('save', { state: 'start', message: gettext('Deleting collection problems...') });
+        
+        var usageId = $element.data("usageId");
+        
+        $.ajax({
+            type: 'POST',
+            url: deleteCollectionUrl,
+            data: JSON.stringify({ collection_key: collectionKey }),
+            contentType: 'application/json',
+            dataType: 'json',
+        })
+        .done(function (response) {
+            if (response.success) {
+                // Tell the parent window that XBlock data was saved
+                window.parent.postMessage(
+                    {
+                        type: 'saveEditedXBlockData',
+                        payload: { locator: usageId },
+                    },
+                    '*',
+                );
+                
+                runtime.notify('save', { 
+                    state: 'end',
+                    message: response.message || gettext('Collection deleted successfully')
+                });
+                
+                // Reload the page to show updated collections
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                runtime.notify('error', {
+                    title: gettext('Failed to delete collection'),
+                    message: response.message || gettext('An error occurred')
+                });
+                $button.prop('disabled', false);
+            }
+        })
+        .fail(function (xhr, status, error) {
+            runtime.notify('error', {
+                title: gettext('Failed to delete collection'),
+                message: gettext('An error occurred while deleting the collection')
+            });
+            $button.prop('disabled', false);
+        });
     });
 
 	var selectionDebounce;
