@@ -574,19 +574,15 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                     )
                     continue
 
-            # Update the parent block
-            modulestore.update_item(self, self.runtime.user_id)
-
-            # Refresh collections info to reflect the deletion
-            grouped_data = self.populate_collections_info_from_children()
-            self.collections_info = grouped_data
+            # Persist parent changes after deletions. Do not repopulate
+            # `collections_info` here; the client will call the refresh
+            # endpoint to rebuild that metadata after a successful delete.
             modulestore.update_item(self, self.runtime.user_id)
 
             return {
                 'success': True,
                 'message': f'Successfully deleted {deleted_count} problems from collection "{collection.get("title", collection_key)}"',
                 'deleted_count': deleted_count,
-                'collections_info': grouped_data
             }
 
         except Exception as e:  # pylint: disable=broad-exception-caught

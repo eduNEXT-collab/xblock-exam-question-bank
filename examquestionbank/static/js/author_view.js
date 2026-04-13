@@ -78,24 +78,40 @@ function ExamQuestionBankAuthorView(runtime, element, context) {
         })
         .done(function (response) {
             if (response.success) {
-                // Tell the parent window that XBlock data was saved
-                window.parent.postMessage(
-                    {
-                        type: 'saveEditedXBlockData',
-                        payload: { locator: usageId },
-                    },
-                    '*',
-                );
-                
                 runtime.notify('save', { 
                     state: 'end',
                     message: response.message || gettext('Collection deleted successfully')
                 });
-                
-                // Reload the page to show updated collections
-                setTimeout(function() {
-                    window.location.reload();
-                }, 1000);
+
+                // After successful delete, trigger the same refresh flow
+                // as the 'Refresh Collections' button so the server rebuilds
+                // `collections_info` and the container re-renders the XBlock.
+                $.ajax({
+                    type: 'POST',
+                    url: refreshCollectionsUrl,
+                    data: JSON.stringify({}),
+                    contentType: 'application/json',
+                    dataType: 'json',
+                })
+                .done(function (refreshResponse) {
+                    // Notify parent (container) that XBlock data was saved
+                    window.parent.postMessage(
+                        {
+                            type: 'saveEditedXBlockData',
+                            payload: { locator: usageId },
+                        },
+                        '*',
+                    );
+
+                    var message = $('<p>').text(gettext('Collections refreshed!'));
+                    $element.find('.bank-collections-section').append(message);
+                })
+                .fail(function () {
+                    runtime.notify('error', {
+                        title: gettext('Failed to refresh collections'),
+                        message: gettext('An error occurred while refreshing collections after delete'),
+                    });
+                });
             } else {
                 runtime.notify('error', {
                     title: gettext('Failed to delete collection'),
