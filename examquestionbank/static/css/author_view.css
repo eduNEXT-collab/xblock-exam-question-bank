@@ -194,13 +194,6 @@ a:focus-visible {
 	justify-content: space-between;
 	margin-bottom: 1rem;
 
-	.collection-title-wrapper {
-	  display: flex;
-	  align-items: center;
-	  gap: 1rem;
-	  flex: 1;
-	}
-
 	.collection-title {
 	  flex: 1;
 	  font-size: 2rem;
@@ -212,7 +205,7 @@ a:focus-visible {
 	  align-items: center;
 	  gap: 0.5em;
 	  padding: 0.5em 1em;
-	  background-color: var(--pgn-color-danger-500, #C32D3A);
+	  background-color: #333;
 	  color: white;
 	  border: none;
 	  border-radius: 0.3em;

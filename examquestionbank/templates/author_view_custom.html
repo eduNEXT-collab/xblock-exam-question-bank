@@ -80,9 +80,9 @@
         {% for coll_key, collection in collection_group.items %}
           <div class="collection" data-collection-key="{{ coll_key }}">
 			<div class="collection-header">
-			  <div class="collection-title-wrapper">
+			  <div>
 			    <h3 class="collection-title">{{ collection.title }}</h3>
-			    <button 
+                <button 
 			      type="button" 
 			      class="btn-delete-collection" 
 			      data-collection-key="{{ coll_key }}"
@@ -93,8 +93,6 @@
 			      <span class="icon fa fa-trash" aria-hidden="true"></span>
 			      {% trans "Delete Collection" %}
 			    </button>
-			  </div>
-			  <div>
 			    <h4 class="collection-description">{{ collection.description }}</h4>
 			  </div>
 
