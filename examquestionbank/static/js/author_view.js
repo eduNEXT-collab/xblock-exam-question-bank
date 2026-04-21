@@ -48,88 +48,101 @@ function ExamQuestionBankAuthorView(runtime, element, context) {
             });
     });
 
+    function showDeleteConfirmModal(message, onConfirm, $triggerButton) {
+        var $overlay = $element.find('.bank-confirm-overlay');
+        var $dialog = $overlay.find('.bank-confirm-dialog');
+        $overlay.find('.bank-confirm-message').text(message);
+
+        if ($triggerButton) {
+            var buttonTop = $triggerButton.offset().top - $element.offset().top;
+            $dialog.css('top', Math.max(8, buttonTop - 20) + 'px');
+        }
+
+        $overlay.show();
+
+        $overlay.find('.bank-confirm-cancel').off('click').on('click', function () {
+            $overlay.hide();
+        });
+
+        $overlay.find('.bank-confirm-ok').off('click').on('click', function () {
+            $overlay.hide();
+            onConfirm();
+        });
+    }
+
     // Handle delete collection button
     $element.on('click', '.btn-delete-collection', function (event) {
         event.preventDefault();
-        
+
         var $button = $(this);
         var collectionKey = $button.data('collection-key');
         var collectionTitle = $button.data('collection-title');
-        
-        // Confirm deletion
-        var confirmMessage = gettext('Are you sure you want to delete all problems in the collection "%(title)s"? This action cannot be undone.');
-        confirmMessage = interpolate(confirmMessage, { title: collectionTitle }, true);
-        
-        if (!confirm(confirmMessage)) {
-            return;
-        }
-        
-        $button.prop('disabled', true);
-        runtime.notify('save', { state: 'start', message: gettext('Deleting collection problems...') });
-        
-        var usageId = $element.data("usageId");
-        
-        $.ajax({
-            type: 'POST',
-            url: deleteCollectionUrl,
-            data: JSON.stringify({ collection_key: collectionKey }),
-            contentType: 'application/json',
-            dataType: 'json',
-        })
-        .done(function (response) {
-            if (response.success) {
-                runtime.notify('save', { 
-                    state: 'end',
-                    message: response.message || gettext('Collection deleted successfully')
-                });
 
-                // After successful delete, trigger the same refresh flow
-                // as the 'Refresh Collections' button so the server rebuilds
-                // `collections_info` and the container re-renders the XBlock.
-                $.ajax({
-                    type: 'POST',
-                    url: refreshCollectionsUrl,
-                    data: JSON.stringify({}),
-                    contentType: 'application/json',
-                    dataType: 'json',
-                })
-                .done(function (refreshResponse) {
-                    // Notify parent (container) that XBlock data was saved
-                    window.parent.postMessage(
-                        {
-                            type: 'saveEditedXBlockData',
-                            payload: { locator: usageId },
-                        },
-                        '*',
-                    );
+        var template = $element.find('.bank-confirm-template').text();
+        var confirmMessage = interpolate(template, { title: collectionTitle }, true);
 
-                    var message = $('<p>').text(gettext('Collections refreshed!'));
-                    $element.find('.bank-collections-section').append(message);
-                })
-                .fail(function () {
-                    runtime.notify('error', {
-                        title: gettext('Failed to refresh collections'),
-                        message: gettext('An error occurred while refreshing collections after delete'),
+        showDeleteConfirmModal(confirmMessage, function () {
+            $button.prop('disabled', true);
+            runtime.notify('save', { state: 'start', message: gettext('Deleting collection problems...') });
+
+            var usageId = $element.data("usageId");
+
+            $.ajax({
+                type: 'POST',
+                url: deleteCollectionUrl,
+                data: JSON.stringify({ collection_key: collectionKey }),
+                contentType: 'application/json',
+                dataType: 'json',
+            })
+            .done(function (response) {
+                if (response.success) {
+                    runtime.notify('save', {
+                        state: 'end',
+                        message: response.message || gettext('Collection deleted successfully')
                     });
-                });
-            } else {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: refreshCollectionsUrl,
+                        data: JSON.stringify({}),
+                        contentType: 'application/json',
+                        dataType: 'json',
+                    })
+                    .done(function (refreshResponse) {
+                        window.parent.postMessage(
+                            {
+                                type: 'saveEditedXBlockData',
+                                payload: { locator: usageId },
+                            },
+                            '*',
+                        );
+
+                        var message = $('<p>').text(gettext('Collections refreshed!'));
+                        $element.find('.bank-collections-section').append(message);
+                    })
+                    .fail(function () {
+                        runtime.notify('error', {
+                            title: gettext('Failed to refresh collections'),
+                            message: gettext('An error occurred while refreshing collections after delete'),
+                        });
+                    });
+                } else {
+                    runtime.notify('error', {
+                        title: gettext('Failed to delete collection'),
+                        message: response.message || gettext('An error occurred')
+                    });
+                    $button.prop('disabled', false);
+                }
+            })
+            .fail(function (xhr, status, error) {
                 runtime.notify('error', {
                     title: gettext('Failed to delete collection'),
-                    message: response.message || gettext('An error occurred')
+                    message: gettext('An error occurred while deleting the collection')
                 });
                 $button.prop('disabled', false);
-            }
-        })
-        .fail(function (xhr, status, error) {
-            runtime.notify('error', {
-                title: gettext('Failed to delete collection'),
-                message: gettext('An error occurred while deleting the collection')
             });
-            $button.prop('disabled', false);
-        });
-    });
-
-	var selectionDebounce;
+        }, $button); // end showDeleteConfirmModal callback
+    }); // end .btn-delete-collection click
 
 	$element.find('.selected-quantity input[type="number"]').on('input change', function () {
 

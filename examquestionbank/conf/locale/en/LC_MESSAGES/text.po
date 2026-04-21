@@ -231,6 +231,21 @@ msgstr ""
 msgid "Refresh Collections"
 msgstr ""
 
+#: templates/author_view_custom.html:171
+msgid ""
+"Are you sure you want to delete all problems in the collection? This action "
+"cannot be undone."
+msgstr ""
+
+#: templates/author_view_custom.html:175
+#: templates/student_view_vert_mod.html:93
+msgid "Cancel"
+msgstr ""
+
+#: templates/author_view_custom.html:176
+msgid "Delete"
+msgstr ""
+
 #: templates/student_view_vert_mod.html:8
 msgid "Exam Progress"
 msgstr ""
@@ -288,10 +303,6 @@ msgstr ""
 msgid "This will count as an attempt."
 msgstr ""
 
-#: templates/student_view_vert_mod.html:93
-msgid "Cancel"
-msgstr ""
-
 #: templates/student_view_vert_mod.html:94
 msgid "Yes, Retry Exam"
 msgstr ""
@@ -300,12 +311,12 @@ msgstr ""
 msgid "Refreshing collections..."
 msgstr ""
 
-#: static/js/author_view.js:35 static/js/author_view.js:106
+#: static/js/author_view.js:35 static/js/author_view.js:120
 msgid "Collections refreshed!"
 msgstr ""
 
 #: static/js/author_view.js:40 static/js/author_view.js:43
-#: static/js/author_view.js:111
+#: static/js/author_view.js:125
 msgid "Failed to refresh collections"
 msgstr ""
 
@@ -313,41 +324,35 @@ msgstr ""
 msgid "An error occurred while refreshing collections"
 msgstr ""
 
-#: static/js/author_view.js:60
-msgid ""
-"Are you sure you want to delete all problems in the collection "
-"\"%(title)s\"? This action cannot be undone."
-msgstr ""
-
-#: static/js/author_view.js:68
+#: static/js/author_view.js:86
 msgid "Deleting collection problems..."
 msgstr ""
 
-#: static/js/author_view.js:83
+#: static/js/author_view.js:101
 msgid "Collection deleted successfully"
 msgstr ""
 
-#: static/js/author_view.js:112
+#: static/js/author_view.js:126
 msgid "An error occurred while refreshing collections after delete"
 msgstr ""
 
-#: static/js/author_view.js:117 static/js/author_view.js:125
+#: static/js/author_view.js:131 static/js/author_view.js:139
 msgid "Failed to delete collection"
 msgstr ""
 
-#: static/js/author_view.js:118
+#: static/js/author_view.js:132
 msgid "An error occurred"
 msgstr ""
 
-#: static/js/author_view.js:126
+#: static/js/author_view.js:140
 msgid "An error occurred while deleting the collection"
 msgstr ""
 
-#: static/js/author_view.js:175
+#: static/js/author_view.js:188
 msgid "Selection update failed"
 msgstr ""
 
-#: static/js/author_view.js:176
+#: static/js/author_view.js:189
 msgid "Could not save selection."
 msgstr ""
 

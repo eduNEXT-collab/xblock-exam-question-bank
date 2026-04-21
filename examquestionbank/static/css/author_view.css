@@ -1,5 +1,56 @@
 /* CSS for ExamQuestionBankXBlock Author View */
 
+/* Confirm modal */
+.bank-confirm-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1000;
+}
+
+.bank-confirm-dialog {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border-radius: 0.5em;
+    padding: 1.5em 2em;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.bank-confirm-message {
+    margin: 0 0 1.25em;
+    line-height: 1.5;
+    color: #333;
+}
+
+.bank-confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75em;
+}
+
+.bank-confirm-cancel {
+    padding: 0.4em 1em;
+    border: 1px solid #999;
+    background: #fff;
+    border-radius: 0.3em;
+    cursor: pointer;
+}
+
+.bank-confirm-ok {
+    padding: 0.4em 1em;
+    border: none;
+    background: #c00;
+    color: #fff;
+    border-radius: 0.3em;
+    cursor: pointer;
+}
+
+.bank-confirm-ok:hover { background: #a00; }
+
 /* Accessibility - Focus styles for keyboard navigation (WCAG AA compliance) */
 .bank-add-btn:focus-visible,
 .edit-button:focus-visible,
@@ -9,7 +60,7 @@ a:focus-visible {
 }
 
 /* Container */
-.bank-container { padding: 1em; }
+.bank-container { padding: 1em; position: relative; }
 
 /* Summary card */
 .bank-summary {
