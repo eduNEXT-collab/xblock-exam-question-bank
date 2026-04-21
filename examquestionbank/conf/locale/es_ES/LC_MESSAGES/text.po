@@ -140,7 +140,7 @@ msgstr "Seleccionados para mostrar"
 msgid "More problems selected than available."
 msgstr "Hay más problemas seleccionados que disponibles."
 
-#: templates/author_view_custom.html:27 templates/author_view_custom.html:142
+#: templates/author_view_custom.html:27 templates/author_view_custom.html:155
 #, python-brace-format
 msgid "Press {link_start}Edit{link_end} to configure settings."
 msgstr "Presiona {link_start}Editar{link_end} para configurar los ajustes."
@@ -200,40 +200,48 @@ msgstr ""
 msgid "These are the problems in the bank:"
 msgstr "Estos son los problemas en el banco:"
 
-#: templates/author_view_custom.html:90
+#: templates/author_view_custom.html:94
+msgid "Delete all problems in this collection"
+msgstr "Eliminar todos los problemas de esta colección"
+
+#: templates/author_view_custom.html:95 templates/author_view_custom.html:98
+msgid "Delete collection"
+msgstr "Eliminar colección"
+
+#: templates/author_view_custom.html:102
 msgid "Number of problems to show"
 msgstr "Problemas a mostrar"
 
-#: templates/author_view_custom.html:99
+#: templates/author_view_custom.html:111
 msgid "max."
 msgstr ""
 
-#: templates/author_view_custom.html:110
+#: templates/author_view_custom.html:123
 msgid "Search problems by title or content..."
 msgstr "Buscar problemas por título..."
 
-#: templates/author_view_custom.html:111
+#: templates/author_view_custom.html:124
 msgid "Search problems"
 msgstr "Buscar problemas"
 
-#: templates/author_view_custom.html:114
+#: templates/author_view_custom.html:127
 msgid "Clear search"
 msgstr "Limpiar búsqueda"
 
-#: templates/author_view_custom.html:122
+#: templates/author_view_custom.html:135
 msgid "No problems in this collection."
 msgstr "No hay problemas en esta colección."
 
-#: templates/author_view_custom.html:131
+#: templates/author_view_custom.html:144
 msgid "No collections data available."
 msgstr "No hay datos de colecciones disponibles."
 
-#: templates/author_view_custom.html:136
+#: templates/author_view_custom.html:149
 #, python-brace-format
 msgid "Press {link_start}View{link_end} to preview components."
 msgstr "Presiona {link_start}Ver{link_end} para previsualizar los componentes."
 
-#: templates/author_view_custom.html:152
+#: templates/author_view_custom.html:165
 msgid "Refresh Collections"
 msgstr "Actualizar colecciones"
 
@@ -302,27 +310,58 @@ msgstr "Cancelar"
 msgid "Yes, Retry Exam"
 msgstr "Sí, reintentar examen"
 
-#: static/js/author_view.js:14
+#: static/js/author_view.js:15
 msgid "Refreshing collections..."
 msgstr "Actualizando colecciones..."
 
-#: static/js/author_view.js:34
+#: static/js/author_view.js:35 static/js/author_view.js:106
 msgid "Collections refreshed!"
 msgstr "Colecciones actualizadas!"
 
-#: static/js/author_view.js:39 static/js/author_view.js:42
+#: static/js/author_view.js:40 static/js/author_view.js:43
+#: static/js/author_view.js:111
 msgid "Failed to refresh collections"
 msgstr "Fallo al actualizar colecciones"
 
-#: static/js/author_view.js:40
+#: static/js/author_view.js:41
 msgid "An error occurred while refreshing collections"
 msgstr "Ha ocurrido un error al actualizar colecciones"
 
-#: static/js/author_view.js:93
+#: static/js/author_view.js:60
+msgid ""
+"Are you sure you want to delete all problems in the collection "
+"\"%(title)s\"? This action cannot be undone."
+msgstr ""
+
+#: static/js/author_view.js:68
+msgid "Deleting collection problems..."
+msgstr "Eliminando problemas de la colección..."
+
+#: static/js/author_view.js:83
+msgid "Collection deleted successfully"
+msgstr ""
+
+#: static/js/author_view.js:112
+msgid "An error occurred while refreshing collections after delete"
+msgstr "Ha ocurrido un error al actualizar colecciones después de eliminar"
+
+#: static/js/author_view.js:117 static/js/author_view.js:125
+msgid "Failed to delete collection"
+msgstr "Fallo al eliminar problemas de la colección"
+
+#: static/js/author_view.js:118
+msgid "An error occurred"
+msgstr ""
+
+#: static/js/author_view.js:126
+msgid "An error occurred while deleting the collection"
+msgstr "Ha ocurrido un error al eliminar problemas de la colección"
+
+#: static/js/author_view.js:175
 msgid "Selection update failed"
 msgstr "La actualización de selección falló"
 
-#: static/js/author_view.js:94
+#: static/js/author_view.js:176
 msgid "Could not save selection."
 msgstr "No se pudo guardar la selección."
 
