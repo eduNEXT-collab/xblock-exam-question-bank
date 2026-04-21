@@ -574,14 +574,14 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                     )
                     continue
 
-            # Persist parent changes after deletions. Do not repopulate
-            # `collections_info` here; the client will call the refresh
-            # endpoint to rebuild that metadata after a successful delete.
             modulestore.update_item(self, self.runtime.user_id)
 
             return {
                 'success': True,
-                'message': f'Successfully deleted {deleted_count} problems from collection "{collection.get("title", collection_key)}"',
+                'message': (
+                    f'Successfully deleted {deleted_count} problems from '
+                    f'collection "{collection.get("title", collection_key)}"'
+                ),
                 'deleted_count': deleted_count,
             }
 
