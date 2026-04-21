@@ -62,14 +62,14 @@ msgstr ""
 
 #: examquestionbank.py:78
 msgid "Maximum Exam Attempts"
-msgstr "Número máximo de intentos del examen"
+msgstr "Número máximo de intentos de la evaluación"
 
 #: examquestionbank.py:80
 msgid ""
 "Maximum number of times a student can attempt this entire exam. Set to -1 "
 "for unlimited attempts."
 msgstr ""
-"Número máximo de veces que un estudiante puede intentar este examen "
+"Número máximo de veces que un estudiante puede intentar esta evaluación"
 "completo. Establece -1 para intentos ilimitados."
 
 #: examquestionbank.py:89
@@ -94,7 +94,7 @@ msgstr "Puntuación mínima para aprobar (%)"
 
 #: examquestionbank.py:104
 msgid "Minimum percentage required to pass the exam (1-100)"
-msgstr "Porcentaje mínimo requerido para aprobar el examen (1-100)"
+msgstr "Porcentaje mínimo requerido para aprobar la evaluación (1-100)"
 
 #: examquestionbank.py:111
 msgid "Is Attempting"
@@ -102,7 +102,7 @@ msgstr "Está intentando"
 
 #: examquestionbank.py:112
 msgid "Indicates whether the student is currently attempting the exam"
-msgstr "Indica si el estudiante está actualmente intentando el examen"
+msgstr "Indica si el estudiante está actualmente intentando la evaluación"
 
 #: templates/author_view_add_custom.html:7
 msgid "Add Problems"
@@ -230,8 +230,8 @@ msgstr "No hay datos de colecciones disponibles."
 
 #: templates/author_view_custom.html:136
 #, python-brace-format
-msgid "Press {link_start}View{link_end} to preview components."
-msgstr "Presiona {link_start}Ver{link_end} para previsualizar los componentes."
+msgid "Press {link_start}View{link_end} to preview or remove components."
+msgstr "Presiona {link_start}Ver{link_end} para previsualizar o eliminar componentes."
 
 #: templates/author_view_custom.html:152
 msgid "Refresh Collections"
@@ -239,7 +239,7 @@ msgstr "Actualizar colecciones"
 
 #: templates/student_view_vert_mod.html:8
 msgid "Exam Progress"
-msgstr "Progreso del examen"
+msgstr "Progreso de la evaluación"
 
 #: templates/student_view_vert_mod.html:11
 msgid "Grade:"
@@ -251,7 +251,7 @@ msgstr "Aprobado"
 
 #: templates/student_view_vert_mod.html:17
 msgid "Goal:"
-msgstr "Meta:"
+msgstr "Porcentaje de aprobación:"
 
 #: templates/student_view_vert_mod.html:20
 msgid "Attempt:"
@@ -264,11 +264,11 @@ msgstr "No quedan intentos"
 #: templates/student_view_vert_mod.html:34
 #: templates/student_view_vert_mod.html:64
 msgid "Retry Exam"
-msgstr "Reintentar examen"
+msgstr "Reintentar evaluación"
 
 #: templates/student_view_vert_mod.html:56
 msgid "Submit Exam"
-msgstr "Enviar examen"
+msgstr "Enviar evaluación"
 
 #: templates/student_view_vert_mod.html:74
 msgid "Start New Attempt?"
@@ -300,7 +300,7 @@ msgstr "Cancelar"
 
 #: templates/student_view_vert_mod.html:94
 msgid "Yes, Retry Exam"
-msgstr "Sí, reintentar examen"
+msgstr "Sí, reintentar evaluación"
 
 #: static/js/author_view.js:14
 msgid "Refreshing collections..."
@@ -328,8 +328,8 @@ msgstr "No se pudo guardar la selección."
 
 #: static/js/student_view.js:94
 msgid "Error submitting exam. Please try again."
-msgstr "Error al enviar el examen. Por favor, inténtalo de nuevo."
+msgstr "Error al enviar la evaluación. Por favor, inténtalo de nuevo."
 
 #: static/js/student_view.js:139
 msgid "Error retrying the exam. Please try again."
-msgstr "Error al reintentar el examen. Por favor, inténtalo de nuevo."
+msgstr "Error al reintentar la evaluación. Por favor, inténtalo de nuevo."
