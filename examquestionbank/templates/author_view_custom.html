@@ -82,7 +82,11 @@
 			<div class="collection-header">
 			  <div>
 			    <h3 class="collection-title">{{ collection.title }}</h3>
-                <button 
+			    <h4 class="collection-description">{{ collection.description }}</h4>
+			  </div>
+
+			  <div class="collection-header-right">
+			    <button 
 			      type="button" 
 			      class="btn-delete-collection" 
 			      data-collection-key="{{ coll_key }}"
@@ -93,24 +97,22 @@
 			      <span class="icon fa fa-trash" aria-hidden="true"></span>
 			      {% trans "Delete Collection" %}
 			    </button>
-			    <h4 class="collection-description">{{ collection.description }}</h4>
+			    {% if max_count != -1 %}
+			      <form class="selected-quantity">
+			        <label for="problems-quantity-selector-{{ coll_key }}" class="input-label">{% trans "Number of problems to show" %}
+			        <input 
+			          id="problems-quantity-selector-{{ coll_key }}"
+			          name="{{ coll_key }}"
+                      type="number"
+                      min="1" 
+                      max="{{ collection.problems|length }}"
+				      value="{{ collection.current_value }}"
+			        />
+			        <span class="help-block">{% trans "max." %} {{ collection.problems|length }}</span>
+			        </label>
+			      </form>
+			    {% endif %}
 			  </div>
-
-			  {% if max_count != -1 %}
-			    <form class="selected-quantity">
-			  	<label for="problems-quantity-selector-{{ coll_key }}" class="input-label">{% trans "Number of problems to show" %}
-			  	<input 
-			  	  id="problems-quantity-selector-{{ coll_key }}"
-			  	  name="{{ coll_key }}"
-                  type="number"
-                  min="1" 
-                  max="{{ collection.problems|length }}"
-				  value="{{ collection.current_value }}"
-			  	/>
-			  	<span class="help-block">{% trans "max." %} {{ collection.problems|length }}</span>
-			  	</label>
-			    </form>
-			  {% endif %}
 			</div>
     
             {% if collection.problems %}

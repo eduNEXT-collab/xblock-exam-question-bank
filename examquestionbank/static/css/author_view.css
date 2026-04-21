@@ -192,6 +192,7 @@ a:focus-visible {
   .collection-header {
 	display: flex;
 	justify-content: space-between;
+	align-items: flex-start;
 	margin-bottom: 1rem;
 
 	.collection-title {
@@ -200,13 +201,25 @@ a:focus-visible {
 	  font-weight: bold;
 	}
 
+	.collection-description {
+	  font-weight: normal;
+	}
+
+	.collection-header-right {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: flex-end;
+	  gap: 0.75rem;
+	}
+  }
+
 	.btn-delete-collection {
 	  display: inline-flex;
 	  align-items: center;
 	  gap: 0.5em;
 	  padding: 0.5em 1em;
-	  background-color: #333;
-	  color: white;
+	  background-color: transparent;
+	  color: var(--pgn-color-danger-500, #cb2431);
 	  border: none;
 	  border-radius: 0.3em;
 	  cursor: pointer;
@@ -214,14 +227,18 @@ a:focus-visible {
 	  font-weight: 500;
 	  transition: background-color 0.2s ease;
 	  white-space: nowrap;
+    opacity: 0.8;
 	}
 
 	.btn-delete-collection:hover:not(:disabled) {
-	  background-color: var(--pgn-color-danger-700, #A02622);
+	  background-color: var(--pgn-color-danger-100, #ffeef0);
+    border-color: var(--pgn-color-danger-500, #cb2431);
+    opacity: 1;
 	}
 
 	.btn-delete-collection:disabled {
 	  background-color: var(--pgn-color-gray-400, #999);
+    color: #000;
 	  cursor: not-allowed;
 	  opacity: 0.6;
 	}
