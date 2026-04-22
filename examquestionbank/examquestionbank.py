@@ -169,7 +169,10 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             context["can_edit_visibility"] = False
             context["can_move"] = False
             context["can_collapse"] = True
-            self.render_children(context, fragment, can_reorder=False, can_add=False)
+            # Allow delete controls to appear in the Studio children wrapper by
+            # enabling `can_add=True` here. The wrapper uses `can_add` to set
+            # `can_delete` (see cms/djangoapps/contentstore/views/preview.py).
+            self.render_children(context, fragment, can_reorder=False, can_add=True)
         else:
             fragment.add_content(resource_loader.render_django_template(
                 "templates/author_view_custom.html",
@@ -497,6 +500,93 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
             }
         except Exception as e:      # pylint: disable=broad-exception-caught
             logger.exception(f"Error: {str(e)}")
+            return {
+                'success': False,
+                'message': f'Error: {str(e)}'
+            }
+
+    @XBlock.json_handler
+    def delete_collection_children(self, data, _):
+        """
+        Delete all children blocks belonging to a specific collection.
+
+        This performs a bulk deletion of all problems in the specified collection,
+        then refreshes the collections_info to reflect the changes.
+        """
+        from opaque_keys.edx.keys import UsageKey  # pylint: disable=import-outside-toplevel
+
+        collection_key = data.get('collection_key')
+        if not collection_key:
+            return {
+                'success': False,
+                'message': 'No collection key provided'
+            }
+
+        if collection_key not in self.collections_info:
+            return {
+                'success': False,
+                'message': f'Collection "{collection_key}" not found'
+            }
+
+        collection = self.collections_info[collection_key]
+        problems = collection.get('problems', {})
+
+        if not problems:
+            return {
+                'success': False,
+                'message': 'No problems to delete in this collection'
+            }
+
+        try:
+            modulestore = get_modulestore()
+            deleted_count = 0
+
+            # Get list of usage keys to delete
+            usage_keys_to_delete = []
+            for problem_usage_key_str in problems.keys():
+                try:
+                    usage_key = UsageKey.from_string(problem_usage_key_str)
+                    usage_keys_to_delete.append(usage_key)
+                except Exception as e:  # pylint: disable=broad-exception-caught
+                    logger.warning(
+                        "Failed to parse usage key '%s' during bulk delete: %s",
+                        problem_usage_key_str,
+                        str(e)
+                    )
+                    continue
+
+            # Delete each child block
+            for usage_key in usage_keys_to_delete:
+                try:
+                    # Remove from parent's children list
+                    if usage_key in self.children:
+                        self.children.remove(usage_key)
+                        deleted_count += 1
+
+                    # Delete the item from the modulestore
+                    modulestore.delete_item(usage_key, self.runtime.user_id)
+
+                except Exception as e:  # pylint: disable=broad-exception-caught
+                    logger.warning(
+                        "Failed to delete block '%s': %s",
+                        usage_key,
+                        str(e)
+                    )
+                    continue
+
+            modulestore.update_item(self, self.runtime.user_id)
+
+            return {
+                'success': True,
+                'message': (
+                    f'Successfully deleted {deleted_count} problems from '
+                    f'collection "{collection.get("title", collection_key)}"'
+                ),
+                'deleted_count': deleted_count,
+            }
+
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logger.exception("Error during bulk deletion: %s", str(e))
             return {
                 'success': False,
                 'message': f'Error: {str(e)}'

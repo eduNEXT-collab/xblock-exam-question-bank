@@ -6,6 +6,7 @@ function ExamQuestionBankAuthorView(runtime, element, context) {
     var refreshButton = $element.find('.btn-refresh-collections');
     var refreshCollectionsUrl = runtime.handlerUrl(element, 'refresh_collections');
 	var updateMaxCountPerCollectionUrl = runtime.handlerUrl(element, 'update_max_count_per_collection');
+	var deleteCollectionUrl = runtime.handlerUrl(element, 'delete_collection_children');
 
     refreshButton.on('click', function (event) {
         event.preventDefault();
@@ -47,7 +48,101 @@ function ExamQuestionBankAuthorView(runtime, element, context) {
             });
     });
 
-	var selectionDebounce;
+    function showDeleteConfirmModal(message, onConfirm, $triggerButton) {
+        var $overlay = $element.find('.bank-confirm-overlay');
+        var $dialog = $overlay.find('.bank-confirm-dialog');
+        $overlay.find('.bank-confirm-message').text(message);
+
+        if ($triggerButton) {
+            var buttonTop = $triggerButton.offset().top - $element.offset().top;
+            $dialog.css('top', Math.max(8, buttonTop - 20) + 'px');
+        }
+
+        $overlay.show();
+
+        $overlay.find('.bank-confirm-cancel').off('click').on('click', function () {
+            $overlay.hide();
+        });
+
+        $overlay.find('.bank-confirm-ok').off('click').on('click', function () {
+            $overlay.hide();
+            onConfirm();
+        });
+    }
+
+    // Handle delete collection button
+    $element.on('click', '.btn-delete-collection', function (event) {
+        event.preventDefault();
+
+        var $button = $(this);
+        var collectionKey = $button.data('collection-key');
+        var collectionTitle = $button.data('collection-title');
+
+        var template = $element.find('.bank-confirm-template').text();
+        var confirmMessage = interpolate(template, { title: collectionTitle }, true);
+
+        showDeleteConfirmModal(confirmMessage, function () {
+            $button.prop('disabled', true);
+            runtime.notify('save', { state: 'start', message: gettext('Deleting collection problems...') });
+
+            var usageId = $element.data("usageId");
+
+            $.ajax({
+                type: 'POST',
+                url: deleteCollectionUrl,
+                data: JSON.stringify({ collection_key: collectionKey }),
+                contentType: 'application/json',
+                dataType: 'json',
+            })
+            .done(function (response) {
+                if (response.success) {
+                    runtime.notify('save', {
+                        state: 'end',
+                        message: response.message || gettext('Collection deleted successfully')
+                    });
+
+                    $.ajax({
+                        type: 'POST',
+                        url: refreshCollectionsUrl,
+                        data: JSON.stringify({}),
+                        contentType: 'application/json',
+                        dataType: 'json',
+                    })
+                    .done(function (refreshResponse) {
+                        window.parent.postMessage(
+                            {
+                                type: 'saveEditedXBlockData',
+                                payload: { locator: usageId },
+                            },
+                            '*',
+                        );
+
+                        var message = $('<p>').text(gettext('Collections refreshed!'));
+                        $element.find('.bank-collections-section').append(message);
+                    })
+                    .fail(function () {
+                        runtime.notify('error', {
+                            title: gettext('Failed to refresh collections'),
+                            message: gettext('An error occurred while refreshing collections after delete'),
+                        });
+                    });
+                } else {
+                    runtime.notify('error', {
+                        title: gettext('Failed to delete collection'),
+                        message: response.message || gettext('An error occurred')
+                    });
+                    $button.prop('disabled', false);
+                }
+            })
+            .fail(function (xhr, status, error) {
+                runtime.notify('error', {
+                    title: gettext('Failed to delete collection'),
+                    message: gettext('An error occurred while deleting the collection')
+                });
+                $button.prop('disabled', false);
+            });
+        }, $button); // end showDeleteConfirmModal callback
+    }); // end .btn-delete-collection click
 
 	$element.find('.selected-quantity input[type="number"]').on('input change', function () {
 

@@ -85,21 +85,34 @@
 			    <h4 class="collection-description">{{ collection.description }}</h4>
 			  </div>
 
-			  {% if max_count != -1 %}
-			    <form class="selected-quantity">
-			  	<label for="problems-quantity-selector-{{ coll_key }}" class="input-label">{% trans "Number of problems to show" %}
-			  	<input 
-			  	  id="problems-quantity-selector-{{ coll_key }}"
-			  	  name="{{ coll_key }}"
-                  type="number"
-                  min="1" 
-                  max="{{ collection.problems|length }}"
-				  value="{{ collection.current_value }}"
-			  	/>
-			  	<span class="help-block">{% trans "max." %} {{ collection.problems|length }}</span>
-			  	</label>
-			    </form>
-			  {% endif %}
+			  <div class="collection-header-right">
+			    <button 
+			      type="button" 
+			      class="btn-delete-collection" 
+			      data-collection-key="{{ coll_key }}"
+			      data-collection-title="{{ collection.title }}"
+			      title="{% trans 'Delete all problems in this collection' %}"
+			      aria-label="{% trans 'Delete collection' %} {{ collection.title }}"
+			    >
+			      <span class="icon fa fa-trash" aria-hidden="true"></span>
+			      {% trans "Delete collection" %}
+			    </button>
+			    {% if max_count != -1 %}
+			      <form class="selected-quantity">
+			        <label for="problems-quantity-selector-{{ coll_key }}" class="input-label">{% trans "Number of problems to show" %}
+			        <input 
+			          id="problems-quantity-selector-{{ coll_key }}"
+			          name="{{ coll_key }}"
+                      type="number"
+                      min="1" 
+                      max="{{ collection.problems|length }}"
+				      value="{{ collection.current_value }}"
+			        />
+			        <span class="help-block">{% trans "max." %} {{ collection.problems|length }}</span>
+			        </label>
+			      </form>
+			    {% endif %}
+			  </div>
 			</div>
     
             {% if collection.problems %}
@@ -153,4 +166,15 @@
 		</button>
 	</div>
 	{% endif %}
+
+	<div class="bank-confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="bank-confirm-title" style="display:none;">
+		<span class="bank-confirm-template" style="display:none">{% trans 'Are you sure you want to delete all problems in the collection? This action cannot be undone.' %}</span>
+		<div class="bank-confirm-dialog">
+			<p id="bank-confirm-title" class="bank-confirm-message"></p>
+			<div class="bank-confirm-actions">
+				<button type="button" class="bank-confirm-cancel">{% trans "Cancel" %}</button>
+				<button type="button" class="bank-confirm-ok">{% trans "Delete" %}</button>
+			</div>
+		</div>
+	</div>
 </div>
