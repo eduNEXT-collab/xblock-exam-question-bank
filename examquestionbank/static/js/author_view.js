@@ -2,6 +2,7 @@
 function ExamQuestionBankAuthorView(runtime, element, context) {
     'use strict';
     var $element = $(element);
+    var selectionDebounce;
 
     var refreshButton = $element.find('.btn-refresh-collections');
     var refreshCollectionsUrl = runtime.handlerUrl(element, 'refresh_collections');
@@ -183,6 +184,16 @@ function ExamQuestionBankAuthorView(runtime, element, context) {
 				contentType: 'application/json',
 				dataType: 'json'
 			})
+            .done(function () {
+                var usageId = $element.data("usageId");
+                window.parent.postMessage(
+                    {
+                        type: 'saveEditedXBlockData',
+                        payload: { locator: usageId },
+                    },
+                    '*',
+                );
+            })
 			.fail(function () {
 				runtime.notify('error', {
 					title: gettext('Selection update failed'),
