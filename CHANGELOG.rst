@@ -15,6 +15,14 @@ Unreleased
 **********
 
 *
+0.9.1 – 2026-04-28
+******************
+
+Fixed
+=====
+
+* Define selectionDebounce and send saveEditedXBlockData after updateMaxCountPerCollection (#24)
+
 0.9.0 – 2026-04-22
 ******************
 
