@@ -399,7 +399,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         """
         # Import here to avoid Django setup issues during module import
         from opaque_keys.edx.keys import UsageKey  # pylint: disable=import-outside-toplevel
-        from openedx_learning.api import authoring as authoring_api  # pylint: disable=import-outside-toplevel
+        from openedx_content import api as authoring_api  # pylint: disable=import-outside-toplevel
 
         # Temporary storage for children data
         children_data = {}
@@ -416,12 +416,12 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 # Get collections for this component
                 collections = authoring_api.get_entity_collections(
                     component.learning_package_id,
-                    component.key,
+                    component.entity_ref,
                 )
                 # Convert collection objects to serializable dictionaries
                 serialized_collections = [
                     {
-                        "key": coll.key,
+                        "key": coll.collection_code,
                         "title": coll.title,
                         "description": getattr(coll, 'description', '')
                     }
