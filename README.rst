@@ -18,6 +18,8 @@ Compatibility Notes
 +------------------+------------------+
 | Ulmo             | >= 0.5.2         |
 +------------------+------------------+
+| Verawood         | >= 0.9.2         |
++------------------+------------------+
 
 To ensure better maintainability and performance, **Python 3.11 or newer** is now required.
 

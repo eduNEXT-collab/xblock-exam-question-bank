@@ -15,6 +15,20 @@ Unreleased
 **********
 
 *
+0.9.2 – 2026-11-09
+******************
+
+Changed
+=======
+
+* Replace the deprecated ``openedx-learning`` dependency with ``openedx-core`` for Verawood compatibility. Installing the XBlock no longer downgrades ``openedx-core`` to 0.34.x, which broke Open edX build image with ``ModuleNotFoundError: No module named 'openedx_catalog'``.
+* Upgrade Python requirements.
+
+Fixed
+=====
+
+* Pass ``COMPILE_OPTS`` to every ``pip-compile`` call in the Makefile so ``make upgrade`` upgrades all requirements files, not only ``pip.txt`` and ``pip-tools.txt``.
+
 0.9.1 – 2026-04-28
 ******************
 

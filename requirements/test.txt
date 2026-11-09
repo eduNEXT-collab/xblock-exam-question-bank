@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=requirements/test.txt requirements/test.in
 #
-amqp==5.3.1
+amqp==5.4.2
     # via
     #   -r requirements/base.txt
     #   kombu
@@ -14,49 +14,49 @@ appdirs==1.4.4
     #   fs
 arrow==1.4.0
     # via cookiecutter
-asgiref==3.11.0
+asgiref==3.13.0
     # via
     #   -r requirements/base.txt
     #   django
-attrs==25.4.0
+attrs==26.1.0
     # via
     #   -r requirements/base.txt
-    #   openedx-learning
-billiard==4.2.4
+    #   openedx-core
+    #   openedx-events
+billiard==4.3.2
     # via
     #   -r requirements/base.txt
     #   celery
-binaryornot==0.4.4
+binaryornot==0.6.0
     # via cookiecutter
-boto3==1.42.8
+boto3==1.43.126
     # via
     #   -r requirements/base.txt
     #   fs-s3fs
-botocore==1.42.8
+botocore==1.43.126
     # via
     #   -r requirements/base.txt
     #   boto3
     #   s3transfer
-celery==5.6.2
+celery==5.7.0
     # via
     #   -r requirements/base.txt
-    #   openedx-learning
-certifi==2026.1.4
+    #   openedx-core
+    #   openedx-events
+certifi==2026.10.23
     # via
     #   -r requirements/base.txt
     #   requests
-cffi==2.0.0
+cffi==2.1.1
     # via
     #   -r requirements/base.txt
     #   cryptography
     #   pynacl
-chardet==5.2.0
-    # via binaryornot
-charset-normalizer==3.4.4
+charset-normalizer==3.5.2
     # via
     #   -r requirements/base.txt
     #   requests
-click==8.3.1
+click==8.5.1
     # via
     #   -r requirements/base.txt
     #   celery
@@ -74,17 +74,17 @@ click-plugins==1.1.1.2
     # via
     #   -r requirements/base.txt
     #   celery
-click-repl==0.3.0
+click-repl==0.4.1
     # via
     #   -r requirements/base.txt
     #   celery
-code-annotations==2.3.0
+code-annotations==3.0.0
     # via -r requirements/test.in
-cookiecutter==2.6.0
+cookiecutter==2.7.1
     # via xblock-sdk
-coverage[toml]==7.13.0
+coverage[toml]==7.17.2
     # via pytest-cov
-cryptography==46.0.4
+cryptography==50.0.2
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -93,6 +93,8 @@ cryptography==46.0.4
     #   -r requirements/base.txt
     #   django-appconf
     #   django-crum
+    #   django-model-utils
+    #   django-simple-history
     #   django-statici18n
     #   django-waffle
     #   djangorestframework
@@ -100,8 +102,10 @@ cryptography==46.0.4
     #   edx-django-utils
     #   edx-drf-extensions
     #   edx-i18n-tools
+    #   edx-organizations
+    #   openedx-core
     #   openedx-django-pyfs
-    #   openedx-learning
+    #   openedx-events
     #   xblock-sdk
 django-appconf==1.2.0
     # via
@@ -111,20 +115,30 @@ django-crum==0.7.9
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-django-statici18n==2.6.0
+django-model-utils==5.0.0
+    # via
+    #   -r requirements/base.txt
+    #   edx-organizations
+django-simple-history==3.13.0
+    # via
+    #   -r requirements/base.txt
+    #   edx-organizations
+    #   openedx-core
+django-statici18n==2.8.0
     # via -r requirements/base.txt
 django-waffle==5.0.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
     #   edx-drf-extensions
-djangorestframework==3.16.1
+djangorestframework==3.18.3
     # via
     #   -r requirements/base.txt
     #   drf-jwt
     #   edx-drf-extensions
-    #   openedx-learning
-dnspython==2.8.0
+    #   edx-organizations
+    #   openedx-core
+dnspython==2.9.2
     # via
     #   -r requirements/base.txt
     #   pymongo
@@ -132,20 +146,38 @@ drf-jwt==1.19.2
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-edx-django-utils==8.0.1
+edx-ccx-keys==2.1.0
+    # via
+    #   -r requirements/base.txt
+    #   openedx-events
+edx-django-utils==8.1.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-edx-drf-extensions==10.6.0
+    #   openedx-events
+edx-drf-extensions==10.11.0
     # via
     #   -r requirements/base.txt
-    #   openedx-learning
-edx-i18n-tools==1.9.0
+    #   edx-organizations
+    #   openedx-core
+edx-i18n-tools==2.1.0
     # via -r requirements/base.txt
-edx-opaque-keys==3.0.0
+edx-opaque-keys[django]==4.0.1
     # via
     #   -r requirements/base.txt
+    #   edx-ccx-keys
     #   edx-drf-extensions
+    #   edx-organizations
+    #   openedx-events
+    #   xblock
+edx-organizations==9.1.0
+    # via
+    #   -r requirements/base.txt
+    #   openedx-core
+fastavro==1.13.1
+    # via
+    #   -r requirements/base.txt
+    #   openedx-events
 fs==2.4.16
     # via
     #   -r requirements/base.txt
@@ -157,48 +189,48 @@ fs-s3fs==1.1.1
     #   -r requirements/base.txt
     #   openedx-django-pyfs
     #   xblock-sdk
-idna==3.11
+idna==3.20
     # via
     #   -r requirements/base.txt
     #   requests
-iniconfig==2.3.0
+iniconfig==2.3.1
     # via pytest
 jinja2==3.1.6
     # via
     #   code-annotations
     #   cookiecutter
-jmespath==1.0.1
+jmespath==1.1.0
     # via
     #   -r requirements/base.txt
     #   boto3
     #   botocore
-kombu==5.6.2
+kombu==5.7.0
     # via
     #   -r requirements/base.txt
     #   celery
-lazy==1.6
+lazy==2.0
     # via
     #   -r requirements/base.txt
     #   xblock
-lxml[html-clean]==6.0.2
+lxml[html-clean]==6.1.3
     # via
     #   -r requirements/base.txt
     #   edx-i18n-tools
     #   lxml-html-clean
     #   xblock
     #   xblock-sdk
-lxml-html-clean==0.4.3
+lxml-html-clean==0.4.6
     # via
     #   -r requirements/base.txt
     #   lxml
-mako==1.3.10
+mako==1.4.3
     # via
     #   -r requirements/base.txt
     #   xblock
     #   xblock-utils
-markdown-it-py==4.0.0
+markdown-it-py==4.2.0
     # via rich
-markupsafe==3.0.3
+markupsafe==3.0.4
     # via
     #   -r requirements/base.txt
     #   jinja2
@@ -206,22 +238,27 @@ markupsafe==3.0.3
     #   xblock
 mdurl==0.1.2
     # via markdown-it-py
-openedx-django-pyfs==3.8.0
+openedx-core==1.21.0
+    # via -r requirements/base.txt
+openedx-django-pyfs==4.1.0
     # via
     #   -r requirements/base.txt
     #   xblock
-openedx-learning==0.31.0
-    # via -r requirements/base.txt
-packaging==26.0
+openedx-events==11.3.0
     # via
     #   -r requirements/base.txt
-    #   kombu
-    #   pytest
-path==16.16.0
+    #   openedx-core
+packaging==26.3
+    # via pytest
+path==17.1.1
     # via
     #   -r requirements/base.txt
     #   edx-i18n-tools
-pluggy==1.6.0
+pillow==13.0.0
+    # via
+    #   -r requirements/base.txt
+    #   edx-organizations
+pluggy==1.7.0
     # via
     #   pytest
     #   pytest-cov
@@ -229,7 +266,7 @@ polib==1.2.0
     # via
     #   -r requirements/base.txt
     #   edx-i18n-tools
-prompt-toolkit==3.0.52
+prompt-toolkit==3.0.53
     # via
     #   -r requirements/base.txt
     #   click-repl
@@ -237,20 +274,20 @@ psutil==7.2.2
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-pycparser==3.0
+pycparser==3.12
     # via
     #   -r requirements/base.txt
     #   cffi
-pygments==2.19.2
+pygments==2.21.0
     # via
     #   pytest
     #   rich
-pyjwt[crypto]==2.11.0
+pyjwt[crypto]==2.15.1
     # via
     #   -r requirements/base.txt
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.16.0
+pymongo==4.19.0
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
@@ -260,13 +297,13 @@ pynacl==1.6.2
     #   edx-django-utils
 pypng==0.20220715.0
     # via xblock-sdk
-pytest==9.0.2
+pytest==9.2.0
     # via
     #   pytest-cov
     #   pytest-django
-pytest-cov==7.0.0
+pytest-cov==7.1.0
     # via -r requirements/test.in
-pytest-django==4.11.1
+pytest-django==4.14.0
     # via -r requirements/test.in
 python-dateutil==2.9.0.post0
     # via
@@ -275,11 +312,11 @@ python-dateutil==2.9.0.post0
     #   botocore
     #   celery
     #   xblock
-python-slugify==8.0.4
+python-slugify==9.1.3
     # via
     #   code-annotations
     #   cookiecutter
-pytz==2025.2
+pytz==2026.6
     # via
     #   -r requirements/base.txt
     #   xblock
@@ -290,19 +327,19 @@ pyyaml==6.0.3
     #   cookiecutter
     #   edx-i18n-tools
     #   xblock
-requests==2.32.5
+requests==2.34.2
     # via
     #   -r requirements/base.txt
     #   cookiecutter
     #   edx-drf-extensions
     #   xblock-sdk
-rich==14.2.0
+rich==15.0.0
     # via cookiecutter
 rules==3.5
     # via
     #   -r requirements/base.txt
-    #   openedx-learning
-s3transfer==0.16.0
+    #   openedx-core
+s3transfer==0.19.3
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -310,7 +347,7 @@ semantic-version==2.10.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-simplejson==3.20.2
+simplejson==4.2.0
     # via
     #   -r requirements/base.txt
     #   xblock
@@ -319,14 +356,15 @@ simplejson==3.20.2
 six==1.17.0
     # via
     #   -r requirements/base.txt
+    #   edx-ccx-keys
     #   fs
     #   fs-s3fs
     #   python-dateutil
-sqlparse==0.5.4
+sqlparse==0.6.1
     # via
     #   -r requirements/base.txt
     #   django
-stevedore==5.6.0
+stevedore==5.9.1
     # via
     #   -r requirements/base.txt
     #   code-annotations
@@ -334,24 +372,22 @@ stevedore==5.6.0
     #   edx-opaque-keys
 text-unidecode==1.3
     # via python-slugify
-tomlkit==0.14.0
+tomlkit==0.15.2
     # via
     #   -r requirements/base.txt
-    #   openedx-learning
-typing-extensions==4.15.0
+    #   openedx-core
+typing-extensions==4.16.0
     # via
     #   -r requirements/base.txt
+    #   click-repl
     #   edx-opaque-keys
-tzdata==2025.3
-    # via
-    #   -r requirements/base.txt
-    #   arrow
-    #   kombu
-tzlocal==5.3.1
+tzdata==2026.6
+    # via arrow
+tzlocal==5.4.5
     # via
     #   -r requirements/base.txt
     #   celery
-urllib3==2.6.2
+urllib3==2.8.0
     # via
     #   -r requirements/base.txt
     #   botocore
@@ -362,27 +398,26 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.6.0
+wcwidth==0.9.4
     # via
     #   -r requirements/base.txt
     #   prompt-toolkit
-web-fragments==3.1.0
-    # via
-    #   -r requirements/base.txt
-    #   xblock
-    #   xblock-sdk
-    #   xblock-utils
-webob==1.8.9
-    # via
-    #   -r requirements/base.txt
-    #   xblock
-    #   xblock-sdk
-xblock[django]==5.2.0
+web-fragments==4.0.0
     # via
     #   -r requirements/base.txt
     #   xblock-sdk
     #   xblock-utils
-xblock-sdk==0.13.0
+webob==1.8.11
+    # via
+    #   -r requirements/base.txt
+    #   xblock
+    #   xblock-sdk
+xblock[django]==6.3.5
+    # via
+    #   -r requirements/base.txt
+    #   xblock-sdk
+    #   xblock-utils
+xblock-sdk==0.15.2
     # via -r requirements/test.in
 xblock-utils==4.0.0
     # via -r requirements/base.txt
