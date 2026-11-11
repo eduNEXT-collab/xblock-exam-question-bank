@@ -270,7 +270,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 'error': 'Not currently attempting exam.'
             }
 
-        if self.max_exam_attempts > -1 and self.current_attempt > self.max_exam_attempts:
+        if -1 < self.max_exam_attempts < self.current_attempt:
             return {
                 'success': False,
                 'error': 'No attempts remaining.'
@@ -338,7 +338,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         if current_grade >= self.minimum_passing_score:
             return False
 
-        if self.max_exam_attempts > -1 and self.current_attempt > self.max_exam_attempts:
+        if -1 < self.max_exam_attempts < self.current_attempt:
             return False
 
         return self.is_attempting
@@ -399,7 +399,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         """
         # Import here to avoid Django setup issues during module import
         from opaque_keys.edx.keys import UsageKey  # pylint: disable=import-outside-toplevel
-        from openedx_learning.api import authoring as authoring_api  # pylint: disable=import-outside-toplevel
+        from openedx_content import api as authoring_api  # pylint: disable=import-outside-toplevel
 
         # Temporary storage for children data
         children_data = {}
@@ -416,12 +416,12 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
                 # Get collections for this component
                 collections = authoring_api.get_entity_collections(
                     component.learning_package_id,
-                    component.key,
+                    component.entity_ref,
                 )
                 # Convert collection objects to serializable dictionaries
                 serialized_collections = [
                     {
-                        "key": coll.key,
+                        "key": coll.collection_code,
                         "title": coll.title,
                         "description": getattr(coll, 'description', '')
                     }
@@ -600,7 +600,7 @@ class ExamQuestionBankXBlock(ItemBankMixin, XBlock):
         max_count,
         max_count_per_collection=None,
         collections_info=None
-    ):  # pylint: disable=too-many-positional-arguments
+    ):
         """
         Make a selection based on max_count and max_count_per_collection if provided, if not use the old logic.
 
