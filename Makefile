@@ -23,7 +23,7 @@ help:
 	@perl -nle'print $& if m{^[\.a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m  %-25s\033[0m %s\n", $$1, $$2}'
 
 # Define PIP_COMPILE_OPTS=-v to get more information during make upgrade.
-PIP_COMPILE = pip-compile $(PIP_COMPILE_OPTS)
+PIP_COMPILE = pip-compile $(PIP_COMPILE_OPTS) $(COMPILE_OPTS)
 
 compile-requirements: ## compile the requirements/*.txt files with the latest packages satisfying requirements/*.in
 	pip install -qr requirements/pip-tools.txt

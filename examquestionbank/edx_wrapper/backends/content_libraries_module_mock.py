@@ -4,9 +4,9 @@
 class MockComponent:
     """Mock component object."""
 
-    def __init__(self, learning_package_id=None, key=None):
+    def __init__(self, learning_package_id=None, entity_ref=None):
         self.learning_package_id = learning_package_id or 1
-        self.key = key or "mock-key"
+        self.entity_ref = entity_ref or "mock-entity-ref"
 
 
 def get_component_from_usage_key():
@@ -15,6 +15,6 @@ def get_component_from_usage_key():
         """Mock implementation that returns a mock component."""
         return MockComponent(
             learning_package_id=1,
-            key=str(usage_key)
+            entity_ref=str(usage_key)
         )
     return mock_get_component_from_usage_key
