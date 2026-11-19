@@ -150,6 +150,7 @@ setup(
     version=VERSION,
     description="""Exam Question Bank XBlock""",
     long_description=README + '\n\n' + CHANGELOG,
+    long_description_content_type='text/x-rst',
     author='Edunext Project',
     author_email='heimdall@edunext.co',
     url='https://github.com/eduNEXT-collab/xblock-exam-question-bank',
